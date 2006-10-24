@@ -1,0 +1,6 @@
+pygments (0.1~svn2258-1) UNRELEASED; urgency=low
+
+  * Initial release (closes: #395064)
+
+ -- Piotr Ozarowski <ozarow@gmail.com>  Tue, 24 Oct 2006 17:54:36 +0200
+
