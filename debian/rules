@@ -41,4 +41,14 @@ binary-arch:
 
 binary: binary-indep binary-arch
 
+tarball:
+	@REV=`LC_ALL=C svn --non-interactive info http://trac.pocoo.org/repos/pygments/trunk \
+		| grep Revision | cut -c 11-`; \
+	if [ "$$REV" = "" ]; then exit 1; fi; \
+	svn -q export http://trac.pocoo.org/repos/pygments/trunk pygments-svn$${REV}; \
+	VERSION=`grep "__version__ = " pygments-svn$${REV}/pygments/__init__.py | cut -d "'" -f 2`; \
+	tar -zcf ../pygments_$$VERSION~svn$${REV}.orig.tar.gz pygments-svn$${REV}; \
+	rm -rf pygments-svn$${REV}; \
+	echo file ../pygments_$$VERSION~svn$${REV}.orig.tar.gz successfully created
+
 .PHONY: build clean binary-indep binary-arch binary install configure
