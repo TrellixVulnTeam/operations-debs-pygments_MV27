@@ -1,0 +1,6 @@
+pygments (0.5.1-1) unstable; urgency=low
+
+  * Initial release (closes: #395064)
+
+ -- Piotr Ozarowski <ozarow@gmail.com>  Mon, 30 Oct 2006 17:19:10 +0100
+
