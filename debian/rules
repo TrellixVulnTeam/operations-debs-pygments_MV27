@@ -2,19 +2,27 @@
 
 #export DH_VERBOSE=1
 
-UPSTREAM_VERSION=$(shell dpkg-parsechangelog \
+UPSTREAM_VERSION ?= $(shell dpkg-parsechangelog \
 	| grep ^Version: | cut -d ' ' -f 2 | cut -d '-' -f 1 | cut -d '~' -f 1)
 
-PYVERS=$(shell pyversions -vr)
+PYVERS ?= $(shell pyversions -vr)
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -rf build Pygments.egg-info
+	rm -rf build Pygments.egg-info build-indep
 	find . -name "*\.py[co]" -exec rm {} \;
 	dh_clean
 
-build:
+build: build-indep
+
+build-indep:
+	dh_testdir
+	if [ ! -d debian/python-pygments/usr/share/doc/python-pygments/ ]; then \
+		mkdir -p debian/python-pygments/usr/share/doc/python-pygments/; \
+	fi
+	PYTHONPATH='.' python docs/generate.py html debian/python-pygments/usr/share/doc/python-pygments/
+	touch $@
 
 install: build $(PYVERS:%=install-python%)
 install-python%:
@@ -25,30 +33,21 @@ install-python%:
 	sed -i -e '1 s/python.*/python/' debian/python-pygments/usr/bin/pygmentize
 
 binary-indep: build install
-	dh_testdir -i
-	dh_testroot -i
-	dh_installchangelogs -i
-	dh_installdocs -i
-	dh_pycentral -i
-	dh_compress -i -X.py
-	dh_fixperms -i
-	dh_installdeb -i
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installman
+	dh_pycentral
+	dh_compress -X.py
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
 
 binary-arch:
 
 binary: binary-indep binary-arch
-
-tarball:
-	@REV=`LC_ALL=C svn --non-interactive info http://trac.pocoo.org/repos/pygments/trunk \
-		| grep Revision | cut -c 11-`; \
-	if [ "$$REV" = "" ]; then exit 1; fi; \
-	svn -q export http://trac.pocoo.org/repos/pygments/trunk pygments-svn$${REV}; \
-	VERSION=`grep "__version__ = " pygments-svn$${REV}/pygments/__init__.py | cut -d "'" -f 2`; \
-	tar -zcf ../pygments_$$VERSION~svn$${REV}.orig.tar.gz pygments-svn$${REV}; \
-	rm -rf pygments-svn$${REV}; \
-	echo file ../pygments_$$VERSION~svn$${REV}.orig.tar.gz successfully created
 
 .PHONY: build clean binary-indep binary-arch binary install configure
