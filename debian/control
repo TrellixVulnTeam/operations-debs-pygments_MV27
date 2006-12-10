@@ -11,7 +11,7 @@ XS-Vcs-Svn: svn://svn.debian.org/python-modules/packages/pygments/trunk/
 
 Package: python-pygments
 Architecture: all
-Depends: ${python:Depends}
+Depends: ${python:Depends}, python-chardet
 XB-Python-Version: ${python:Versions}
 Description: syntax highlighting package written in Python
  Pygments aims to be a generic syntax highlighter for general use in all kinds

@@ -1,8 +1,10 @@
-pygments (0.5.1-2) UNRELEASED; urgency=low
+pygments (0.6-1) UNRELEASED; urgency=low
 
   * Added XS-Vcs-Svn field
+  * Added python-chardet to Depends: (guessing input encoding added upstream)
+  * debian/copyright updated (license change to BSD)
 
- -- Piotr Ozarowski <ozarow@gmail.com>  Thu, 23 Nov 2006 14:44:49 +0100
+ -- Piotr Ozarowski <ozarow@gmail.com>  Sun, 10 Dec 2006 12:19:11 +0100
 
 pygments (0.5.1-1) unstable; urgency=low
 
