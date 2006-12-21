@@ -38,6 +38,8 @@ binary-indep: build install
 	dh_installchangelogs
 	dh_installdocs
 	dh_installman
+	mv debian/python-pygments/usr/share/man/man1/pygments.1 \
+	   debian/python-pygments/usr/share/man/man1/pygmentize.1
 	dh_pycentral
 	dh_compress -X.py
 	dh_fixperms
