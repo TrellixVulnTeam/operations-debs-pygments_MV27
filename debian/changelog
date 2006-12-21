@@ -1,3 +1,13 @@
+pygments (0.6-1) experimental; urgency=low
+
+  * New upstream release (upload to experimental due to Etch freeze)
+  * Added XS-Vcs-Svn and XS-Vcs-Browser fields to debian/control
+  * Added python-chardet to Recommends: (guessing input encoding added)
+  * debian/copyright updated (license change to BSD)
+  * Removed debian/pygmentize.1 manpage (it's in upstream sources now)
+
+ -- Piotr Ozarowski <ozarow@gmail.com>  Thu, 21 Dec 2006 16:20:10 +0100
+
 pygments (0.5.1-1) unstable; urgency=low
 
   * Initial release (closes: #395064)

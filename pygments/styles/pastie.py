@@ -8,7 +8,7 @@
     .. _pastie: http://pastie.caboo.se/
 
     :copyright: 2006 by Armin Ronacher.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from pygments.style import Style
@@ -40,6 +40,7 @@ class PastieStyle(Style):
         Name.Class:             'bold #bb0066',
         Name.Exception:         'bold #bb0066',
         Name.Function:          'bold #0066bb',
+        Name.Property:          'bold #336699',
         Name.Module:            'bold #bb0066',
         Name.Builtin:           '#003388',
         Name.Variable:          '#336699',
@@ -50,6 +51,7 @@ class PastieStyle(Style):
         Name.Tag:               'bold #bb0066',
         Name.Attribute:         '#336699',
         Name.Decorator:         '#555555',
+        Name.Label:             'italic #336699',
 
         Number:                 'bold #0000DD',
 

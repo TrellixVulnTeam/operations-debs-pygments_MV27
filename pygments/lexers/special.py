@@ -6,7 +6,7 @@
     Special lexers.
 
     :copyright: 2006 by Georg Brandl.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 import re
@@ -60,7 +60,12 @@ class RawTokenLexer(Lexer):
         elif self.compress == 'bz2':
             import bz2
             text = bz2.decompress(text)
-        return Lexer.get_tokens(self, text)
+
+        # do not call Lexer.get_tokens() because we do not want Unicode
+        # decoding to occur, and stripping is not optional.
+        text = text.strip('\n') + '\n'
+        for i, t, v in self.get_tokens_unprocessed(text):
+            yield t, v
 
     def get_tokens_unprocessed(self, text):
         length = 0
@@ -68,7 +73,7 @@ class RawTokenLexer(Lexer):
             try:
                 ttypestr, val = match.group().split('\t', 1)
             except ValueError:
-                val = match.group()
+                val = match.group().decode(self.encoding)
                 ttype = Error
             else:
                 ttype = _ttype_cache.get(ttypestr)
@@ -78,6 +83,6 @@ class RawTokenLexer(Lexer):
                     for ttype_ in ttypes:
                         ttype = getattr(ttype, ttype_)
                     _ttype_cache[ttypestr] = ttype
-                val = val[1:-2].decode('string-escape')
+                val = val[2:-2].decode('unicode-escape')
             yield length, ttype, val
             length += len(val)

@@ -6,12 +6,12 @@
     .net languages
 
     :copyright: 2006 by Georg Brandl, Armin Ronacher.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 import re
 
 from pygments.lexer import RegexLexer, bygroups, using, this
-from pygments.token import \
+from pygments.token import Punctuation, \
      Text, Comment, Operator, Keyword, Name, String, Number, Literal
 
 __all__ = ['CSharpLexer', 'BooLexer', 'VbNetLexer']
@@ -39,7 +39,7 @@ class CSharpLexer(RegexLexer):
             (r'//.*?\n', Comment),
             (r'/[*](.|\n)*?[*]/', Comment),
             (r'\n', Text),
-            (r'[~!%^&*()+=|\[\]:;,.<>/?-]', Text),
+            (r'[~!%^&*()+=|\[\]:;,.<>/?-]', Punctuation),
             (r'[{}]', Keyword),
             (r'@"(\\\\|\\"|[^"])*"', String),
             (r'"(\\\\|\\"|[^"\n])*["\n]', String),
@@ -85,7 +85,7 @@ class BooLexer(RegexLexer):
             (r'\s+', Text),
             (r'(#|//).*$', Comment),
             (r'/[*]', Comment, 'comment'),
-            (r'[]{}:(),.;[]', Text),
+            (r'[]{}:(),.;[]', Punctuation),
             (r'\\\n', Text),
             (r'\\', Text),
             (r'(in|is|and|or|not)\b', Operator.Word),
@@ -151,11 +151,11 @@ class VbNetLexer(RegexLexer):
             (r'\n', Text),
             (r'rem\b.*?\n', Comment),
             (r"'.*?\n", Comment),
-            (r'[\(\){}!#,.:]', Text),
             (r'#If\s.*?\sThen|#ElseIf\s.*?\sThen|#End\s+If|#Const|'
              r'#ExternalSource.*?\n|#End\s+ExternalSource|'
              r'#Region.*?\n|#End\s+Region|#ExternalChecksum',
              Comment.Preproc),
+            (r'[\(\){}!#,.:]', Punctuation),
             (r'Option\s+(Strict|Explicit|Compare)\s+'
              r'(On|Off|Binary|Text)', Keyword.Declaration),
             (r'(?<!\.)(AddHandler|Alias|'

@@ -1,56 +1,53 @@
 Todo
 ====
 
-for 0.5
+for 0.7
 -------
-
-- improve guess_lexer heuristics (esp. for template langs)
-
-for 0.6
--------
-
-- more unit tests
-
-- allow "overlay" token types (e.g. Diff + X) 
-  - highlight specials: nth line, a word etc.
-  - dhtml: overlays toggleable by javascript
 
 - lexers:
-    * BASIC
-    * apacheconf
-    * python TBs
-    * haskell
-    * ls -alG
-    * python help() ?
-    * HTML with special formatting?
-    * ocaml
-    * nemerle
-    * scheme/lisp
-    * windows batch files
-    * assembler
-    * objective c
-    * bash
-    * mysql/postgresql/sqlite
-    * tcl
-    * latex special formatting?
+  * Haskell
+  * (Q)BASIC
+  * Lisp
+  * Python TBs
+  * IPython sessions
+  * ls -alG
+  * HTML with special formatting?
+  * LaTeX special formatting?
+  * OCaml
+  * Nemerle
+  * Windows batch files
+  * Assembler
+  * Objective C
+  * MySQL/PostgreSQL/SQLite
+  * Tcl
 
-- tell the PHP and DelphiLexer how to differ between Operators and
-  text.
+- automatically get help for lexers/formatters/options from docstrings
 
-- add a `Punctuation` token type for symbols that are not text
-  but also not a symbol (blocks in ruby etc)
+- a MoinMoin parser
+
+- allow "overlay" token types to highlight specials: nth line, a word etc.
+
+- readd property support for C# lexer? that is, find a regex that doesn't
+  backtrack to death...
 
 - add support for function name highlighting to c++ lexer
 
-- readd property support for C# lexer
+- pygmentize option presets?
 
-- review perl lexer (numerous bugs)
+- more unit tests (test pygmentize, test all formatters comprehensively)
 
-- docstrings?
+- review perl lexer (numerous bugs, but so far no one had complaints ;)
 
-for 0.7 / later
----------------
+- add `Mako lexers`_ written by Ben Bangert.
 
-- moin parser
+
+.. _Mako lexers: http://pygments.pocoo.org/demo/174/
+
+
+for 0.8 -- 1.0
+--------------
+
+- more setuptools entrypoints (html formatter etc.)
+  see paste script's Commands
 
 - add folding? would require more language-aware parsers...

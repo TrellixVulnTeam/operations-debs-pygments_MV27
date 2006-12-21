@@ -18,9 +18,20 @@ Currently, **all lexers** support these options:
 `tabsize`
     If given and greater than 0, expand tabs in the input (default: ``0``).
 
+`encoding`
+    *New in Pygments 0.6.*
 
-These lexers are builtin and can be imported from
-`pygments.lexers`:
+    If given, must be an encoding name (such as ``"utf-8"``). This encoding
+    will be used to convert the input string to Unicode (if it is not already
+    a Unicode string). The default is ``"latin1"``.
+
+    If this option is set to ``"guess"``, a simple UTF-8 vs. Latin-1
+    detection is used, if it is set to ``"chardet"``, the
+    `chardet library <http://chardet.feedparser.org/>`__ is used to
+    guess the encoding of the input.
+
+
+These lexers are builtin and can be imported from `pygments.lexers`:
 
 
 Special lexers
@@ -32,6 +43,7 @@ Special lexers
 
     :Aliases: ``text``
     :Filename patterns: ``*.txt``
+    :Mimetypes: ``text/plain``
 
 
 `RawTokenLexer`
@@ -46,6 +58,7 @@ Special lexers
 
     :Aliases: ``raw``
     :Filename patterns: ``*.raw``
+    :Mimetypes: ``application/x-pygments/tokens``
 
 
 Agile languages
@@ -57,6 +70,7 @@ Agile languages
 
     :Aliases: ``python``, ``py``
     :Filename patterns: ``*.py``, ``*.pyw``
+    :Mimetypes: ``text/x-python``, ``application/x-python``
 
 
 `PythonConsoleLexer`
@@ -74,6 +88,7 @@ Agile languages
 
     :Aliases: ``pycon``
     :Filename patterns: None
+    :Mimetypes: None
 
 
 `RubyLexer`
@@ -82,6 +97,7 @@ Agile languages
 
     :Aliases: ``ruby``, ``rb``
     :Filename patterns: ``*.rb``
+    :Mimetypes: ``text/x-ruby``, ``application/x-ruby``
 
 
 `RubyConsoleLexer`
@@ -98,6 +114,7 @@ Agile languages
 
     :Aliases: ``rbcon``, ``irb``
     :Filename patterns: None
+    :Mimetypes: None
 
 
 `PerlLexer`
@@ -106,6 +123,7 @@ Agile languages
 
     :Aliases: ``perl``, ``pl``
     :Filename patterns: ``*.pl``, ``*.pm``
+    :Mimetypes: ``text/x-perl``, ``application/x-perl``
 
 
 `LuaLexer`
@@ -132,6 +150,18 @@ Agile languages
 
     :Aliases: ``lua``
     :Filename patterns: ``*.lua``
+    :Mimetypes: ``text/x-lua``, ``application/x-lua``
+
+
+`SchemeLexer`
+
+    For Scheme source code. It supports the whole R5RS specification.
+
+    *New in Pygments 0.6.*
+
+    :Aliases: ``scheme``
+    :Filename patterns: ``*.scm``
+    :Mimetypes: ``text/x-scheme``, ``application/x-scheme``
 
 
 Compiled languages
@@ -143,6 +173,7 @@ Compiled languages
 
     :Aliases: ``c``
     :Filename patterns: ``*.c``, ``*.h``
+    :Mimetypes: ``text/x-chdr``, ``text/x-csrc``
 
 
 `CppLexer`
@@ -151,6 +182,7 @@ Compiled languages
 
     :Aliases: ``cpp``, ``c++``
     :Filename patterns: ``*.cpp``, ``*.hpp``, ``*.c++``, ``*.h++``
+    :Mimetypes: ``text/x-c++hdr``, ``text/x-c++src``
 
 
 `DelphiLexer`
@@ -160,6 +192,7 @@ Compiled languages
 
     :Aliases: ``delphi``, ``pas``, ``pascal``, ``objectpascal``
     :Filename patterns: ``*.pas``
+    :Mimetypes: ``text/x-pascal``
 
 
 `JavaLexer`
@@ -168,6 +201,7 @@ Compiled languages
 
     :Aliases: ``java``
     :Filename patterns: ``*.java``
+    :Mimetypes: ``text/x-java``
 
 
 .NET languages
@@ -180,6 +214,8 @@ Compiled languages
 
     :Aliases: ``c#``, ``csharp``
     :Filename patterns: ``*.cs``
+    :Mimetypes: ``text/x-csharp``
+
 
 `BooLexer`
 
@@ -187,6 +223,8 @@ Compiled languages
 
     :Aliases: ``boo``
     :Filename patterns: ``*.boo``
+    :Mimetypes: ``text/x-boo``
+
 
 `VbNetLexer`
 
@@ -196,6 +234,7 @@ Compiled languages
 
     :Aliases: ``vbnet``, ``vb.net``
     :Filename patterns: ``*.vb``, ``*.bas``
+    :Mimetypes: ``text/x-vbnet``, ``text/x-vba``
 
 
 Web-related languages
@@ -207,6 +246,7 @@ Web-related languages
 
     :Aliases: ``js``, ``javascript``
     :Filename patterns: ``*.js``
+    :Mimetypes: ``text/x-javascript``, ``application/x-javascript``, ``text/javascript``
 
 
 `CssLexer`
@@ -215,6 +255,7 @@ Web-related languages
 
     :Aliases: ``css``
     :Filename patterns: ``*.css``
+    :Mimetypes: ``text/css``
 
 
 `HtmlLexer`
@@ -224,6 +265,7 @@ Web-related languages
 
     :Aliases: ``html``
     :Filename patterns: ``*.html``, ``*.htm``, ``*.xhtml``
+    :Mimetypes: ``text/html``, ``application/xhtml+xml``
 
 
 `PhpLexer`
@@ -259,6 +301,7 @@ Web-related languages
 
     :Aliases: ``php``, ``php3``, ``php4``, ``php5``
     :Filename patterns: ``*.php``, ``*.php[345]``
+    :Mimetypes: None
 
 
 `XmlLexer`
@@ -267,6 +310,9 @@ Web-related languages
 
     :Aliases: ``xml``
     :Filename patterns: ``*.xml``
+    :Mimetypes: ``text/xml``, ``application/xml``, ``image/svg+xml``,
+                 ``application/rss+xml``, ``application/atom+xml``,
+                 ``application/xsl+xml``, ``application/xslt+xml``
 
 
 Template languages
@@ -331,6 +377,9 @@ Template languages
 
     :Aliases:   ``html+php``
     :Filename patterns:  ``*.phtml``
+    :Mimetypes: ``text/x-php``, ``application/x-php``,
+                ``application/x-httpd-php``, ``application/x-httpd-php3``,
+                ``application/x-httpd-php4``, ``application/x-httpd-php5``
 
 
 `XmlPhpLexer`
@@ -361,12 +410,12 @@ Template languages
 `DjangoLexer`
 
     Generic `django <http://www.djangoproject.com/documentation/templates/>`_
-    template lexer.
+    and `jinja <http://wsgiarea.pocoo.org/jinja/>`_ template lexer.
 
-    It just highlights django code between the preprocessor directives, other
-    data is left untouched by the lexer.
+    It just highlights django/jinja code between the preprocessor directives,
+    other data is left untouched by the lexer.
 
-    :Aliases:   ``django``
+    :Aliases:   ``django``, ``jinja``
     :Filename patterns: None
 
 
@@ -377,7 +426,7 @@ Template languages
 
     Nested Javascript and CSS is highlighted too.
 
-    :Aliases:   ``html+django``
+    :Aliases:   ``html+django``, ``html+jinja``
     :Filename patterns: None
 
 
@@ -386,7 +435,7 @@ Template languages
     Subclass of the `DjangoLexer` that highlights unlexed data with the
     `XmlLexer`.
 
-    :Aliases:   ``xml+django``
+    :Aliases:   ``xml+django``, ``xml+jinja``
     :Filename patterns: None
 
 
@@ -395,7 +444,7 @@ Template languages
     Subclass of the `DjangoLexer` that highlights unlexed data with the
     `CssLexer`.
 
-    :Aliases:   ``css+django``
+    :Aliases:   ``css+django``, ``css+jinja``
     :Filename patterns: None
 
 
@@ -404,7 +453,8 @@ Template languages
     Subclass of the `DjangoLexer` that highlights unlexed data with the
     `JavascriptLexer`.
 
-    :Aliases:   ``javascript+django``
+    :Aliases:   ``javascript+django``, ``js+django``,
+                ``javascript+jinja``, ``js+jinja``
     :Filename patterns: None
 
 
@@ -457,6 +507,107 @@ Template languages
     :Filename patterns: None
 
 
+`GenshiTextLexer`
+
+    A lexer that highlights `genshi <http://genshi.edgewall.org/>`_ text
+    templates.
+
+    :Aliases:   ``genshitext``
+    :Filename patterns: None
+
+
+`HtmlGenshiLexer`
+
+    A lexer that highlights `genshi <http://genshi.edgewall.org/>`_ and
+    `kid <http://kid-templating.org/>`_ kid HTML templates.
+
+    :Aliases:   ``html+genshi``, ``html+kid``
+    :Filename patterns: None
+
+
+`GenshiLexer`
+
+    A lexer that highlights `genshi <http://genshi.edgewall.org/>`_ and
+    `kid <http://kid-templating.org/>`_ kid XML templates.
+
+    :Aliases:   ``genshi``, ``kid``, ``xml+genshi``, ``xml.kid``
+    :Filename patterns: ``*.kid``
+
+
+`JavascriptGenshiLexer`
+
+    A lexer that highlights javascript code in genshi text templates.
+
+    :Aliases:   ``js+genshitext``, ``js+genshi``, ``javascript+genshitext``,
+                ``javascript+genshi``
+    :Filename patterns: None
+
+
+`CssGenshiLexer`
+
+    A lexer that highlights CSS definitions in genshi text templates.
+
+    :Aliases:   ``css+genshitext``, ``css+genshi``
+    :Filename patterns: None
+
+
+`MyghtyLexer`
+
+    Generic `myghty templates`_ lexer. Code that isn't Myghty
+    markup is yielded as `Token.Other`.
+
+    *New in Pygments 0.6.*
+
+    .. _myghty templates: http://www.myghty.org/
+
+    :Aliases:   ``myghty``
+    :Filename patterns: ``*.myt``, ``autodelegate``
+
+
+`MyghtyHtmlLexer`
+
+    Subclass of the `MyghtyLexer` that highlights unlexer data
+    with the `HtmlLexer`.
+
+    *New in Pygments 0.6.*
+
+    :Aliases:   ``html+myghty``
+    :Filename patterns: None
+
+
+`MyghtyXmlLexer`
+
+    Subclass of the `MyghtyLexer` that highlights unlexer data
+    with the `XmlLexer`.
+
+    *New in Pygments 0.6.*
+
+    :Aliases:   ``xml+myghty``
+    :Filename patterns: None
+
+
+`MyghtyJavascriptLexer`
+
+    Subclass of the `MyghtyLexer` that highlights unlexer data
+    with the `JavascriptLexer`.
+
+    *New in Pygments 0.6.*
+
+    :Aliases:   ``js+myghty``, ``javascript+myghty``
+    :Filename patterns: None
+
+
+`MyghtyCssLexer`
+
+    Subclass of the `MyghtyLexer` that highlights unlexer data
+    with the `CssLexer`.
+
+    *New in Pygments 0.6.*
+
+    :Aliases:   ``css+myghty``
+    :Filename patterns: None
+
+
 Other languages
 ===============
 
@@ -467,6 +618,7 @@ Other languages
 
     :Aliases: ``sql``
     :Filename patterns: ``*.sql``
+    :Mimetypes: ``text/x-sql``
 
 
 `BrainfuckLexer`
@@ -476,6 +628,18 @@ Other languages
 
     :Aliases: ``brainfuck``
     :Filename patterns: ``*.bf``, ``*.b``
+    :Mimetypes: None
+
+
+`BashLexer`
+
+    Lexer for (ba)sh shell scripts.
+
+    *New in Pygments 0.6.*
+
+    :Aliases: ``bash``, ``sh``
+    :Filename patterns: ``*.sh``
+    :Mimetypes: ``application/x-sh``, ``application/x-shellscript`` 
 
 
 Text lexers
@@ -487,6 +651,7 @@ Text lexers
 
     :Aliases: ``ini``, ``cfg``
     :Filename patterns: ``*.ini``, ``*.cfg``
+    :Mimetypes: None
 
 
 `MakefileLexer`
@@ -495,6 +660,7 @@ Text lexers
 
     :Aliases: ``make``, ``makefile``, ``mf``
     :Filename patterns: ``*.mak``, ``Makefile``, ``makefile``
+    :Mimetypes: ``text/x-makefile``
 
 
 `DiffLexer`
@@ -503,6 +669,7 @@ Text lexers
 
     :Aliases: ``diff``
     :Filename patterns: ``*.diff``, ``*.patch``
+    :Mimetypes: ``text/x-diff``, ``text/x-patch``
 
 
 `IrcLogsLexer`
@@ -511,6 +678,7 @@ Text lexers
 
     :Aliases: ``irc``
     :Filename patterns: None
+    :Mimetypes: None
 
 
 `TexLexer`
@@ -519,3 +687,63 @@ Text lexers
 
     :Aliases: ``tex``, ``latex``
     :Filename patterns: ``*.tex``, ``*.aux``, ``*.toc``
+    :Mimetypes: ``text/x-tex``, ``text/x-latex``
+
+
+`GroffLexer`
+
+    Lexer for the (g)roff typesetting language, supporting groff
+    extensions. Mainly useful for highlighting manpage sources.
+
+    *New in Pygments 0.6.*
+
+    :Aliases: ``groff``, ``nroff``, ``man``
+    :Filename patterns: ``*.[1234567]``, ``*.man``
+    :Mimetypes: ``text/troff``, ``application/x-troff``
+
+
+`ApacheConfLexer`
+
+    Lexer for configuration files following the Apache config file
+    format.
+
+    *New in Pygments 0.6.*
+
+    :Aliases: ``apacheconf``, ``aconf``, ``apache``
+    :Filename patterns: ``.htaccess``, ``apache.conf``, ``apache2.conf``
+    :Mimetypes: None
+
+
+`BBCodeLexer`
+
+    A Lexer that highlights BBCode(-like) syntax.
+
+    *New in Pygments 0.6.*
+
+    :Aliases: ``bbcode``
+    :Filename patterns: None
+    :Mimetypes: None
+
+
+Iterating over all lexers
+=========================
+
+*New in Pygments 0.6.*
+
+To get all lexers (both the builtin and the plugin ones), you can
+use the `get_all_lexers()` function from the `pygments.lexers`
+module:
+
+.. sourcecode:: pycon
+
+    >>> from pygments.lexers import get_all_lexers
+    >>> i = get_all_lexers()
+    >>> i.next()
+    ('Diff', ('diff',), ('*.diff', '*.patch'), ('text/x-diff', 'text/x-patch'))
+    >>> i.next()
+    ('Delphi', ('delphi', 'objectpascal', 'pas', 'pascal'), ('*.pas',), ('text/x-pascal',))
+    >>> i.next()
+    ('XML+Ruby', ('xml+erb', 'xml+ruby'), (), ())
+
+As you can see, the return value is an iterator which yields tuples
+in the form ``(name, aliases, filetypes, mimetypes)``.

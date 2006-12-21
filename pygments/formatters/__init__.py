@@ -6,12 +6,13 @@
     Pygments formatters.
 
     :copyright: 2006 by Georg Brandl, Armin Ronacher.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 import os.path
 from pygments.formatters.html import HtmlFormatter
 from pygments.formatters.terminal import TerminalFormatter
 from pygments.formatters.latex import LatexFormatter
+from pygments.formatters.rtf import RtfFormatter
 from pygments.formatters.bbcode import BBCodeFormatter
 from pygments.formatters.other import NullFormatter, RawTokenFormatter
 from pygments.plugin import find_plugin_formatters
@@ -20,11 +21,13 @@ from pygments.plugin import find_plugin_formatters
 def _doc_desc(obj):
     if not obj.__doc__:
         return ''
-    res = ''
+    res = []
     for line in obj.__doc__.strip().splitlines():
-        if line.strip(): res += line.strip() + " "
-        else: break
-    return res
+        if line.strip():
+            res.append(line.strip())
+        else:
+            break
+    return ''.join(res)
 
 
 #: Map formatter classes to ``(longname, names, file extensions, descr)``.
@@ -35,6 +38,8 @@ FORMATTERS = {
                            _doc_desc(TerminalFormatter)),
     LatexFormatter:       ('LaTeX', ('latex', 'tex'), ('.tex',),
                            _doc_desc(LatexFormatter)),
+    RtfFormatter:         ('RTF', ('rtf',), ('.rtf',),
+                           _doc_desc(RtfFormatter)),
     RawTokenFormatter:    ('Raw tokens', ('raw', 'tokens'), ('.raw',),
                            _doc_desc(RawTokenFormatter)),
     NullFormatter:        ('Text only', ('text', 'null'), ('.txt',),
@@ -77,3 +82,11 @@ def get_formatter_for_filename(fn, **options):
     if not cls:
         raise ValueError("No formatter found for file name %r" % fn)
     return cls(**options)
+
+
+def get_all_formatters():
+    """Return a generator for all formatters."""
+    for formatter in FORMATTERS:
+        yield formatter
+    for _, formatter in find_plugin_formatters():
+        yield formatter

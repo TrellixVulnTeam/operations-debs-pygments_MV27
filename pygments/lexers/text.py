@@ -5,19 +5,21 @@
 
     Lexers for non-source code file types: Diff, Makefiles, Ini configs etc.
 
-    :copyright: 2006 by Armin Ronacher, Georg Brandl.
-    :license: GNU LGPL, see LICENSE for more details.
+    :copyright: 2006 by Armin Ronacher, Georg Brandl,
+                Tim Hatch <tim@timhatch.com>,
+                Ronny Pfannschmidt.
+    :license: BSD, see LICENSE for more details.
 """
 
 import re
 
 from pygments.lexer import RegexLexer, bygroups, include
-from pygments.token import \
+from pygments.token import Punctuation, \
     Text, Comment, Keyword, Name, String, Generic, Operator, Number
 
 
 __all__ = ['IniLexer', 'MakefileLexer', 'DiffLexer', 'IrcLogsLexer',
-           'TexLexer']
+           'TexLexer', 'GroffLexer', 'ApacheConfLexer', 'BBCodeLexer']
 
 
 class IniLexer(RegexLexer):
@@ -28,12 +30,18 @@ class IniLexer(RegexLexer):
     tokens = {
         'root': [
             (r'\s+', Text),
-            (r';.*?$', Comment),
+            (r'[;#].*?$', Comment),
             (r'\[.*?\]$', Keyword),
             (r'(.*?)(\s*)(=)(\s*)(.*?)$',
              bygroups(Name.Attribute, Text, Operator, Text, String))
         ]
     }
+
+    def analyse_text(text):
+        npos = text.find('\n')
+        if npos < 3:
+            return False
+        return text[0] == '[' and text[npos-1] == ']'
 
 
 class MakefileLexer(RegexLexer):
@@ -63,7 +71,7 @@ class MakefileLexer(RegexLexer):
         ],
         'block-header': [
             (r'[^,\n]', String),
-            (r',', Text),
+            (r',', Punctuation),
             (r'\n[\t ]+', Text, 'block'),
             (r'\n', Text, '#pop')
         ],
@@ -83,7 +91,7 @@ class DiffLexer(RegexLexer):
     name = 'Diff'
     aliases = ['diff']
     filenames = ['*.diff', '*.patch']
-    mimetypes = ['text/x-diff']
+    mimetypes = ['text/x-diff', 'text/x-patch']
 
     tokens = {
         'root': [
@@ -97,6 +105,14 @@ class DiffLexer(RegexLexer):
             (r'.*\n', Text),
         ]
     }
+
+    def analyse_text(text):
+        if text[:7] == 'Index: ':
+            return True
+        if text[:5] == 'diff ':
+            return True
+        if text[:4] == '--- ':
+            return 0.9
 
 
 class IrcLogsLexer(RegexLexer):
@@ -135,6 +151,21 @@ class IrcLogsLexer(RegexLexer):
         'msg': [
             (r"[^\s]+:", Name.Attribute),  # Prefix
             (r".*?\n", Text, '#pop'),
+        ],
+    }
+
+
+class BBCodeLexer(RegexLexer):
+    name = 'BBCode'
+    aliases = ['bbcode']
+
+    tokens = {
+        'root' : [
+            (r'[\s\w]+', Text),
+            (r'(\[)(/?[^\]\n\r=]+)(\])',
+             bygroups(Keyword, Keyword.Pseudo, Keyword)),
+            (r'(\[)([^\]\n\r=]+)(=)([^\]\n\r]+)(\])',
+             bygroups(Keyword, Keyword.Pseudo, Operator, String, Keyword)),
         ],
     }
 
@@ -183,4 +214,95 @@ class TexLexer(RegexLexer):
             (r'\*', Keyword),
             (r'', Text, '#pop'),
         ],
+    }
+
+    def analyse_text(text):
+        for start in ("\\documentclass", "\\input", "\\documentstyle",
+                      "\\relax"):
+            if text[:len(start)] == start:
+                return True
+
+
+class GroffLexer(RegexLexer):
+    """
+    Lexer for the roff format, supporting groff extensions.  Mainly useful
+    for highlighting manpages.
+    """
+    name = 'Groff'
+    aliases = ['groff', 'nroff', 'man']
+    filenames = ['*.[1234567]', '*.man']
+    mimetypes = ['application/x-troff', 'text/troff']
+
+    tokens = {
+        'root': [
+            (r'(?i)(\.)(\w+)', bygroups(Text, Keyword), 'request'),
+            (r'\.', Punctuation, 'request'),
+            # Regular characters, slurp till we find a backslash or newline
+            (r'[^\\\n]*', Text, 'textline'),
+        ],
+        'textline': [
+            include('escapes'),
+            (r'[^\\\n]+', Text),
+            (r'\n', Text, '#pop'),
+        ],
+        'escapes': [
+            # groff has many ways to write escapes.
+            (r'\\"[^\n]*', Comment),
+            (r'\\[fn]\w', String.Escape),
+            (r'\\\(..', String.Escape),
+            (r'\\.\[.*\]', String.Escape),
+            (r'\\.', String.Escape),
+            (r'\\\n', Text, 'request'),
+        ],
+        'request': [
+            (r'\n', Text, '#pop'),
+            include('escapes'),
+            (r'"[^\n"]+"', String.Double),
+            (r'\d+', Number),
+            (r'\S+', String),
+            (r'\s+', Text),
+        ],
+    }
+
+    def analyse_text(text):
+        if text[0] != '.':
+            return False
+        if text[:3] == '.\\"':
+            return True
+        if text[:4] == '.TH ':
+            return True
+        if text[1:3].isalnum() and text[3].isspace():
+            return 0.9
+
+
+class ApacheConfLexer(RegexLexer):
+    """
+    Lex Apache configuration like files.
+    """
+    name = 'ApacheConf'
+    aliases = ['apacheconf', 'aconf', 'apache']
+    filenames = ['.htaccess', 'apache.conf', 'apache2.conf']
+    flags = re.MULTILINE | re.IGNORECASE
+
+    tokens = {
+        'root': [
+            (r'^(\s*)(#.*?)$', bygroups(Text, Comment)),
+            (r'\s+', Text),
+            (r'(<[^\s>]+)(?:(\s+)(.*?))?(>)',
+             bygroups(Name.Tag, Text, String, Name.Tag)),
+            (r'([a-zA-Z][a-zA-Z0-9]*)(\s+)',
+             bygroups(Name.Builtin, Text), 'value')
+        ],
+        'value': [
+            (r'$', Text, '#pop'),
+            (r'[^\S\n]+', Text),
+            (r'\d+', Number),
+            (r'/([a-zA-Z0-9][a-zA-Z0-9_./-]+)', String.Other),
+            (r'(on|off|none|any|all|double|email|dns|min|minimal|'
+             r'os|productonly|full|emerg|alert|crit|error|warn|'
+             r'notice|info|debug|registry|script|inetd|standalone|'
+             r'user|group)\b', Keyword),
+            (r'"([^"\\]*(?:\\.[^"\\]*)*)"', String.Double),
+            (r'[^\s"]+', Text)
+        ]
     }

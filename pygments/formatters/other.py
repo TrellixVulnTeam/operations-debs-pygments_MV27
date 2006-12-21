@@ -6,7 +6,7 @@
     Other formatters: NullFormatter, RawTokenFormatter.
 
     :copyright: 2006 by Georg Brandl, Armin Ronacher.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from pygments.formatter import Formatter
@@ -20,8 +20,12 @@ class NullFormatter(Formatter):
     Output the text unchanged without any formatting.
     """
     def format(self, tokensource, outfile):
+        enc = self.encoding
         for ttype, value in tokensource:
-            outfile.write(value)
+            if enc:
+                outfile.write(value.encode(enc))
+            else:
+                outfile.write(value)
 
 
 class RawTokenFormatter(Formatter):
@@ -36,6 +40,8 @@ class RawTokenFormatter(Formatter):
         If set to "gz" or "bz2", compress the token stream with
         the given compression algorithm (default: '').
     """
+
+    unicodeoutput = False
 
     def __init__(self, **options):
         Formatter.__init__(self, **options)
@@ -60,14 +66,15 @@ class RawTokenFormatter(Formatter):
             flush = outfile.flush
 
         lasttype = None
-        lastval = ''
+        lastval = u''
         for ttype, value in tokensource:
+            value = repr(value)
             if ttype is lasttype:
                 lastval += value
             else:
                 if lasttype:
-                    write("%s\t%r\n" % (lasttype, lastval))
+                    write("%s\t%s\n" % (lasttype, lastval))
                 lastval = value
                 lasttype = ttype
-        write("%s\t%r\n" % (lasttype, lastval))
+        write("%s\t%s\n" % (lasttype, lastval))
         flush()

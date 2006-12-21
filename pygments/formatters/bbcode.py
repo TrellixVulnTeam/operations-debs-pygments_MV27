@@ -6,7 +6,7 @@
     BBcode formatter.
 
     :copyright: 2006 by Lukas Meuser.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 
@@ -44,7 +44,7 @@ class BBCodeFormatter(Formatter):
         self._code = get_bool_opt(options, 'codetag', False)
         self._mono = get_bool_opt(options, 'monofont', False)
 
-        self.styles = {} 
+        self.styles = {}
         self._make_styles()
 
     def _make_styles(self):
@@ -64,7 +64,7 @@ class BBCodeFormatter(Formatter):
                 end = '[/u]' + end
             # there are no common BBcodes for background-color and border
 
-            self.styles[token] = start, end
+            self.styles[ttype] = start, end
 
     def format(self, tokensource, outfile):
         if self._code:
@@ -72,10 +72,13 @@ class BBCodeFormatter(Formatter):
         if self._mono:
             outfile.write('[font=monospace]')
 
+        enc = self.encoding
         lastval = ''
         lasttype = None
 
         for ttype, value in tokensource:
+            if enc:
+                value = value.encode(enc)
             while ttype not in self.styles:
                 ttype = ttype.parent
             if ttype == lasttype:

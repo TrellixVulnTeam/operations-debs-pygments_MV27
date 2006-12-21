@@ -6,7 +6,7 @@
     Base lexer classes.
 
     :copyright: 2006 by Georg Brandl.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 import re
 
@@ -50,6 +50,12 @@ class Lexer(object):
         (default: False).
     ``tabsize``
         If given and greater than 0, expand tabs in the input (default: 0).
+    ``encoding``
+        If given, must be an encoding name. This encoding will be used to
+        convert the input string to Unicode, if it is not already a Unicode
+        string. The default is to use latin1 (default: 'latin1').
+        Can also be 'guess' to use a simple UTF-8 / Latin1 detection, or
+        'chardet' to use the chardet library, if it is installed.
     """
 
     #: Name of the lexer
@@ -74,6 +80,7 @@ class Lexer(object):
         self.stripnl = get_bool_opt(options, 'stripnl', True)
         self.stripall = get_bool_opt(options, 'stripall', False)
         self.tabsize = get_int_opt(options, 'tabsize', 0)
+        self.encoding = options.get('encoding', 'latin1')
 
     def __repr__(self):
         if self.options:
@@ -102,7 +109,26 @@ class Lexer(object):
 
         Also preprocess the text, i.e. expand tabs and strip it if wanted.
         """
-        text = type(text)('\n').join(text.splitlines())
+        if isinstance(text, unicode):
+            text = u'\n'.join(text.splitlines())
+        else:
+            text = '\n'.join(text.splitlines())
+            if self.encoding == 'guess':
+                try:
+                    text = text.decode('utf-8-sig')
+                except UnicodeDecodeError:
+                    text = text.decode('latin1')
+            elif self.encoding == 'chardet':
+                try:
+                    import chardet
+                except ImportError:
+                    raise ImportError('To enable chardet encoding guessing, please '
+                                      'install the chardet library from '
+                                      'http://chardet.feedparser.org/')
+                enc = chardet.detect(text)
+                text = text.decode(enc['encoding'])
+            else:
+                text = text.decode(self.encoding)
         if self.stripall:
             text = text.strip()
         elif self.stripnl:
@@ -215,7 +241,9 @@ def bygroups(*args):
     """
     def callback(lexer, match, ctx=None):
         for i, action in enumerate(args):
-            if type(action) is _TokenType:
+            if action is None:
+                continue
+            elif type(action) is _TokenType:
                 data = match.group(i + 1)
                 if data:
                     yield match.start(i + 1), action, data
@@ -247,8 +275,16 @@ def using(_other, **kwargs):
     """
     if _other is this:
         def callback(lexer, match, ctx=None):
+            # if keyword arguments are given the callback
+            # function has to create a new lexer instance
+            if kwargs:
+                # XXX: cache that somehow
+                kwargs.update(lexer.options)
+                lx = lexer.__class__(**kwargs)
+            else:
+                lx = lexer
             s = match.start()
-            for i, t, v in lexer.get_tokens_unprocessed(match.group()):
+            for i, t, v in lx.get_tokens_unprocessed(match.group()):
                 yield i + s, t, v
             if ctx:
                 ctx.pos = match.end()
@@ -410,7 +446,7 @@ class RegexLexer(Lexer):
                         pos += 1
                         statestack = ['root']
                         statetokens = self._tokens['root']
-                        yield pos, Text, '\n'
+                        yield pos, Text, u'\n'
                         continue
                     yield pos, Error, text[pos]
                     pos += 1
@@ -487,7 +523,7 @@ class ExtendedRegexLexer(RegexLexer):
                         ctx.pos += 1
                         ctx.stack = ['root']
                         statetokens = self._tokens['root']
-                        yield ctx.pos, Text, '\n'
+                        yield ctx.pos, Text, u'\n'
                         continue
                     yield ctx.pos, Error, text[ctx.pos]
                     ctx.pos += 1
@@ -507,7 +543,7 @@ def do_insertions(insertions, tokens):
 
     The result is a combined token stream.
 
-    XXX: The indices yielded by this function are not correct!
+    FIXME: The indices yielded by this function are not correct!
     """
     insertions = iter(insertions)
     try:

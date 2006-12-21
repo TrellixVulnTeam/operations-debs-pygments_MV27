@@ -6,14 +6,13 @@
     Formatter for terminal output with ANSI sequences.
 
     :copyright: 2006 by Georg Brandl.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from pygments.formatter import Formatter
 from pygments.token import Keyword, Name, Comment, String, Error, \
      Number, Operator, Generic, Token
 from pygments.console import ansiformat
-from pygments.util import get_bool_opt
 
 
 __all__ = ['TerminalFormatter']
@@ -67,18 +66,16 @@ class TerminalFormatter(Formatter):
         ``colorscheme``
             ``None`` or a dictionary mapping token types to
             ``(lightbg, darkbg)`` color names.
-
-        ``debug``
-            If true, output "<<ERROR>>" after each error token.
         """
         Formatter.__init__(self, **options)
         self.darkbg = options.get('bg', 'light') == 'dark'
         self.colorscheme = options.get('colorscheme', None) or TERMINAL_COLORS
-        self.debug = get_bool_opt(options, 'debug', False)
 
     def format(self, tokensource, outfile):
-        dbg = self.debug
+        enc = self.encoding
         for ttype, value in tokensource:
+            if enc:
+                value = value.encode(enc)
             color = self.colorscheme.get(ttype)
             while color is None:
                 ttype = ttype[:-1]
@@ -94,5 +91,3 @@ class TerminalFormatter(Formatter):
                     outfile.write(ansiformat(color, spl[-1]))
             else:
                 outfile.write(value)
-            if dbg and ttype is Error:
-                outfile.write('<<ERROR>>')

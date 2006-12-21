@@ -5,8 +5,9 @@
 
     Lexers for web-related languages: JavaScript, CSS, HTML, XML, PHP.
 
-    :copyright: 2006 by Georg Brandl, Armin Ronacher.
-    :license: GNU LGPL, see LICENSE for more details.
+    :copyright: 2006 by Georg Brandl, Armin Ronacher,
+                Tim Hatch <tim@timhatch.com>.
+    :license: BSD, see LICENSE for more details.
 """
 
 import re
@@ -15,9 +16,9 @@ try:
 except NameError:
     from sets import Set as set
 
-from pygments.lexer import Lexer, RegexLexer, bygroups, using
+from pygments.lexer import RegexLexer, bygroups, using, include, this
 from pygments.token import \
-     Text, Comment, Operator, Keyword, Name, String, Number, Other
+     Text, Comment, Operator, Keyword, Name, String, Number, Other, Punctuation
 from pygments.util import get_bool_opt, get_list_opt, looks_like_xml, \
                           html_doctype_matches
 
@@ -30,7 +31,7 @@ class JavascriptLexer(RegexLexer):
     name = 'JavaScript'
     aliases = ['js', 'javascript']
     filenames = ['*.js']
-    mimetypes = ['application/x-javascript', 'text/x-javascript']
+    mimetypes = ['application/x-javascript', 'text/x-javascript', 'text/javascript']
 
     flags = re.DOTALL
     tokens = {
@@ -39,7 +40,8 @@ class JavascriptLexer(RegexLexer):
             (r'//.*?\n', Comment),
             (r'/\*.*?\*/', Comment),
             (r'/(\\\\|\\/|[^/\n])*/[gim]*', String.Regex),
-            (r'[~\^\*!%&\[\]\{\}\(\)<>\|+=:;,./?-]', Operator),
+            (r'[~\^\*!%&<>\|+=:;,/?-\\]+', Operator),
+            (r'[{}\[\]();.]+', Punctuation),
             (r'(for|in|while|do|break|return|continue|if|else|throw|try|'
              r'catch|var|with|const|label|function|new|typeof|'
              r'instanceof|this)\b', Keyword),
@@ -65,9 +67,14 @@ class CssLexer(RegexLexer):
 
     tokens = {
         'root': [
+            (r'(@media)(\s+)(\w+)(\s*)({)', bygroups(Keyword, Text, String,
+             Text, Punctuation), 'media'),
+            include('basics'),
+        ],
+        'basics': [
             (r'\s+', Text),
             (r'/\*(?:.|\n)*?\*/', Comment),
-            (r'{', Operator, 'content'),
+            (r'{', Punctuation, 'content'),
             (r'\:[a-zA-Z0-9_-]+', Name.Decorator),
             (r'\.[a-zA-Z0-9_-]+', Name.Class),
             (r'\#[a-zA-Z0-9_-]+', Name.Function),
@@ -76,9 +83,13 @@ class CssLexer(RegexLexer):
             (r'"(\\\\|\\"|[^"])*"', String.Double),
             (r"'(\\\\|\\'|[^'])*'", String.Single)
         ],
+        'media': [
+            include('basics'),
+            (r'}', Punctuation, '#pop')
+        ],
         'content': [
             (r'\s+', Text),
-            (r'}', Operator, '#pop'),
+            (r'}', Punctuation, '#pop'),
             (r'url\(.*?\)', String.Other),
             (r'^@.*?$', Comment.Preproc),
             (r'(azimuth|background-attachment|background-color|'
@@ -168,7 +179,8 @@ class CssLexer(RegexLexer):
             (r'\#[a-zA-Z0-9]{1,6}', Number),
             (r'[\.-]?[0-9]*[\.]?[0-9]+(em|px|\%|pt|pc|in|mm|cm|ex)', Number),
             (r'-?[0-9]+', Number),
-            (r'[~\^\*!%&\[\]\(\)<>\|+=@:;,./?-]', Operator),
+            (r'[~\^\*!%&<>\|+=@:,./?-]+', Operator),
+            (r'[\[\]();]+', Punctuation),
             (r'"(\\\\|\\"|[^"])*"', String.Double),
             (r"'(\\\\|\\'|[^'])*'", String.Single),
             (r'[a-zA-Z][a-zA-Z0-9]+', Name)
@@ -247,9 +259,11 @@ class PhpLexer(RegexLexer):
             (r'/\*.*?\*/', Comment),
             (r'(->|::)(\s*)([a-zA-Z_][a-zA-Z0-9_]*)',
              bygroups(Operator, Text, Name.Attribute)),
-            (r'[~!%^&*()+=|\[\]:;,.<>/?{}@-]', Text),
+            (r'[~!%^&*+=|:.<>/?@-]+', Operator),
+            (r'[\[\]{}();,]+', Punctuation),
             (r'(class)(\s+)', bygroups(Keyword, Text), 'classname'),
-            (r'(function)(\s+)', bygroups(Keyword, Text), 'functionname'),
+            (r'(function)(\s+)(&?)(\s*)',
+              bygroups(Keyword, Text, Operator, Text), 'functionname'),
             (r'(and|E_PARSE|old_function|E_ERROR|or|as|E_WARNING|parent|'
              r'eval|PHP_OS|break|exit|case|extends|PHP_VERSION|cfunction|'
              r'FALSE|print|for|require|continue|foreach|require_once|'
@@ -265,14 +279,31 @@ class PhpLexer(RegexLexer):
             ('[a-zA-Z_][a-zA-Z0-9_]*', Name.Other),
             (r"[0-9](\.[0-9]*)?(eE[+-][0-9])?[flFLdD]?|"
              r"0[xX][0-9a-fA-F]+[Ll]?", Number),
-            (r'"(\\\\|\\"|[^"])*"', String.Double),
-            (r"'(\\\\|\\'|[^'])*'", String.Single)
+            (r"'([^'\\]*(?:\\.[^'\\]*)*)'", String.Single),
+            (r'`([^`\\]*(?:\\.[^`\\]*)*)`', String.Backtick),
+            (r'"', String.Double, 'string'),
         ],
         'classname': [
             (r'[a-zA-Z_][a-zA-Z0-9_]*', Name.Class, '#pop')
         ],
         'functionname': [
             (r'[a-zA-Z_][a-zA-Z0-9_]*', Name.Function, '#pop')
+        ],
+        'string': [
+            (r'"', String.Double, '#pop'),
+            (r'[^{$"\\]+', String.Double),
+            (r'\\([nrt\"$]|[0-7]{1,3}|x[0-9A-Fa-f]{1,2})', String.Escape),
+            (r'\$[a-zA-Z_][a-zA-Z0-9_]*(\[\S+\]|->[a-zA-Z_][a-zA-Z0-9_]*)?',
+             String.Interpol),
+            (r'(\{\$\{)(.*?)(\}\})',
+             bygroups(String.Interpol, using(this, _startinline=True),
+                      String.Interpol)),
+            (r'(\{)(\$.*?)(\})',
+             bygroups(String.Interpol, using(this, _startinline=True),
+                      String.Interpol)),
+            (r'(\$\{)(\S+)(\})',
+             bygroups(String.Interpol, Name.Variable, String.Interpol)),
+            (r'[${\\]+', String.Double)
         ]
     }
 
@@ -282,6 +313,10 @@ class PhpLexer(RegexLexer):
         self.disabledmodules = get_list_opt(
             options, 'disabledmodules', ['unknown'])
         self.startinline = get_bool_opt(options, 'startinline', False)
+
+        # private option argument for the lexer itself
+        if '_startinline' in options:
+            self.startinline = options.pop('_startinline')
 
         # collect activated functions in a set
         self._functions = set()
@@ -317,8 +352,10 @@ class XmlLexer(RegexLexer):
 
     name = 'XML'
     aliases = ['xml']
-    filenames = ['*.xml']
-    mimetypes = ['text/xml', 'application/xml', 'image/svg+xml']
+    filenames = ['*.xml', '*.xsl', '*.rss']
+    mimetypes = ['text/xml', 'application/xml', 'image/svg+xml',
+                 'application/rss+xml', 'application/atom+xml',
+                 'application/xsl+xml', 'application/xslt+xml']
 
     tokens = {
         'root': [
@@ -328,8 +365,8 @@ class XmlLexer(RegexLexer):
             ('<!--', Comment, 'comment'),
             (r'<\?.*?\?>', Comment.Preproc),
             ('<![^>]*>', Comment.Preproc),
-            (r'<\s*[a-zA-Z0-9:-]+', Name.Tag, 'tag'),
-            (r'<\s*/\s*[a-zA-Z0-9:-]+\s*>', Name.Tag),
+            (r'<\s*[a-zA-Z0-9:.-]+', Name.Tag, 'tag'),
+            (r'<\s*/\s*[a-zA-Z0-9:.-]+\s*>', Name.Tag),
         ],
         'comment': [
             ('[^-]+', Comment),
@@ -338,7 +375,7 @@ class XmlLexer(RegexLexer):
         ],
         'tag': [
             (r'\s+', Text),
-            (r'[a-zA-Z0-9_:-]+\s*=', Name.Attribute, 'attr'),
+            (r'[a-zA-Z0-9_.:-]+\s*=', Name.Attribute, 'attr'),
             (r'/?\s*>', Name.Tag, '#pop'),
         ],
         'attr': [
