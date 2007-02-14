@@ -18,9 +18,7 @@ build: build-indep
 
 build-indep:
 	dh_testdir
-	if [ ! -d debian/python-pygments/usr/share/doc/python-pygments/ ]; then \
-		mkdir -p debian/python-pygments/usr/share/doc/python-pygments/; \
-	fi
+	dh_installdirs
 	PYTHONPATH='.' python docs/generate.py html debian/python-pygments/usr/share/doc/python-pygments/
 	touch $@
 
@@ -35,11 +33,9 @@ install-python%:
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs
+	dh_installchangelogs CHANGES
 	dh_installdocs
 	dh_installman
-	mv debian/python-pygments/usr/share/man/man1/pygments.1 \
-	   debian/python-pygments/usr/share/man/man1/pygmentize.1
 	dh_pycentral
 	dh_compress -X.py
 	dh_fixperms
