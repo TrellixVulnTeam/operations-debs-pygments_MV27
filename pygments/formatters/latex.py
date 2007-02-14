@@ -5,7 +5,7 @@
 
     Formatter for LaTeX fancyvrb output.
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 import cStringIO
@@ -46,32 +46,55 @@ DOC_TEMPLATE = r'''
 
 
 class LatexFormatter(Formatter):
+    r"""
+    Format tokens as LaTeX code. This needs the `fancyvrb` and `color`
+    standard packages.
+
+    Without the `full` option, code is formatted as one ``Verbatim``
+    environment, like this:
+
+    .. sourcecode:: latex
+
+        \begin{Verbatim}[commandchars=@\[\]]
+        @Can[def ]@Cax[foo](bar):
+            @Can[pass]
+        \end{Verbatim}
+
+    The command sequences used here (``@Can`` etc.) are generated from the given
+    `style` and can be retrieved using the `get_style_defs` method.
+
+    With the `full` option, a complete LaTeX document is output, including
+    the command definitions in the preamble.
+
+    The `get_style_defs(arg='')` method of a `LatexFormatter` returns a string
+    containing ``\newcommand`` commands defining the commands used inside the
+    ``Verbatim`` environments. If the argument `arg` is true,
+    ``\renewcommand`` is used instead.
+
+    Additional options accepted:
+
+    `docclass`
+        If the `full` option is enabled, this is the document class to use
+        (default: ``'article'``).
+
+    `preamble`
+        If the `full` option is enabled, this can be further preamble commands,
+        e.g. ``\usepackage`` (default: ``''``).
+
+    `verboptions`
+        Additional options given to the Verbatim environment (see the *fancyvrb*
+        docs for possible values) (default: ``''``).
+
+    `commandprefix`
+        The LaTeX commands used to produce colored output are constructed
+        using this prefix and some letters (default: ``'C'``).
+        *New in Pygments 0.7.*
     """
-    Output LaTeX "color" and "fancyvrb" control sequences.
-    """
+    name = 'LaTeX'
+    aliases = ['latex', 'tex']
+    filenames = ['*.tex']
 
     def __init__(self, **options):
-        """
-        Additional options accepted:
-
-        ``docclass``
-            If ``full`` is true, this is the document class to use (default: 'article').
-        ``preamble``
-            If ``full`` is true, this can be further preamble commands (default: '').
-        ``linenos``
-            If true, output line numbers (default: False).
-        ``linenostart``
-            The line number for the first line (default: 1).
-        ``linenostep``
-            If set to a number n > 1, only every nth line number is printed (default: 1).
-        ``verboptions``
-            Additional options given to the Verbatim environment (default: '').
-        ``nobackground``
-            If set to ``True`` the formatter won't output the background color
-            for the overall element (default: ``False``)
-            Note that light colors on dark background with this option disabled
-            won't be readable very good.
-        """
         Formatter.__init__(self, **options)
         self.docclass = options.get('docclass', 'article')
         self.preamble = options.get('preamble', '')
@@ -80,6 +103,7 @@ class LatexFormatter(Formatter):
         self.linenostep = abs(get_int_opt(options, 'linenostep', 1))
         self.verboptions = options.get('verboptions', '')
         self.nobackground = get_bool_opt(options, 'nobackground', False)
+        self.commandprefix = options.get('commandprefix', 'C')
 
         self._create_stylecmds()
 
@@ -87,6 +111,7 @@ class LatexFormatter(Formatter):
     def _create_stylecmds(self):
         t2c = self.ttype2cmd = {Token: ''}
         c2d = self.cmd2def = {}
+        cp = self.commandprefix
 
         letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
         first = iter(letters)
@@ -127,11 +152,11 @@ class LatexFormatter(Formatter):
             if cmndef == '#1':
                 continue
             try:
-                alias = 'C' + firstl + second.next()
+                alias = cp + firstl + second.next()
             except StopIteration:
                 firstl = first.next()
                 second = iter(letters)
-                alias = 'C' + firstl + second.next()
+                alias = cp + firstl + second.next()
             t2c[ttype] = alias
             c2d[alias] = cmndef
 
@@ -191,6 +216,6 @@ class LatexFormatter(Formatter):
                 dict(docclass  = self.docclass,
                      preamble  = self.preamble,
                      title     = self.title,
-                     encoding  = self.encoding,
+                     encoding  = self.encoding or 'latin1',
                      styledefs = self.get_style_defs(),
                      code      = outfile.getvalue()))

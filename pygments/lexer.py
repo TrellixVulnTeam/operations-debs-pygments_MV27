@@ -5,7 +5,7 @@
 
     Base lexer classes.
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 import re
@@ -15,8 +15,11 @@ try:
 except NameError:
     from sets import Set as set
 
+from pygments.filter import apply_filters, Filter
+from pygments.filters import get_filter_by_name
 from pygments.token import Error, Text, Other, _TokenType
-from pygments.util import get_bool_opt, get_int_opt, make_analysator
+from pygments.util import get_bool_opt, get_int_opt, get_list_opt, \
+     make_analysator
 
 
 __all__ = ['Lexer', 'RegexLexer', 'ExtendedRegexLexer', 'DelegatingLexer',
@@ -81,6 +84,10 @@ class Lexer(object):
         self.stripall = get_bool_opt(options, 'stripall', False)
         self.tabsize = get_int_opt(options, 'tabsize', 0)
         self.encoding = options.get('encoding', 'latin1')
+        # self.encoding = options.get('inencoding', None) or self.encoding
+        self.filters = []
+        for filter_ in get_list_opt(options, 'filters', ()):
+            self.add_filter(filter_)
 
     def __repr__(self):
         if self.options:
@@ -88,6 +95,14 @@ class Lexer(object):
                                                      self.options)
         else:
             return '<pygments.lexers.%s>' % self.__class__.__name__
+
+    def add_filter(self, filter_, **options):
+        """
+        Add a new stream filter to this lexer.
+        """
+        if not isinstance(filter_, Filter):
+            filter_ = get_filter_by_name(filter_, **options)
+        self.filters.append(filter_)
 
     def analyse_text(text):
         """
@@ -103,11 +118,14 @@ class Lexer(object):
         it's the same as if the return values was ``0.0``.
         """
 
-    def get_tokens(self, text):
+    def get_tokens(self, text, unfiltered=False):
         """
-        Return an iterable of (tokentype, value) pairs generated from ``text``.
+        Return an iterable of (tokentype, value) pairs generated from
+        `text`. If `unfiltered` is set to `True`, the filtering mechanism
+        is bypassed even if filters are defined.
 
-        Also preprocess the text, i.e. expand tabs and strip it if wanted.
+        Also preprocess the text, i.e. expand tabs and strip it if
+        wanted and applies registered filters.
         """
         if isinstance(text, unicode):
             text = u'\n'.join(text.splitlines())
@@ -115,16 +133,18 @@ class Lexer(object):
             text = '\n'.join(text.splitlines())
             if self.encoding == 'guess':
                 try:
-                    text = text.decode('utf-8-sig')
+                    text = text.decode('utf-8')
+                    if text.startswith(u'\ufeff'):
+                        text = text[len(u'\ufeff'):]
                 except UnicodeDecodeError:
                     text = text.decode('latin1')
             elif self.encoding == 'chardet':
                 try:
                     import chardet
                 except ImportError:
-                    raise ImportError('To enable chardet encoding guessing, please '
-                                      'install the chardet library from '
-                                      'http://chardet.feedparser.org/')
+                    raise ImportError('To enable chardet encoding guessing, '
+                                      'please install the chardet library '
+                                      'from http://chardet.feedparser.org/')
                 enc = chardet.detect(text)
                 text = text.decode(enc['encoding'])
             else:
@@ -138,8 +158,13 @@ class Lexer(object):
         if not text.endswith('\n'):
             text += '\n'
 
-        for i, t, v in self.get_tokens_unprocessed(text):
-            yield t, v
+        def streamer():
+            for i, t, v in self.get_tokens_unprocessed(text):
+                yield t, v
+        stream = streamer()
+        if not unfiltered:
+            stream = apply_filters(stream, self.filters, self)
+        return stream
 
     def get_tokens_unprocessed(self, text):
         """
@@ -271,8 +296,23 @@ def using(_other, **kwargs):
     """
     Callback that processes the match with a different lexer.
 
-    The keyword arguments are forwarded to the lexer.
+    The keyword arguments are forwarded to the lexer, except `state` which
+    is handled separately.
+
+    `state` specifies the state that the new lexer will start in, and can
+    be an enumerable such as ('root', 'inline', 'string') or a simple
+    string which is assumed to be on top of the root state.
+
+    Note: For that to work, `_other` must not be an `ExtendedRegexLexer`.
     """
+    gt_kwargs = {}
+    if 'state' in kwargs:
+        s = kwargs.pop('state')
+        if isinstance(s, (list, tuple)):
+            gt_kwargs['stack'] = s
+        else:
+            gt_kwargs['stack'] = ('root', s)
+
     if _other is this:
         def callback(lexer, match, ctx=None):
             # if keyword arguments are given the callback
@@ -284,7 +324,7 @@ def using(_other, **kwargs):
             else:
                 lx = lexer
             s = match.start()
-            for i, t, v in lx.get_tokens_unprocessed(match.group()):
+            for i, t, v in lx.get_tokens_unprocessed(match.group(), **gt_kwargs):
                 yield i + s, t, v
             if ctx:
                 ctx.pos = match.end()
@@ -295,7 +335,7 @@ def using(_other, **kwargs):
             lx = _other(**kwargs)
 
             s = match.start()
-            for i, t, v in lx.get_tokens_unprocessed(match.group()):
+            for i, t, v in lx.get_tokens_unprocessed(match.group(), **gt_kwargs):
                 yield i + s, t, v
             if ctx:
                 ctx.pos = match.end()
@@ -420,6 +460,7 @@ class RegexLexer(Lexer):
             for rex, action, new_state in statetokens:
                 m = rex.match(text, pos)
                 if m:
+                    # print rex.pattern
                     if type(action) is _TokenType:
                         yield pos, action, m.group()
                     else:
@@ -568,3 +609,7 @@ def do_insertions(insertions, tokens):
                 insleft = False
                 break  # not strictly necessary
         yield i, t, v[oldi:]
+    # leftover tokens
+    if insleft:
+        for item in itokens:
+            yield item

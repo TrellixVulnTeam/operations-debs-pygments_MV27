@@ -20,6 +20,28 @@ You can create a new token type by accessing an attribute of `Token`:
 Note that tokens are singletons so you can use the ``is`` operator for comparing
 token types.
 
+As of Pygments 0.7 you can also use the ``in`` operator to perform set tests:
+
+.. sourcecode:: pycon
+
+    >>> from pygments.token import Comment
+    >>> Comment.Single in Comment
+    True
+    >>> Comment in Comment.Multi
+    False
+
+This can be useful in `filters`_ and if you write lexers on your own without
+using the base lexers.
+
+You can also split a token type into a hierarchy, and get the parent of it:
+
+.. sourcecode:: pycon
+
+    >>> String.split()
+    [Token, Token.Literal, Token.Literal.String]
+    >>> String.parent
+    Token.Literal
+
 In principle, you can create an unlimited number of token types but nobody can
 guarantee that a style would define style rules for a token type. Because of
 that, Pygments proposes some global token types defined in the
@@ -35,22 +57,23 @@ For some tokens aliases are already defined:
 
 Inside the `pygments.token` module the following aliases are defined:
 
-=========== =============================== ==================================
-`Text`      `Token.Text`                    for any type of text data
-`Error`     `Token.Error`                   represents lexer errors
-`Other`     `Token.Other`                   special token for data not
-                                            matched by a parser (e.g. HTML
-                                            markup in PHP code)
-`Keyword`   `Token.Keyword`                 any kind of keywords
-`Name`      `Token.Name`                    variable/function names
-`Literal`   `Token.Literal`                 Any literals
-`String`    `Token.Literal.String`          string literals
-`Number`    `Token.Literal.Number`          number literals
-`Operator`  `Token.Operator`                operators (``+``, ``not`` etc)
-`Comment`   `Token.Comment`                 any kind of comments
-`Generic`   `Token.Generic`                 generic tokens (have a look at
-                                            the explanation below)
-=========== =============================== ==================================
+============= ============================ ==================================
+`Text`        `Token.Text`                 for any type of text data
+`Error`       `Token.Error`                represents lexer errors
+`Other`       `Token.Other`                special token for data not
+                                           matched by a parser (e.g. HTML
+                                           markup in PHP code)
+`Keyword`     `Token.Keyword`              any kind of keywords
+`Name`        `Token.Name`                 variable/function names
+`Literal`     `Token.Literal`              Any literals
+`String`      `Token.Literal.String`       string literals
+`Number`      `Token.Literal.Number`       number literals
+`Operator`    `Token.Operator`             operators (``+``, ``not``...)
+`Punctuation` `Token.Punctuation`          punctuation (``[``, ``(``...)
+`Comment`     `Token.Comment`              any kind of comments
+`Generic`     `Token.Generic`              generic tokens (have a look at
+                                           the explanation below)
+============= ============================ ==================================
 
 Normally you just create token types using the already defined aliases. For each
 of those token aliases, a number of subtypes exists (excluding the special tokens
@@ -58,6 +81,22 @@ of those token aliases, a number of subtypes exists (excluding the special token
 
 The `is_token_subtype()` function in the `pygments.token` module can be used to
 test if a token type is a subtype of another (such as `Name.Tag` and `Name`).
+(This is the same as ``Name.Tag in Name``. The overloaded `in` operator was newly
+introduced in Pygments 0.7, the function still exists for backwards
+compatiblity.)
+
+With Pygments 0.7, it's also possible to convert strings to token types (for example
+if you want to supply a token from the command line):
+
+.. sourcecode:: pycon
+
+    >>> from pygments.token import String, string_to_tokentype
+    >>> string_to_tokentype("String")
+    Token.Literal.String
+    >>> string_to_tokentype("Token.Literal.String")
+    Token.Literal.String
+    >>> string_to_tokentype(String)
+    Token.Literal.String
 
 
 Keyword Tokens
@@ -230,6 +269,15 @@ Operators
     For any operator that is a word (e.g. ``not``).
 
 
+Punctuation
+===========
+
+*New in Pygments 0.7.*
+
+`Punctuation`
+    For any punctuation which is not an operator (e.g. ``[``, ``(``...)
+
+
 Comments
 ========
 
@@ -244,6 +292,10 @@ Comments
 
 `Comment.Single`
     Token type for comments that end at the end of a line (e.g. ``# foo``).
+
+`Comment.Special`
+    Special data in comments. For example code tags, author and license
+    informations etc.
 
 
 Generic Tokens
@@ -285,3 +337,5 @@ highlight a programming language but a patch file.
 
 `Generic.Traceback`
     Marks the token value as a part of an error traceback.
+
+.. _filters: filters.txt

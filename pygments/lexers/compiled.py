@@ -3,9 +3,9 @@
     pygments.lexers.compiled
     ~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Lexers for compiled languages: C/C++, Delphi, Java.
+    Lexers for compiled languages.
 
-    :copyright: 2006 by Georg Brandl, Armin Ronacher, Christoph Hack.
+    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher, Christoph Hack.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -24,10 +24,14 @@ from pygments.token import \
      Error
 
 
-__all__ = ['CLexer', 'CppLexer', 'DelphiLexer', 'JavaLexer']
+__all__ = ['CLexer', 'CppLexer', 'DelphiLexer', 'JavaLexer', 'DylanLexer',
+           'OcamlLexer']
 
 
 class CLexer(RegexLexer):
+    """
+    For C source code with preprocessor directives.
+    """
     name = 'C'
     aliases = ['c']
     filenames = ['*.c', '*.h']
@@ -49,12 +53,11 @@ class CLexer(RegexLexer):
         'statements': [
             (r'L?"', String, 'string'),
             (r"L?'(\\.|\\[0-7]{1,3}|\\x[a-fA-F0-9]{1,2}|[^\\\'\n])'", String.Char),
-            (r'(0x[0-9a-fA-F]|0[0-7]+|(\d+\.\d*|\.\d+)|\d+)'
-             r'e[+-]\d+[lL]?', Number.Float),
+            (r'(\d+\.\d*|\.\d+|\d+)[eE][+-]?\d+[lL]?', Number.Float),
+            (r'(\d+\.\d*|\.\d+|\d+[fF])[fF]?', Number.Float),
             (r'0x[0-9a-fA-F]+[Ll]?', Number.Hex),
             (r'0[0-7]+[Ll]?', Number.Oct),
-            (r'(\d+\.\d*|\.\d+)', Number.Float),
-            (r'\d+', Number.Integer),
+            (r'\d+[Ll]?', Number.Integer),
             (r'[~!%^&*+=|?:<>/-]', Operator),
             (r'[()\[\],.]', Punctuation),
             (r'(auto|break|case|const|continue|default|do|else|enum|extern|'
@@ -65,8 +68,8 @@ class CLexer(RegexLexer):
             (r'(_{0,2}inline|naked|restrict|thread|typename)\b', Keyword.Reserved),
             (r'__(asm|int8|based|except|int16|stdcall|cdecl|fastcall|int32|'
              r'declspec|finally|int64|try|leave)\b', Keyword.Reserved),
-            (r'(true|false|NULL)\b', Keyword.Constant),
-            ('[a-zA-Z_][a-zA-Z0-9_]*:', Name.Label),
+            (r'(true|false|NULL)\b', Name.Builtin),
+            ('[a-zA-Z_][a-zA-Z0-9_]*:(?!:)', Name.Label),
             ('[a-zA-Z_][a-zA-Z0-9_]*', Name),
         ],
         'root': [
@@ -76,7 +79,7 @@ class CLexer(RegexLexer):
              r'([a-zA-Z_][a-zA-Z0-9_]*)'             # method name
              r'(\s*\([^;]*?\))'                      # signature
              r'(' + _ws + r')({)',
-             bygroups(using(this), Name.Function, using(this), Text, Keyword),
+             bygroups(using(this), Name.Function, using(this), Text, Punctuation),
              'function'),
             # function declarations
             (r'((?:[a-zA-Z0-9_*\s])+?(?:\s|[*]))'    # return arguments
@@ -89,15 +92,15 @@ class CLexer(RegexLexer):
         'statement' : [
             include('whitespace'),
             include('statements'),
-            ('[{}]', Keyword),
+            ('[{}]', Punctuation),
             (';', Punctuation, '#pop'),
         ],
         'function': [
             include('whitespace'),
             include('statements'),
             (';', Punctuation),
-            ('{', Keyword, '#push'),
-            ('}', Keyword, '#pop'),
+            ('{', Punctuation, '#push'),
+            ('}', Punctuation, '#pop'),
         ],
         'string': [
             (r'"', String, '#pop'),
@@ -123,6 +126,9 @@ class CLexer(RegexLexer):
 
 
 class CppLexer(RegexLexer):
+    """
+    For C++ source code with preprocessor directives.
+    """
     name = 'C++'
     aliases = ['cpp', 'c++']
     filenames = ['*.cpp', '*.hpp', '*.c++', '*.h++']
@@ -137,24 +143,23 @@ class CppLexer(RegexLexer):
             (r'\\\n', Text), # line continuation
             (r'/(\\\n)?/(\n|(.|\n)*?[^\\]\n)', Comment),
             (r'/(\\\n)?[*](.|\n)*?[*](\\\n)?/', Comment),
-            (r'[{}]', Keyword),
+            (r'[{}]', Punctuation),
             (r'L?"', String, 'string'),
             (r"L?'(\\.|\\[0-7]{1,3}|\\x[a-fA-F0-9]{1,2}|[^\\\'\n])'", String.Char),
-            (r'(0x[0-9a-fA-F]|0[0-7]+|(\d+\.\d*|\.\d+)|\d+)'
-             r'e[+-]\d+[lL]?', Number.Float),
+            (r'(\d+\.\d*|\.\d+|\d+)[eE][+-]?\d+[lL]?', Number.Float),
+            (r'(\d+\.\d*|\.\d+|\d+[fF])[fF]?', Number.Float),
             (r'0x[0-9a-fA-F]+[Ll]?', Number.Hex),
             (r'0[0-7]+[Ll]?', Number.Oct),
-            (r'(\d+\.\d*|\.\d+)', Number.Float),
-            (r'\d+', Number.Integer),
+            (r'\d+[Ll]?', Number.Integer),
             (r'[~!%^&*+=|?:<>/-]', Operator),
             (r'[()\[\],.;]', Punctuation),
             (r'(asm|auto|break|case|catch|const|const_cast|continue|'
              r'default|delete|do|dynamic_cast|else|enum|explicit|export|'
              r'extern|for|friend|goto|if|mutable|namespace|new|operator|'
              r'private|protected|public|register|reinterpret_cast|return|'
-             r'sizeof|static|static_cast|struct|switch|template|this|throw|'
-             r'throws|try|typedef|typeid|typename|union|using|volatile|'
-             r'virtual|while)\b', Keyword),
+             r'restrict|sizeof|static|static_cast|struct|switch|template|'
+             r'this|throw|throws|try|typedef|typeid|typename|union|using|'
+             r'volatile|virtual|while)\b', Keyword),
             (r'(class)(\s+)', bygroups(Keyword, Text), 'classname'),
             (r'(bool|int|long|float|short|double|char|unsigned|signed|'
              r'void|wchar_t)\b', Keyword.Type),
@@ -164,8 +169,9 @@ class CppLexer(RegexLexer):
              r'uuidof|unaligned|super|single_inheritance|raise|noop|'
              r'multiple_inheritance|m128i|m128d|m128|m64|interface|'
              r'identifier|forceinline|event|assume)\b', Keyword.Reserved),
-            (r'(true|false|NULL)\b', Keyword.Constant),
-            ('[a-zA-Z_][a-zA-Z0-9_]*:', Name.Label),
+            (r'(true|false)\b', Keyword.Constant),
+            (r'NULL\b', Name.Builtin),
+            ('[a-zA-Z_][a-zA-Z0-9_]*:(?!:)', Name.Label),
             ('[a-zA-Z_][a-zA-Z0-9_]*', Name),
         ],
         'classname': [
@@ -197,6 +203,23 @@ class CppLexer(RegexLexer):
 
 
 class DelphiLexer(Lexer):
+    """
+    For `Delphi <http://www.borland.com/delphi/>`_ (Borland Object Pascal),
+    Turbo Pascal and Free Pascal source code.
+
+    Additional options accepted:
+
+    `turbopascal`
+        Highlight Turbo Pascal specific keywords (default: ``True``).
+    `delphi`
+        Highlight Borland Delphi specific keywords (default: ``True``).
+    `freepascal`
+        Highlight Free Pascal specific keywords (default: ``True``).
+    `units`
+        A list of units that should be considered builtin, supported are
+        ``System``, ``SysUtils``, ``Classes`` and ``Math``.
+        Default is to consider all of them builtin.
+    """
     name = 'Delphi'
     aliases = ['delphi', 'pas', 'pascal', 'objectpascal']
     filenames = ['*.pas']
@@ -664,6 +687,10 @@ class DelphiLexer(Lexer):
 
 
 class JavaLexer(RegexLexer):
+    """
+    For `Java <http://www.sun.com/java/>`_ source code.
+    """
+
     name = 'Java'
     aliases = ['java']
     filenames = ['*.java']
@@ -703,12 +730,138 @@ class JavaLexer(RegexLexer):
             (r'[a-zA-Z_][a-zA-Z0-9_]*:', Name.Label),
             (r'[a-zA-Z_\$][a-zA-Z0-9_]*', Name),
             (r'[~\^\*!%&\[\]\(\)\{\}<>\|+=:;,./?-]', Operator),
-            (r'[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?', Number),
-            (r'[0-9]+L?', Number),
-            (r'0x[0-9a-f]+', Number),
+            (r'[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?', Number.Float),
+            (r'0x[0-9a-f]+', Number.Hex),
+            (r'[0-9]+L?', Number.Integer),
             (r'\n', Text)
         ],
         'class': [
-            (r'[a-zA-Z_][a-zA-Z0-9_]*', Name.Class, '#pop')
+            (r'[a-zA-Z_][a-zA-Z0-9_]*', Name.Class, '#pop'),
+            (r'', Text, '#pop'),
+        ]
+    }
+
+
+class DylanLexer(RegexLexer):
+    """
+    For the `Dylan <http://www.opendylan.org/>`_ language.
+
+    *New in Pygments 0.7.*
+    """
+
+    name = 'DylanLexer'
+    aliases = ['dylan']
+    filenames = ['*.dylan']
+    mimetypes = ['text/x-dylan']
+
+    flags = re.DOTALL
+
+    tokens = {
+        'root': [
+            (r'\b(subclass|abstract|block|c(on(crete|stant)|lass)|domain'
+             r'|ex(c(eption|lude)|port)|f(unction(|al))|generic|handler'
+             r'|i(n(herited|line|stance|terface)|mport)|library|m(acro|ethod)'
+             r'|open|primary|sealed|si(deways|ngleton)|slot'
+             r'|v(ariable|irtual))\b', Name.Builtin),
+            (r'<\w+>', Keyword.Type),
+            (r'#?"(?:\\.|[^"])+?"', String.Double),
+            (r'//.*?\n', Comment),
+            (r'/\*[\w\W]*?\*/', Comment.Multiline),
+            (r'\'.*?\'', String.Single),
+            (r'=>|\b(a(bove|fterwards)|b(e(gin|low)|y)|c(ase|leanup|reate)'
+             r'|define|else(|if)|end|f(inally|or|rom)|i[fn]|l(et|ocal)|otherwise'
+             r'|rename|s(elect|ignal)|t(hen|o)|u(n(less|til)|se)|wh(en|ile))\b',
+             Keyword),
+            (r'([ \t])([!\$%&\*\/:<=>\?~_^a-zA-Z0-9.+\-]*:)',
+             bygroups(Text, Name.Variable)),
+            (r'([ \t]*)(\S+[^:])([ \t]*)(\()([ \t]*)',
+             bygroups(Text, Name.Function, Text, Punctuation, Text)),
+            (r'-?[0-9.]+', Number),
+            (r'[(),;]', Punctuation),
+            (r'\$[a-zA-Z0-9-]+', Name.Constant),
+            (r'[!$%&*/:<>=?~^.+\[\]{}-]+', Operator),
+            (r'\s+', Text),
+            (r'#[a-zA-Z0-9-]+', Keyword),
+            (r'[a-zA-Z0-9-]+', Name.Variable),
+        ],
+    }
+
+
+class OcamlLexer(RegexLexer):
+    """
+    For the OCaml language.
+
+    *New in Pygments 0.7.*
+    """
+
+    name = 'OCaml'
+    aliases = ['ocaml']
+    filenames = ['*.ml', '*.mli']
+    mimetypes = ['text/x-ocaml']
+
+    keywords = [
+      'and', 'as', 'assert', 'asr', 'begin', 'class',
+      'constraint', 'do', 'done', 'downto', 'else', 'end',
+      'exception', 'external', 'false', 'for', 'fun', 'function',
+      'functor', 'if', 'in', 'include', 'inherit', 'initializer',
+      'land', 'lazy', 'let', 'lor', 'lsl', 'lsr',
+      'lxor', 'match', 'method', 'mod', 'module', 'mutable',
+      'new', 'object', 'of', 'open', 'or', 'private',
+      'rec', 'sig', 'struct', 'then', 'to', 'true',
+      'try', 'type', 'val', 'virtual', 'when', 'while', 'with'
+    ]
+    keyopts = [
+      '!=','#','&','&&','\(','\)','\*','\+',',','-',
+      '-\.','->','\.','\.\.',':','::',':=',':>',';',';;','<',
+      '<-','=','>','>]','>}','\?','\?\?','\[','\[<','\[>','\[\|',
+      ']','_','`','{','{<','\|','\|]','}','~'
+    ]
+
+    operators = r'[!$%&*+\./:<=>?@^|~-]'
+    prefix_syms = r'[!?~]'
+    infix_syms = r'[=<>@^|&+\*/$%-]'
+
+    tokens = {
+        'escape-sequence': [
+            (r'\\[\"\'ntbr]', String.Escape),
+            (r'\\[0-9]{3}', String.Escape),
+            (r'\\x[0-9a-fA-F]{2}', String.Escape),
+        ],
+        'root': [
+            (r'\s+', Text),
+            (r'\(\*', Comment, 'comment'),
+            (r'\b(%s)\b' % '|'.join(keywords), Keyword.Reserved),
+            (r'(%s)' % '|'.join(keyopts), Keyword),
+            (r'false|true|\(\)|\[\]', Name.Constant),
+            (r'(%s|%s)?%s' % (infix_syms, prefix_syms, operators), Operator),
+
+            (r"[^\W\d][\w']*", Name),
+
+            (r'\d[\d_]*', Number.Integer),
+            (r'0[xX][\da-fA-F][\da-fA-F_]*', Number.Hex),
+            (r'0[oO][0-7][0-7_]*', Number.Oct),
+            (r'0[bB][01][01_]*', Number),
+            (r'-?\d[\d_]*(.[\d_]*)?([eE][+\-]?\d[\d_]*)', Number.Float),
+
+            (r"'(?:(\\[\\\"'ntbr ])|(\\[0-9]{3})|(\\x[0-9a-fA-F]{2}))'",
+             String.Char),
+            (r"'.'", String.Char),
+            (r"'", Keyword), # a stray quote is another syntax element
+
+            (r'"', String.Double, 'string'),
+
+            (r'[~?][a-z][\w\']*:', Name.Variable),
+        ],
+        'comment': [
+            (r'[^(*)]', Comment),
+            (r'\(\*', Comment, '#push'),
+            (r'\*\)', Comment, '#pop'),
+            (r'[(*)]', Comment),
+        ],
+        'string': [
+            (r'[^\\"]', String.Double),
+            include('escape-sequence'),
+            (r'\\\n', String.Double),
+            (r'"', String.Double, '#pop'),
         ]
     }

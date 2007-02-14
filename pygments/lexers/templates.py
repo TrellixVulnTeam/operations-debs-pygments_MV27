@@ -3,9 +3,10 @@
     pygments.lexers.templates
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Lexers for various template engines.
+    Lexers for various template engines' markup.
 
-    :copyright: 2006 by Armin Ronacher, Georg Brandl, Matt Good.
+    :copyright: 2006-2007 by Armin Ronacher, Georg Brandl, Matt Good,
+                Ben Bangert.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -18,6 +19,7 @@ except NameError:
 from pygments.lexers.web import \
      PhpLexer, HtmlLexer, XmlLexer, JavascriptLexer, CssLexer
 from pygments.lexers.agile import PythonLexer
+from pygments.lexers.compiled import JavaLexer
 from pygments.lexer import Lexer, DelegatingLexer, RegexLexer, bygroups, \
      include, using, this
 from pygments.token import Error, Punctuation, \
@@ -33,12 +35,25 @@ __all__ = ['HtmlPhpLexer', 'XmlPhpLexer', 'CssPhpLexer',
            'JavascriptDjangoLexer', 'GenshiLexer', 'HtmlGenshiLexer',
            'GenshiTextLexer', 'CssGenshiLexer', 'JavascriptGenshiLexer',
            'MyghtyLexer', 'MyghtyHtmlLexer', 'MyghtyXmlLexer',
-           'MyghtyCssLexer', 'MyghtyJavascriptLexer']
+           'MyghtyCssLexer', 'MyghtyJavascriptLexer', 'MakoLexer',
+           'MakoHtmlLexer', 'MakoXmlLexer', 'MakoJavascriptLexer',
+           'MakoCssLexer', 'JspLexer']
 
 
 class ErbLexer(Lexer):
+    """
+    Generic `ERB <http://ruby-doc.org/core/classes/ERB.html>`_ (Ruby Templating)
+    lexer.
+
+    Just highlights ruby code between the preprocessor directives, other data
+    is left untouched by the lexer.
+
+    All options are also forwarded to the `RubyLexer`.
+    """
+
     name = 'ERB'
     aliases = ['erb']
+    mimetypes = ['application/x-ruby-templating']
 
     _block_re = re.compile(r'(<%%|%%>|<%=|<%#|<%-|<%|-%>|%>|^%[^%].*?$)', re.M)
 
@@ -121,9 +136,17 @@ class ErbLexer(Lexer):
 
 
 class SmartyLexer(RegexLexer):
+    """
+    Generic `Smarty <http://smarty.php.net/>`_ template lexer.
+
+    Just highlights smarty code between the preprocessor directives, other
+    data is left untouched by the lexer.
+    """
+
     name = 'Smarty'
     aliases = ['smarty']
     filenames = ['*.tpl']
+    mimetypes = ['application/x-smarty']
 
     flags = re.MULTILINE | re.DOTALL
 
@@ -168,8 +191,17 @@ class SmartyLexer(RegexLexer):
 
 
 class DjangoLexer(RegexLexer):
+    """
+    Generic `django <http://www.djangoproject.com/documentation/templates/>`_
+    and `jinja <http://wsgiarea.pocoo.org/jinja/>`_ template lexer.
+
+    It just highlights django/jinja code between the preprocessor directives,
+    other data is left untouched by the lexer.
+    """
+
     name = 'Django/Jinja'
     aliases = ['django', 'jinja']
+    mimetypes = ['application/x-django-templating', 'application/x-jinja']
 
     tokens = {
         'root': [
@@ -224,9 +256,19 @@ class DjangoLexer(RegexLexer):
 
 
 class MyghtyLexer(RegexLexer):
+    """
+    Generic `myghty templates`_ lexer. Code that isn't Myghty
+    markup is yielded as `Token.Other`.
+
+    *New in Pygments 0.6.*
+
+    .. _myghty templates: http://www.myghty.org/
+    """
+
     name = 'Myghty'
     aliases = ['myghty']
     filenames = ['*.myt', 'autodelegate']
+    mimetypes = ['application/x-myghty']
 
     tokens = {
         'root': [
@@ -242,29 +284,36 @@ class MyghtyLexer(RegexLexer):
             (r'(<&\|)(.*?)(,.*?)?(&>)(?s)',
              bygroups(Name.Tag, Name.Function, using(PythonLexer), Name.Tag)),
             (r'</&>', Name.Tag),
-            (r'(<%)(.*?)(%>)',
+            (r'(<%!?)(.*?)(%>)(?s)',
              bygroups(Name.Tag, using(PythonLexer), Name.Tag)),
             (r'(?<=^)\#[^\n]*(\n|\Z)', Comment),
             (r'(?<=^)(\%)([^\n]*)(\n|\Z)',
              bygroups(Name.Tag, using(PythonLexer), Other)),
-            (r'''(?sx)
-                (.+?)               # anything, followed by:
-                (?:
-                 (?<=\n)(?=[%#]) |  # an eval or comment line
-                 (?=</?[%&]) |      # a substitution or block or
-                                    # call start or end
-                                    # - don't consume
-                 (\\\n) |           # an escaped newline
-                 \Z                 # end of string
-                )
-            ''', bygroups(Other, Operator)),
+            (r"""(?sx)
+                 (.+?)               # anything, followed by:
+                 (?:
+                  (?<=\n)(?=[%#]) |  # an eval or comment line
+                  (?=</?[%&]) |      # a substitution or block or
+                                     # call start or end
+                                     # - don't consume
+                  (\\\n) |           # an escaped newline
+                  \Z                 # end of string
+                 )""", bygroups(Other, Operator)),
         ]
     }
 
 
 class MyghtyHtmlLexer(DelegatingLexer):
+    """
+    Subclass of the `MyghtyLexer` that highlights unlexer data
+    with the `HtmlLexer`.
+
+    *New in Pygments 0.6.*
+    """
+
     name = 'HTML+Myghty'
     aliases = ['html+myghty']
+    mimetypes = ['text/html+myghty']
 
     def __init__(self, **options):
         super(MyghtyHtmlLexer, self).__init__(HtmlLexer, MyghtyLexer,
@@ -272,8 +321,16 @@ class MyghtyHtmlLexer(DelegatingLexer):
 
 
 class MyghtyXmlLexer(DelegatingLexer):
+    """
+    Subclass of the `MyghtyLexer` that highlights unlexer data
+    with the `XmlLexer`.
+
+    *New in Pygments 0.6.*
+    """
+
     name = 'XML+Myghty'
     aliases = ['xml+myghty']
+    mimetypes = ['application/xml+myghty']
 
     def __init__(self, **options):
         super(MyghtyXmlLexer, self).__init__(XmlLexer, MyghtyLexer,
@@ -281,8 +338,18 @@ class MyghtyXmlLexer(DelegatingLexer):
 
 
 class MyghtyJavascriptLexer(DelegatingLexer):
+    """
+    Subclass of the `MyghtyLexer` that highlights unlexer data
+    with the `JavascriptLexer`.
+
+    *New in Pygments 0.6.*
+    """
+
     name = 'JavaScript+Myghty'
     aliases = ['js+myghty', 'javascript+myghty']
+    mimetypes = ['application/x-javascript+myghty',
+                 'text/x-javascript+myghty',
+                 'text/javascript+mygthy']
 
     def __init__(self, **options):
         super(MyghtyJavascriptLexer, self).__init__(JavascriptLexer,
@@ -290,19 +357,166 @@ class MyghtyJavascriptLexer(DelegatingLexer):
 
 
 class MyghtyCssLexer(DelegatingLexer):
+    """
+    Subclass of the `MyghtyLexer` that highlights unlexer data
+    with the `CssLexer`.
+
+    *New in Pygments 0.6.*
+    """
+
     name = 'CSS+Myghty'
     aliases = ['css+myghty']
+    mimetypes = ['text/css+myghty']
 
     def __init__(self, **options):
         super(MyghtyCssLexer, self).__init__(CssLexer, MyghtyLexer,
                                              **options)
 
 
+class MakoLexer(RegexLexer):
+    """
+    Generic `mako templates`_ lexer. Code that isn't Mako
+    markup is yielded as `Token.Other`.
+
+    *New in Pygments 0.7.*
+
+    .. _mako templates: http://www.makotemplates.org/
+    """
+
+    name = 'Mako'
+    aliases = ['mako']
+    filenames = ['*.mao']
+    mimetypes = ['application/x-mako']
+
+    tokens = {
+        'root': [
+            (r'(\s*)(\%)(\s*end(?:\w+))(\n|\Z)',
+             bygroups(Text, Comment.Preproc, Keyword, Other)),
+            (r'(\s*)(\%)([^\n]*)(\n|\Z)',
+             bygroups(Text, Comment.Preproc, using(PythonLexer), Other)),
+             (r'(\s*)(#[^\n]*)(\n|\Z)',
+              bygroups(Text, Comment.Preproc, Other)),
+            (r'(<%)(def|call|namespace|text)',
+             bygroups(Comment.Preproc, Name.Builtin), 'tag'),
+            (r'(</%)(def|call|namespace|text)(>)',
+             bygroups(Comment.Preproc, Name.Builtin, Comment.Preproc)),
+            (r'<%(?=(include|inherit|namespace|page))', Comment.Preproc, 'ondeftags'),
+            (r'(<%(?:!?))(.*?)(%>)(?s)',
+             bygroups(Comment.Preproc, using(PythonLexer), Comment.Preproc)),
+            (r'(\$\{)(.*?)(\})',
+             bygroups(Comment.Preproc, using(PythonLexer), Comment.Preproc)),
+            (r'''(?sx)
+                (.+?)               # anything, followed by:
+                (?:
+                 (?<=\n)(?=[%#]) |  # an eval or comment line
+                 (?=</?%) |         # a python block
+                                    # call start or end
+                 (?=\$\{) |         # a substitution
+                 (?<=\n)(?=\s*%) |
+                                    # - don't consume
+                 (\\\n) |           # an escaped newline
+                 \Z                 # end of string
+                )
+            ''', bygroups(Other, Operator)),
+            (r'\s+', Text),
+        ],
+        'ondeftags': [
+            (r'<%', Comment.Preproc),
+            (r'(?<=<%)(include|inherit|namespace|page)', Name.Builtin),
+            include('tag'),
+        ],
+        'tag': [
+            (r'((?:\w+)\s*=)\s*(".*?")',
+             bygroups(Name.Attribute, String)),
+            (r'/?\s*>', Comment.Preproc, '#pop'),
+            (r'\s+', Text),
+        ],
+        'attr': [
+            ('".*?"', String, '#pop'),
+            ("'.*?'", String, '#pop'),
+            (r'[^\s>]+', String, '#pop'),
+        ],
+    }
+
+
+class MakoHtmlLexer(DelegatingLexer):
+    """
+    Subclass of the `MakoLexer` that highlights unlexed data
+    with the `HtmlLexer`.
+
+    *New in Pygments 0.7.*
+    """
+
+    name = 'HTML+Mako'
+    aliases = ['html+mako']
+    mimetypes = ['text/html+mako']
+
+    def __init__(self, **options):
+        super(MakoHtmlLexer, self).__init__(HtmlLexer, MakoLexer,
+                                              **options)
+
+class MakoXmlLexer(DelegatingLexer):
+    """
+    Subclass of the `MakoLexer` that highlights unlexer data
+    with the `XmlLexer`.
+
+    *New in Pygments 0.7.*
+    """
+
+    name = 'XML+Mako'
+    aliases = ['xml+mako']
+    mimetypes = ['application/xml+mako']
+
+    def __init__(self, **options):
+        super(MakoXmlLexer, self).__init__(XmlLexer, MakoLexer,
+                                             **options)
+
+class MakoJavascriptLexer(DelegatingLexer):
+    """
+    Subclass of the `MakoLexer` that highlights unlexer data
+    with the `JavascriptLexer`.
+
+    *New in Pygments 0.7.*
+    """
+
+    name = 'JavaScript+Mako'
+    aliases = ['js+mako', 'javascript+mako']
+    mimetypes = ['application/x-javascript+mako',
+                 'text/x-javascript+mako',
+                 'text/javascript+mako']
+
+    def __init__(self, **options):
+        super(MakoJavascriptLexer, self).__init__(JavascriptLexer,
+                                                    MakoLexer, **options)
+
+class MakoCssLexer(DelegatingLexer):
+    """
+    Subclass of the `MakoLexer` that highlights unlexer data
+    with the `CssLexer`.
+
+    *New in Pygments 0.7.*
+    """
+
+    name = 'CSS+Mako'
+    aliases = ['css+mako']
+    mimetypes = ['text/css+mako']
+
+    def __init__(self, **options):
+        super(MakoCssLexer, self).__init__(CssLexer, MakoLexer,
+                                             **options)
+
+
 # Genshi lexers courtesy of Matt Good.
 
 class GenshiTextLexer(RegexLexer):
+    """
+    A lexer that highlights `genshi <http://genshi.edgewall.org/>`_ text
+    templates.
+    """
+
     name = 'Genshi Text'
     aliases = ['genshitext']
+    mimetypes = ['application/x-genshi-text', 'text/x-genshi']
 
     tokens = {
         'root': [
@@ -330,6 +544,11 @@ class GenshiTextLexer(RegexLexer):
 
 
 class GenshiMarkupLexer(RegexLexer):
+    """
+    Base lexer for Genshi markup, used by `HtmlGenshiLexer` and
+    `GenshiLexer`.
+    """
+
     flags = re.DOTALL
 
     tokens = {
@@ -389,9 +608,15 @@ class GenshiMarkupLexer(RegexLexer):
 
 
 class HtmlGenshiLexer(DelegatingLexer):
+    """
+    A lexer that highlights `genshi <http://genshi.edgewall.org/>`_ and
+    `kid <http://kid-templating.org/>`_ kid HTML templates.
+    """
+
     name = 'HTML+Genshi'
     aliases = ['html+genshi', 'html+kid']
     alias_filenames = ['*.html', '*.htm', '*.xhtml']
+    mimetypes = ['text/html+genshi']
 
     def __init__(self, **options):
         super(HtmlGenshiLexer, self).__init__(HtmlLexer, GenshiMarkupLexer,
@@ -407,10 +632,16 @@ class HtmlGenshiLexer(DelegatingLexer):
 
 
 class GenshiLexer(DelegatingLexer):
+    """
+    A lexer that highlights `genshi <http://genshi.edgewall.org/>`_ and
+    `kid <http://kid-templating.org/>`_ kid XML templates.
+    """
+
     name = 'Genshi'
     aliases = ['genshi', 'kid', 'xml+genshi', 'xml+kid']
     filenames = ['*.kid']
     alias_filenames = ['*.xml']
+    mimetypes = ['application/x-genshi', 'application/x-kid']
 
     def __init__(self, **options):
         super(GenshiLexer, self).__init__(XmlLexer, GenshiMarkupLexer,
@@ -426,10 +657,17 @@ class GenshiLexer(DelegatingLexer):
 
 
 class JavascriptGenshiLexer(DelegatingLexer):
+    """
+    A lexer that highlights javascript code in genshi text templates.
+    """
+
     name = 'JavaScript+Genshi Text'
     aliases = ['js+genshitext', 'js+genshi', 'javascript+genshitext',
                'javascript+genshi']
     alias_filenames = ['*.js']
+    mimetypes = ['application/x-javascript+genshi',
+                 'text/x-javascript+genshi',
+                 'text/javascript+genshi']
 
     def __init__(self, **options):
         super(JavascriptGenshiLexer, self).__init__(JavascriptLexer,
@@ -441,9 +679,14 @@ class JavascriptGenshiLexer(DelegatingLexer):
 
 
 class CssGenshiLexer(DelegatingLexer):
+    """
+    A lexer that highlights CSS definitions in genshi text templates.
+    """
+
     name = 'CSS+Genshi Text'
     aliases = ['css+genshitext', 'css+genshi']
     alias_filenames = ['*.css']
+    mimetypes = ['text/css+genshi']
 
     def __init__(self, **options):
         super(CssGenshiLexer, self).__init__(CssLexer, GenshiTextLexer,
@@ -454,10 +697,18 @@ class CssGenshiLexer(DelegatingLexer):
 
 
 class RhtmlLexer(DelegatingLexer):
+    """
+    Subclass of the ERB lexer that highlights the unlexed data with the
+    html lexer.
+
+    Nested Javascript and CSS is highlighted too.
+    """
+
     name = 'RHTML'
     aliases = ['rhtml', 'html+erb', 'html+ruby']
     filenames = ['*.rhtml']
     alias_filenames = ['*.html', '*.htm', '*.xhtml']
+    mimetypes = ['text/html+ruby']
 
     def __init__(self, **options):
         super(RhtmlLexer, self).__init__(HtmlLexer, ErbLexer, **options)
@@ -471,9 +722,15 @@ class RhtmlLexer(DelegatingLexer):
 
 
 class XmlErbLexer(DelegatingLexer):
+    """
+    Subclass of `ErbLexer` which highlights data outside preprocessor
+    directives with the `XmlLexer`.
+    """
+
     name = 'XML+Ruby'
     aliases = ['xml+erb', 'xml+ruby']
     alias_filenames = ['*.xml']
+    mimetypes = ['application/xml+ruby']
 
     def __init__(self, **options):
         super(XmlErbLexer, self).__init__(XmlLexer, ErbLexer, **options)
@@ -486,9 +743,14 @@ class XmlErbLexer(DelegatingLexer):
 
 
 class CssErbLexer(DelegatingLexer):
+    """
+    Subclass of `ErbLexer` which highlights unlexed data with the `CssLexer`.
+    """
+
     name = 'CSS+Ruby'
     aliases = ['css+erb', 'css+ruby']
-    alias_filenames = ['*.xml']
+    alias_filenames = ['*.css']
+    mimetypes = ['text/css+ruby']
 
     def __init__(self, **options):
         super(CssErbLexer, self).__init__(CssLexer, ErbLexer, **options)
@@ -498,9 +760,17 @@ class CssErbLexer(DelegatingLexer):
 
 
 class JavascriptErbLexer(DelegatingLexer):
+    """
+    Subclass of `ErbLexer` which highlights unlexed data with the
+    `JavascriptLexer`.
+    """
+
     name = 'JavaScript+Ruby'
     aliases = ['js+erb', 'javascript+erb', 'js+ruby', 'javascript+ruby']
     alias_filenames = ['*.js']
+    mimetypes = ['application/x-javascript+ruby',
+                 'text/x-javascript+ruby',
+                 'text/javascript+ruby']
 
     def __init__(self, **options):
         super(JavascriptErbLexer, self).__init__(JavascriptLexer, ErbLexer,
@@ -511,12 +781,18 @@ class JavascriptErbLexer(DelegatingLexer):
 
 
 class HtmlPhpLexer(DelegatingLexer):
+    """
+    Subclass of `PhpLexer` that highlights unhandled data with the `HtmlLexer`.
+
+    Nested Javascript and CSS is highlighted too.
+    """
+
     name = 'HTML+PHP'
     aliases = ['html+php']
     filenames = ['*.phtml']
     alias_filenames = ['*.php', '*.html', '*.htm', '*.xhtml',
                        '*.php[345]']
-    mimetypes = ['text/x-php', 'application/x-php',
+    mimetypes = ['application/x-php',
                  'application/x-httpd-php', 'application/x-httpd-php3',
                  'application/x-httpd-php4', 'application/x-httpd-php5']
 
@@ -531,9 +807,14 @@ class HtmlPhpLexer(DelegatingLexer):
 
 
 class XmlPhpLexer(DelegatingLexer):
+    """
+    Subclass of `PhpLexer` that higlights unhandled data with the `XmlLexer`.
+    """
+
     name = 'XML+PHP'
     aliases = ['xml+php']
     alias_filenames = ['*.xml', '*.php', '*.php[345]']
+    mimetypes = ['application/xml+php']
 
     def __init__(self, **options):
         super(XmlPhpLexer, self).__init__(XmlLexer, PhpLexer, **options)
@@ -546,9 +827,14 @@ class XmlPhpLexer(DelegatingLexer):
 
 
 class CssPhpLexer(DelegatingLexer):
+    """
+    Subclass of `PhpLexer` which highlights unmatched data with the `CssLexer`.
+    """
+
     name = 'CSS+PHP'
     aliases = ['css+php']
     alias_filenames = ['*.css']
+    mimetypes = ['text/css+php']
 
     def __init__(self, **options):
         super(CssPhpLexer, self).__init__(CssLexer, PhpLexer, **options)
@@ -558,9 +844,17 @@ class CssPhpLexer(DelegatingLexer):
 
 
 class JavascriptPhpLexer(DelegatingLexer):
+    """
+    Subclass of `PhpLexer` which highlights unmatched data with the
+    `JavascriptLexer`.
+    """
+
     name = 'JavaScript+PHP'
     aliases = ['js+php', 'javascript+php']
     alias_filenames = ['*.js']
+    mimetypes = ['application/x-javascript+php',
+                 'text/x-javascript+php',
+                 'text/javascript+php']
 
     def __init__(self, **options):
         super(JavascriptPhpLexer, self).__init__(JavascriptLexer, PhpLexer,
@@ -571,9 +865,17 @@ class JavascriptPhpLexer(DelegatingLexer):
 
 
 class HtmlSmartyLexer(DelegatingLexer):
+    """
+    Subclass of the `SmartyLexer` that highighlights unlexed data with the
+    `HtmlLexer`.
+
+    Nested Javascript and CSS is highlighted too.
+    """
+
     name = 'HTML+Smarty'
     aliases = ['html+smarty']
     alias_filenames = ['*.html', '*.htm', '*.xhtml', '*.tpl']
+    mimetypes = ['text/html+smarty']
 
     def __init__(self, **options):
         super(HtmlSmartyLexer, self).__init__(HtmlLexer, SmartyLexer, **options)
@@ -586,9 +888,15 @@ class HtmlSmartyLexer(DelegatingLexer):
 
 
 class XmlSmartyLexer(DelegatingLexer):
+    """
+    Subclass of the `SmartyLexer` that highlights unlexed data with the
+    `XmlLexer`.
+    """
+
     name = 'XML+Smarty'
     aliases = ['xml+smarty']
     alias_filenames = ['*.xml', '*.tpl']
+    mimetypes = ['application/xml+smarty']
 
     def __init__(self, **options):
         super(XmlSmartyLexer, self).__init__(XmlLexer, SmartyLexer, **options)
@@ -601,9 +909,15 @@ class XmlSmartyLexer(DelegatingLexer):
 
 
 class CssSmartyLexer(DelegatingLexer):
+    """
+    Subclass of the `SmartyLexer` that highlights unlexed data with the
+    `CssLexer`.
+    """
+
     name = 'CSS+Smarty'
     aliases = ['css+smarty']
     alias_filenames = ['*.css', '*.tpl']
+    mimetypes = ['text/css+smarty']
 
     def __init__(self, **options):
         super(CssSmartyLexer, self).__init__(CssLexer, SmartyLexer, **options)
@@ -613,9 +927,17 @@ class CssSmartyLexer(DelegatingLexer):
 
 
 class JavascriptSmartyLexer(DelegatingLexer):
+    """
+    Subclass of the `SmartyLexer` that highlights unlexed data with the
+    `JavascriptLexer`.
+    """
+
     name = 'JavaScript+Smarty'
     aliases = ['js+smarty', 'javascript+smarty']
     alias_filenames = ['*.js', '*.tpl']
+    mimetypes = ['application/x-javascript+smarty',
+                 'text/x-javascript+smarty',
+                 'text/javascript+smarty']
 
     def __init__(self, **options):
         super(JavascriptSmartyLexer, self).__init__(JavascriptLexer, SmartyLexer,
@@ -626,9 +948,17 @@ class JavascriptSmartyLexer(DelegatingLexer):
 
 
 class HtmlDjangoLexer(DelegatingLexer):
+    """
+    Subclass of the `DjangoLexer` that highighlights unlexed data with the
+    `HtmlLexer`.
+
+    Nested Javascript and CSS is highlighted too.
+    """
+
     name = 'HTML+Django/Jinja'
     aliases = ['html+django', 'html+jinja']
     alias_filenames = ['*.html', '*.htm', '*.xhtml']
+    mimetypes = ['text/html+django', 'text/html+jinja']
 
     def __init__(self, **options):
         super(HtmlDjangoLexer, self).__init__(HtmlLexer, DjangoLexer, **options)
@@ -641,9 +971,15 @@ class HtmlDjangoLexer(DelegatingLexer):
 
 
 class XmlDjangoLexer(DelegatingLexer):
+    """
+    Subclass of the `DjangoLexer` that highlights unlexed data with the
+    `XmlLexer`.
+    """
+
     name = 'XML+Django/Jinja'
     aliases = ['xml+django', 'xml+jinja']
     alias_filenames = ['*.xml']
+    mimetypes = ['application/xml+django', 'application/xml+jinja']
 
     def __init__(self, **options):
         super(XmlDjangoLexer, self).__init__(XmlLexer, DjangoLexer, **options)
@@ -656,9 +992,15 @@ class XmlDjangoLexer(DelegatingLexer):
 
 
 class CssDjangoLexer(DelegatingLexer):
+    """
+    Subclass of the `DjangoLexer` that highlights unlexed data with the
+    `CssLexer`.
+    """
+
     name = 'CSS+Django/Jinja'
     aliases = ['css+django', 'css+jinja']
     alias_filenames = ['*.css']
+    mimetypes = ['text/css+django', 'text/css+jinja']
 
     def __init__(self, **options):
         super(CssDjangoLexer, self).__init__(CssLexer, DjangoLexer, **options)
@@ -668,10 +1010,21 @@ class CssDjangoLexer(DelegatingLexer):
 
 
 class JavascriptDjangoLexer(DelegatingLexer):
+    """
+    Subclass of the `DjangoLexer` that highlights unlexed data with the
+    `JavascriptLexer`.
+    """
+
     name = 'JavaScript+Django/Jinja'
     aliases = ['js+django', 'javascript+django',
                'js+jinja', 'javascript+jinja']
     alias_filenames = ['*.js']
+    mimetypes = ['application/x-javascript+django',
+                 'application/x-javascript+jinja',
+                 'text/x-javascript+django',
+                 'text/x-javascript+jinja',
+                 'text/javascript+django',
+                 'text/javascript+jinja']
 
     def __init__(self, **options):
         super(JavascriptDjangoLexer, self).__init__(JavascriptLexer, DjangoLexer,
@@ -679,3 +1032,51 @@ class JavascriptDjangoLexer(DelegatingLexer):
 
     def analyse_text(text):
         return DjangoLexer.analyse_text(text) - 0.05
+
+
+class JspRootLexer(RegexLexer):
+    """
+    Base for the `JspLexer`. Yields `Token.Other` for area outside of
+    JSP tags.
+
+    *New in Pygments 0.7.*
+    """
+
+    tokens = {
+        'root': [
+            (r'<%\S?', Keyword, 'sec'),
+            # FIXME: I want to make these keywords but still parse attributes.
+            (r'</?jsp:(forward|getProperty|include|plugin|setProperty|useBean).*?>',
+             Keyword),
+            (r'[^<]+', Other),
+            (r'<', Other),
+        ],
+        'sec': [
+            (r'%>', Keyword, '#pop'),
+            # note: '\w\W' != '.' without DOTALL.
+            (r'[\w\W]+?(?=%>|\Z)', using(JavaLexer)),
+        ],
+    }
+
+
+class JspLexer(DelegatingLexer):
+    """
+    Lexer for Java Server Pages.
+
+    *New in Pygments 0.7.*
+    """
+    name = 'Java Server Page'
+    aliases = ['jsp']
+    filenames = ['*.jsp']
+    mimetypes = ['application/x-jsp']
+
+    def __init__(self, **options):
+        super(JspLexer, self).__init__(XmlLexer, JspRootLexer, **options)
+
+    def analyse_text(text):
+        rv = JavaLexer.analyse_text(text) - 0.01
+        if looks_like_xml(text):
+            rv += 0.4
+        if '<%' in text and '%>' in text:
+            rv += 0.1
+        return rv

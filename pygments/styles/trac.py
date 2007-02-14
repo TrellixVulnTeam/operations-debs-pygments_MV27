@@ -5,7 +5,7 @@
 
     Port of the default trac highlighter design.
 
-    :copyright: 2006 by Edgewall, Armin Ronacher.
+    :copyright: 2006-2007 by Edgewall, Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -15,12 +15,16 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class TracStyle(Style):
+    """
+    Port of the default trac highlighter design.
+    """
 
     default_style = ''
 
     styles = {
         Comment:                'italic #999988',
         Comment.Preproc:        'bold noitalic #999999',
+        Comment.Special:        'bold #999999',
 
         Operator:               'bold',
 
@@ -37,8 +41,8 @@ class TracStyle(Style):
         Name.Class:             'bold #445588',
         Name.Exception:         'bold #990000',
         Name.Namespace:         '#555555',
-        Name.Variable:          '#ff99ff',
-        Name.Constant:          '#ff99ff',
+        Name.Variable:          '#008080',
+        Name.Constant:          '#008080',
         Name.Tag:               '#000080',
         Name.Attribute:         '#008080',
         Name.Entity:            '#800080',

@@ -4,22 +4,24 @@
 #
 # Combines scripts for common tasks.
 #
-# :copyright: 2006 by Georg Brandl.
+# :copyright: 2006-2007 by Georg Brandl.
 # :license: GNU GPL, see LICENSE for more details.
 #
 
 PYTHON ?= python
 
-export PYTHONPATH = $(shell python -c 'print ":".join(line.strip() for line in file("PYTHONPATH"))' 2>/dev/null)
+export PYTHONPATH = $(shell echo "$$PYTHONPATH"):$(shell python -c 'print ":".join(line.strip() for line in file("PYTHONPATH"))' 2>/dev/null)
 
-.PHONY: apidocs check clean clean-pyc codetags docs epydoc lexermap \
+.PHONY: all apidocs check clean clean-pyc codetags docs epydoc mapfiles \
 	pylint reindent test
+
+all: clean-pyc check test
 
 apidocs: epydoc
 
 check:
 	@$(PYTHON) scripts/check_sources.py -i apidocs -i pygments/lexers/_mapping.py \
-		   -i docs/build
+		   -i docs/build -i pygments/formatters/_mapping.py
 
 clean: clean-pyc
 	rm -f codetags.html
@@ -54,8 +56,9 @@ epydoc:
 			apidocs/*.html
 	@$(PYTHON) scripts/fix_epydoc_markup.py apidocs
 
-lexermap:
-	cd pygments/lexers; $(PYTHON) _mapping.py
+mapfiles:
+	(cd pygments/lexers; $(PYTHON) _mapping.py)
+	(cd pygments/formatters; $(PYTHON) _mapping.py)
 
 pylint:
 	@pylint --rcfile scripts/pylintrc pygments

@@ -3,10 +3,10 @@
     pygments.lexers.agile
     ~~~~~~~~~~~~~~~~~~~~~
 
-    Lexers for agile languages: Python, Ruby, Perl, Scheme.
+    Lexers for agile languages.
 
-    :copyright: 2006 by Georg Brandl, Armin Ronacher,
-                Lukas Meuser, Marek Kubica.
+    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher,
+                Lukas Meuser, Marek Kubica, Tim Hatch.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -17,20 +17,24 @@ except NameError:
     from sets import Set as set
 
 from pygments.lexer import Lexer, RegexLexer, ExtendedRegexLexer, \
-     LexerContext, include, combined, do_insertions, bygroups
+     LexerContext, include, combined, do_insertions, bygroups, using
 from pygments.token import Error, Text, \
      Comment, Operator, Keyword, Name, String, Number, Generic, Punctuation
 from pygments.util import get_bool_opt, get_list_opt, shebang_matches
 
 
-__all__ = ['PythonLexer', 'PythonConsoleLexer', 'RubyLexer',
-           'RubyConsoleLexer', 'PerlLexer', 'LuaLexer',
+__all__ = ['PythonLexer', 'PythonConsoleLexer', 'PythonTracebackLexer',
+           'RubyLexer', 'RubyConsoleLexer', 'PerlLexer', 'LuaLexer',
            'SchemeLexer']
 
 line_re  = re.compile('.*?\n')
 
 
 class PythonLexer(RegexLexer):
+    """
+    For `Python <http://www.python.org>`_ source code.
+    """
+
     name = 'Python'
     aliases = ['python', 'py']
     filenames = ['*.py', '*.pyw']
@@ -112,7 +116,7 @@ class PythonLexer(RegexLexer):
             (r'[a-zA-Z_.][a-zA-Z0-9_.]*', Name.Namespace),
         ],
         'stringescape': [
-            (r'\\([\\abfnrtv"\']|N{.*?}|u[a-fA-F0-9]{4}|'
+            (r'\\([\\abfnrtv"\']|\n|N{.*?}|u[a-fA-F0-9]{4}|'
              r'U[a-fA-F0-9]{8}|x[a-fA-F0-9]{2}|[0-7]{1,3})', String.Escape)
         ],
         'strings': [
@@ -130,10 +134,12 @@ class PythonLexer(RegexLexer):
         ],
         'dqs': [
             (r'"', String, '#pop'),
+            (r'\\\\|\\"|\\\n', String.Escape), # included here again for raw strings
             include('strings')
         ],
         'sqs': [
             (r"'", String, '#pop'),
+            (r"\\\\|\\'|\\\n", String.Escape), # included here again for raw strings
             include('strings')
         ],
         'tdqs': [
@@ -154,20 +160,30 @@ class PythonLexer(RegexLexer):
 
 class PythonConsoleLexer(Lexer):
     """
-    Parses Python console output or doctests, like::
+    For Python console output or doctests, such as:
 
-        >>> a = 1
+    .. sourcecode:: pycon
+
+        >>> a = 'foo'
         >>> print a
-        1
+        foo
+        >>> 1 / 0
+        Traceback (most recent call last):
+          File "<stdin>", line 1, in <module>
+        ZeroDivisionError: integer division or modulo by zero
     """
     name = 'Python console session'
     aliases = ['pycon']
+    mimetypes = ['text/x-python-doctest']
 
     def get_tokens_unprocessed(self, text):
         pylexer = PythonLexer(**self.options)
+        tblexer = PythonTracebackLexer(**self.options)
 
         curcode = ''
         insertions = []
+        curtb = ''
+        tbindex = 0
         tb = 0
         for match in line_re.finditer(text):
             line = match.group()
@@ -185,11 +201,14 @@ class PythonConsoleLexer(Lexer):
                     insertions = []
                 if line.startswith('Traceback (most recent call last):'):
                     tb = 1
-                    yield match.start(), Generic.Traceback, line
+                    curtb = line
+                    tbindex = match.start()
                 elif tb:
-                    if not line.startswith(' '):
+                    curtb += line
+                    if not (line.startswith(' ') or line.strip() == '...'):
                         tb = 0
-                    yield match.start(), Generic.Traceback, line
+                        for i, t, v in tblexer.get_tokens_unprocessed(curtb):
+                            yield tbindex+i, t, v
                 else:
                     yield match.start(), Generic.Output, line
         if curcode:
@@ -198,7 +217,40 @@ class PythonConsoleLexer(Lexer):
                 yield item
 
 
+class PythonTracebackLexer(RegexLexer):
+    """
+    For Python tracebacks.
+
+    *New in Pygments 0.7.*
+    """
+
+    name = 'Python Traceback'
+    aliases = ['pytb']
+    filenames = ['*.pytb']
+    mimetypes = ['text/x-python-traceback']
+
+    tokens = {
+        'root': [
+            (r'^Traceback \(most recent call last\):\n', Generic.Traceback, 'intb'),
+        ],
+        'intb': [
+            (r'^(  File )("[^"]+")(, line )(\d+)(, in )(.+)(\n)',
+             bygroups(Text, Name.Builtin, Text, Number, Text, Name.Identifier, Text)),
+            (r'^(    )(.+)(\n)',
+             bygroups(Text, using(PythonLexer), Text)),
+            (r'^(...)(\n)',
+             bygroups(Comment, Text)), # for doctests...
+            (r'^(.+)(: )(.+)(\n)',
+             bygroups(Name.Class, Text, Name.Identifier, Text), '#pop'),
+        ],
+    }
+
+
 class RubyLexer(ExtendedRegexLexer):
+    """
+    For `Ruby <http://www.ruby-lang.org>`_ source code.
+    """
+
     name = 'Ruby'
     aliases = ['rb', 'ruby']
     filenames = ['*.rb', '*.rbw', 'Rakefile', '*.rake', '*.gemspec', '*.rbx']
@@ -353,10 +405,18 @@ class RubyLexer(ExtendedRegexLexer):
         'root': [
             (r'#.*?$', Comment.Single),
             (r'=begin\n.*?\n=end', Comment.Multiline),
+            # keywords
             (r'(BEGIN|END|alias|begin|break|case|defined\?|'
              r'do|else|elsif|end|ensure|for|if|in|next|redo|'
              r'rescue|raise|retry|return|super|then|undef|unless|until|when|'
              r'while|yield)\b', Keyword),
+            # start of function, class and module names
+            (r'(module)(\s+)([a-zA-Z_][a-zA-Z0-9_]*(::[a-zA-Z_][a-zA-Z0-9_]*)*)',
+             bygroups(Keyword, Text, Name.Namespace)),
+            (r'(def)(\s+)', bygroups(Keyword, Text), 'funcname'),
+            (r'def(?=[*%&^`~+-/\[<>=])', Keyword, 'funcname'),
+            (r'(class)(\s+)', bygroups(Keyword, Text), 'classname'),
+            # special methods
             (r'(initialize|new|loop|include|extend|raise|attr_reader|'
              r'attr_writer|attr_accessor|attr|catch|throw|private|'
              r'module_function|public|protected|true|false|nil)\b', Keyword.Pseudo),
@@ -425,13 +485,18 @@ class RubyLexer(ExtendedRegexLexer):
             # lex numbers and ignore following regular expressions which
             # are division operators in fact (grrrr. i hate that. any
             # better ideas?)
-            (r'(0_?[0-7]+(?:_[0-7]+)*)(\s*)(/)?',
+            # since pygments 0.7 we also eat a "?" operator after numbers
+            # so that the char operator does not work. Chars are not allowed
+            # there so that you can use the terner operator.
+            # stupid example:
+            #   x>=0?n[x]:""
+            (r'(0_?[0-7]+(?:_[0-7]+)*)(\s*)([/?])?',
              bygroups(Number.Oct, Text, Operator)),
-            (r'(0x[0-9A-Fa-f]+(?:_[0-9A-Fa-f]+)*)(\s*)(/)?',
+            (r'(0x[0-9A-Fa-f]+(?:_[0-9A-Fa-f]+)*)(\s*)([/?])?',
              bygroups(Number.Hex, Text, Operator)),
-            (r'(0b[01]+(?:_[01]+)*)(\s*)(/)?',
+            (r'(0b[01]+(?:_[01]+)*)(\s*)([/?])?',
              bygroups(Number.Bin, Text, Operator)),
-            (r'([\d]+(?:_\d+)*)(\s*)(/)?',
+            (r'([\d]+(?:_\d+)*)(\s*)([/?])?',
              bygroups(Number.Integer, Text, Operator)),
             # Names
             (r'@@[a-zA-Z_][a-zA-Z0-9_]*', Name.Variable.Class),
@@ -449,23 +514,20 @@ class RubyLexer(ExtendedRegexLexer):
             (r'[A-Z][a-zA-Z0-9_]+', Name.Constant),
             # this is needed because ruby attributes can look
             # like keywords (class) or like this: ` ?!?
-            (r'(?<=\.)([a-zA-Z_]\w*[\!\?]?|[*%&^`~+-/\[<>=])', Name),
-            # module name
-            (r'(module)(\s+)([a-zA-Z_]\w*)', bygroups(Keyword, Text, Name.Namespace)),
-            # start of function name, a bit tricky
-            (r'(def)(\s+)', bygroups(Keyword, Text), 'funcname'),
-            (r'def(?=[*%&^`~+-/\[<>=])', Keyword, 'funcname'),
-            (r'(class)(\s+)', bygroups(Keyword, Text), 'classname'),
+            (r'(\.|::)([a-zA-Z_]\w*[\!\?]?|[*%&^`~+-/\[<>=])',
+             bygroups(Operator, Name)),
             (r'[a-zA-Z_][\w_]*[\!\?]?', Name),
-            (r'(\[\]|\*\*|<<?|>>?|>=|<=|<=>|=~|={3}|'
+            (r'(\[|\]|\*\*|<<?|>>?|>=|<=|<=>|=~|={3}|'
              r'!~|&&?|\|\||\.{1,3})', Operator),
             (r'[-+/*%=<>&!^|~]=?', Operator),
-            (r'[\[\](){};,/?:\\]', Punctuation),
+            (r'[(){};,/?:\\]', Punctuation),
             (r'\s+', Text)
         ],
         'funcname': [
-            (r'([a-zA-Z_][\w_]*[\!\?]?|\*\*?|[-+]@?|'
-             r'[/%&|^`~]|\[\]=?|<<|>>|<=?>|>=?|===?)', Name.Function, '#pop')
+            (r'(?:([a-zA-Z_][a-zA-Z0-9_]*)(\.))?'
+             r'([a-zA-Z_][\w_]*[\!\?]?|\*\*?|[-+]@?|'
+             r'[/%&|^`~]|\[\]=?|<<|>>|<=?>|>=?|===?)',
+             bygroups(Name.Class, Operator, Name.Function), '#pop')
         ],
         'classname': [
             (r'<<', Operator, '#pop'),
@@ -513,7 +575,9 @@ class RubyLexer(ExtendedRegexLexer):
 
 class RubyConsoleLexer(Lexer):
     """
-    Parses Ruby console output like::
+    For Ruby interactive console (**irb**) output like:
+
+    .. sourcecode:: rbcon
 
         irb(main):001:0> a = 1
         => 1
@@ -523,6 +587,7 @@ class RubyConsoleLexer(Lexer):
     """
     name = 'Ruby irb session'
     aliases = ['rbcon', 'irb']
+    mimetypes = ['text/x-ruby-shellsession']
 
     _prompt_re = re.compile('irb\([a-zA-Z_][a-zA-Z0-9_]*\):\d{3}:\d+[>*] ')
 
@@ -554,6 +619,10 @@ class RubyConsoleLexer(Lexer):
 
 
 class PerlLexer(RegexLexer):
+    """
+    For `Perl <http://www.perl.org>`_ source code.
+    """
+
     name = 'Perl'
     aliases = ['perl', 'pl']
     filenames = ['*.pl', '*.pm']
@@ -688,6 +757,28 @@ class PerlLexer(RegexLexer):
 
 
 class LuaLexer(RegexLexer):
+    """
+    For `Lua <http://www.lua.org>`_ source code.
+
+    Additional options accepted:
+
+    `func_name_highlighting`
+        If given and ``True``, highlight builtin function names
+        (default: ``True``).
+    `disabled_modules`
+        If given, must be a list of module names whose function names
+        should not be highlighted. By default all modules are highlighted.
+
+        To get a list of allowed modules have a look into the
+        `_luabuiltins` module:
+
+        .. sourcecode:: pycon
+
+            >>> from pygments.lexers._luabuiltins import MODULES
+            >>> MODULES.keys()
+            ['string', 'coroutine', 'modules', 'io', 'basic', ...]
+    """
+
     name = 'Lua'
     aliases = ['lua']
     filenames = ['*.lua']
@@ -795,7 +886,9 @@ class SchemeLexer(RegexLexer):
     This parser is checked with pastes from the LISP pastebin
     at http://paste.lisp.org/ to cover as much syntax as possible.
 
-    It should support the full Scheme syntax as defined in R5RS.
+    It supports the full Scheme syntax as defined in R5RS.
+
+    *New in Pygments 0.6.*
     """
     name = 'Scheme'
     aliases = ['scheme']

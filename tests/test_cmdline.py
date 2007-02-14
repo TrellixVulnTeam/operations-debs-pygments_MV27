@@ -3,7 +3,7 @@
     Command line test
     ~~~~~~~~~~~~~~~~~
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -33,19 +33,38 @@ class CmdLineTest(unittest.TestCase):
 
     def test_L_opt(self):
         c, o, e = run_cmdline("-L")
-        self.assert_(c == 0)
-        self.assert_(o.find("Lexers") and o.find("Formatters"))
+        self.assertEquals(c, 0)
+        self.assert_("Lexers" in o and "Formatters" in o and
+                     "Filters" in o and "Styles" in o)
+        c, o, e = run_cmdline("-L", "lexer")
+        self.assertEquals(c, 0)
+        self.assert_("Lexers" in o and "Formatters" not in o)
+        c, o, e = run_cmdline("-L", "lexers")
+        self.assertEquals(c, 0)
 
     def test_O_opt(self):
         filename = os.path.join(testdir, testfile)
-        c, o, e = run_cmdline("-Ofull=1,linenos=true", "-fhtml", filename)
+        c, o, e = run_cmdline("-Ofull=1,linenos=true,foo=bar", "-fhtml", filename)
         self.assertEquals(c, 0)
         self.assert_("<html" in o)
         self.assert_('class="linenos"' in o)
 
+    def test_F_opt(self):
+        filename = os.path.join(testdir, testfile)
+        c, o, e = run_cmdline("-Fhighlight:tokentype=Name.Blubb,names=testfile testdir",
+                              "-fhtml", filename)
+        self.assertEquals(c, 0)
+        self.assert_('<span class="n-Blubb' in o)
+
+    def test_H_opt(self):
+        c, o, e = run_cmdline("-H", "formatter", "html")
+        self.assertEquals(c, 0)
+        self.assert_('HTML' in o)
+
     def test_invalid_opts(self):
         for opts in [("-L", "-lpy"), ("-L", "-fhtml"), ("-L", "-Ox"),
-                     ("-a",), ("-Sst", "-lpy")]:
+                     ("-a",), ("-Sst", "-lpy"), ("-H",),
+                     ("-H", "formatter"),]:
             self.assert_(run_cmdline(*opts)[0] == 2)
 
     def test_normal(self):

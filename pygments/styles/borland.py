@@ -5,7 +5,7 @@
 
     Style similar to the style used in the borland ides.
 
-    :copyright: 2006 by Armin Ronacher.
+    :copyright: 2006-2007 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -15,12 +15,16 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class BorlandStyle(Style):
+    """
+    Style similar to the style used in the borland IDEs.
+    """
 
     default_style = ''
 
     styles = {
         Comment:                'italic #008800',
         Comment.Preproc:        'noitalic',
+        Comment.Special:        'noitalic bold',
 
         String:                 '#0000FF',
         Number:                 '#0000FF',

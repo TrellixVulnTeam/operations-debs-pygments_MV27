@@ -5,7 +5,7 @@
 
     A modern style based on the VIM pyte theme.
 
-    :copyright: 2006 by Georg Brandl, Armin Ronacher.
+    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -15,6 +15,9 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class FriendlyStyle(Style):
+    """
+    A modern style based on the VIM pyte theme.
+    """
 
     background_color = "#f0f0f0"
     default_style = ""
@@ -22,6 +25,7 @@ class FriendlyStyle(Style):
     styles = {
         Comment:                   "italic #60a0b0",
         Comment.Preproc:           "noitalic #007020",
+        Comment.Special:           "noitalic bg:#fff0f0",
 
         Keyword:                   "bold #007020",
         Keyword.Pseudo:            "nobold",

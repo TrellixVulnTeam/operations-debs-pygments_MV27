@@ -5,7 +5,7 @@
 
     Utility functions.
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 import re
@@ -23,6 +23,12 @@ doctype_lookup_re = re.compile(r'''(?smx)
 tag_re = re.compile(r'<(.+?)(\s.*?)?>.*?</\1>(?uism)')
 
 
+class ClassNotFound(ValueError):
+    """
+    If one of the get_*_by_* functions didn't find a matching class.
+    """
+
+
 class OptionError(Exception):
     pass
 
@@ -37,8 +43,8 @@ def get_bool_opt(options, optname, default=None):
         return False
     else:
         raise OptionError('Invalid value %r for option %s; use '
-                          '1/0, yes/no, true/false, on/off' %
-                          string, optname)
+                          '1/0, yes/no, true/false, on/off' % (
+                          string, optname))
 
 
 def get_int_opt(options, optname, default=None):
@@ -47,8 +53,8 @@ def get_int_opt(options, optname, default=None):
         return int(string)
     except ValueError:
         raise OptionError('Invalid value %r for option %s; you '
-                          'must give an integer value' %
-                          string, optname)
+                          'must give an integer value' % (
+                          string, optname))
 
 
 def get_list_opt(options, optname, default=None):
@@ -59,8 +65,20 @@ def get_list_opt(options, optname, default=None):
         return list(val)
     else:
         raise OptionError('Invalid value %r for option %s; you '
-                          'must give a list value' %
-                          val, optname)
+                          'must give a list value' % (
+                          val, optname))
+
+
+def docstring_headline(obj):
+    if not obj.__doc__:
+        return ''
+    res = []
+    for line in obj.__doc__.strip().splitlines():
+        if line.strip():
+            res.append(" " + line.strip())
+        else:
+            break
+    return ''.join(res).lstrip()
 
 
 def make_analysator(f):

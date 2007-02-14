@@ -5,7 +5,7 @@
 
     Formatter for terminal output with ANSI sequences.
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -51,28 +51,40 @@ TERMINAL_COLORS = {
 
 
 class TerminalFormatter(Formatter):
+    r"""
+    Format tokens with ANSI color sequences, for output in a text console.
+    Color sequences are terminated at newlines, so that paging the output
+    works correctly.
+
+    The `get_style_defs()` method doesn't do anything special since there is
+    no support for common styles.
+
+    Options accepted:
+
+    `bg`
+        Set to ``"light"`` or ``"dark"`` depending on the terminal's background
+        (default: ``"light"``).
+
+    `colorscheme`
+        A dictionary mapping token types to (lightbg, darkbg) color names or
+        ``None`` (default: ``None`` = use builtin colorscheme).
     """
-    Output plain text with coloring ANSI sequences.
-    """
+    name = 'Terminal'
+    aliases = ['terminal', 'console']
+    filenames = []
 
     def __init__(self, **options):
-        """
-        Accepted options:
-
-        ``bg``
-            Set to ``'light'`` or ``'dark'`` depending on the
-            terminal's background.
-
-        ``colorscheme``
-            ``None`` or a dictionary mapping token types to
-            ``(lightbg, darkbg)`` color names.
-        """
         Formatter.__init__(self, **options)
         self.darkbg = options.get('bg', 'light') == 'dark'
         self.colorscheme = options.get('colorscheme', None) or TERMINAL_COLORS
 
     def format(self, tokensource, outfile):
         enc = self.encoding
+        # hack: if the output is a terminal and has an encoding set,
+        # use that to avoid unicode encode problems
+        if not enc and hasattr(outfile, "encoding") and \
+           hasattr(outfile, "isatty") and outfile.isatty():
+            enc = outfile.encoding
         for ttype, value in tokensource:
             if enc:
                 value = value.encode(enc)

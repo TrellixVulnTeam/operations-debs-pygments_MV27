@@ -5,7 +5,7 @@
 
     A colorful style, inspired by CodeRay.
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -15,12 +15,16 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class ColorfulStyle(Style):
+    """
+    A colorful style, inspired by CodeRay.
+    """
 
     default_style = ""
 
     styles = {
         Comment:                   "#888",
         Comment.Preproc:           "#579",
+        Comment.Special:           "bold #cc0000",
 
         Keyword:                   "bold #080",
         Keyword.Pseudo:            "#038",

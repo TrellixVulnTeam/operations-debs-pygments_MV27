@@ -3,16 +3,18 @@
     Pygments basic API tests
     ~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
+import os
 import unittest
 import StringIO
 import random
 
-from pygments import lexers, formatters, format
-from pygments.token import _TokenType
+from pygments import lexers, formatters, filters, format
+from pygments.token import _TokenType, Text
+from pygments.lexer import RegexLexer
 
 test_content = [chr(i) for i in xrange(33, 128)] * 5
 random.shuffle(test_content)
@@ -30,10 +32,16 @@ class LexersTest(unittest.TestCase):
         ae = self.assertEquals
         # test that every lexer class has the correct public API
         for lexer in lexers._iter_lexerclasses():
-            for attr in 'name', 'aliases', 'filenames', 'alias_filenames', 'mimetypes':
+            a(type(lexer.name) is str)
+            for attr in 'aliases', 'filenames', 'alias_filenames', 'mimetypes':
                 a(hasattr(lexer, attr))
+                a(type(getattr(lexer, attr)) is list, "%s: %s attribute wrong" %
+                                                      (lexer, attr))
             result = lexer.analyse_text("abc")
             a(isinstance(result, float) and 0.0 <= result <= 1.0)
+
+            if issubclass(lexer, RegexLexer):
+                a('root' in lexer._tokens, '%s has no root state' % lexer)
 
             inst = lexer(opt1="val1", opt2="val2")
             tokens = list(inst.get_tokens(test_content))
@@ -63,6 +71,16 @@ class LexersTest(unittest.TestCase):
             a(isinstance(x, lexers.PythonLexer))
             ae(x.options["opt"], "val")
 
+    def test_filters(self):
+        for x in filters.FILTERS.keys():
+            lx = lexers.PythonLexer()
+            lx.add_filter(x)
+            text = file(os.path.join(testdir, testfile)).read().decode('utf-8')
+            tokens = list(lx.get_tokens(text))
+            roundtext = ''.join([t[1] for t in tokens])
+            self.assertEquals(roundtext, text,
+                              "lexer roundtrip with %s filter failed" % x)
+
 
 class FormattersTest(unittest.TestCase):
 
@@ -81,6 +99,30 @@ class FormattersTest(unittest.TestCase):
             inst = formatter(opt1="val1")
             inst.get_style_defs()
             inst.format(ts, out)
+
+    def test_encodings(self):
+        from pygments.formatters import HtmlFormatter
+
+        # unicode output
+        fmt = HtmlFormatter()
+        tokens = [(Text, u"ä")]
+        out = format(tokens, fmt)
+        self.assert_(type(out) is unicode)
+        self.assert_(u"ä" in out)
+
+        # encoding option
+        fmt = HtmlFormatter(encoding="latin1")
+        tokens = [(Text, u"ä")]
+        self.assert_(u"ä".encode("latin1") in format(tokens, fmt))
+
+        # encoding and outencoding option
+        fmt = HtmlFormatter(encoding="latin1", outencoding="utf8")
+        tokens = [(Text, u"ä")]
+        self.assert_(u"ä".encode("utf8") in format(tokens, fmt))
+
+    def test_styles(self):
+        from pygments.formatters import HtmlFormatter
+        fmt = HtmlFormatter(style="pastie")
 
     def test_unicode_handling(self):
         # test that the formatter supports encoding and Unicode

@@ -7,7 +7,7 @@
 
     .. _perldoc: http://perldoc.perl.org/
 
-    :copyright: 2006 by Armin Ronacher.
+    :copyright: 2006-2007 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -17,6 +17,9 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class PerldocStyle(Style):
+    """
+    Style similar to the style used in the perldoc code blocks.
+    """
 
     background_color = '#eeeedd'
     default_style = ''
@@ -24,6 +27,7 @@ class PerldocStyle(Style):
     styles = {
         Comment:                '#228B22',
         Comment.Preproc:        '#1e889b',
+        Comment.Special:        '#8B008B bold',
 
         String:                 '#CD5555',
         String.Heredoc:         '#1c7e71 italic',
