@@ -1,9 +1,24 @@
 Pygments changelog
 ==================
 
+Version 0.7.1
+-------------
+(released Feb 15, 2007)
+
+- Fixed little highlighting bugs in the Python, Java, Scheme and Apache
+  Config lexers.
+
+- Updated the included manpage.
+
+- Included a built version of the documentation in the source tarball.
+
+
 Version 0.7
 -----------
 (codename Faschingskrapfn, released Feb 14, 2007)
+
+- Added a MoinMoin parser that uses Pygments. With it, you get Pygments
+  highlighting in Moin Wiki pages.
 
 - Changed the exception raised if no suitable lexer, formatter etc. is
   found in one of the `get_*_by_*` functions to a custom exception,
