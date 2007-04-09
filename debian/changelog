@@ -1,3 +1,11 @@
+pygments (0.7.1-2) unstable; urgency=low
+
+  * Upload to unstable
+  * debian/copyright file updated
+  * Changed my address to piotr@debian.org
+
+ -- Piotr Ożarowski <piotr@debian.org>  Mon, 09 Apr 2007 20:18:54 +0200
+
 pygments (0.7.1-1) experimental; urgency=low
 
   * New upstream release (upload to experimental due to Etch freeze)

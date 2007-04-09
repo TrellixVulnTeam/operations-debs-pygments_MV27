@@ -1,7 +1,7 @@
 Source: pygments
 Section: python
 Priority: optional
-Maintainer: Piotr Ozarowski <ozarow@gmail.com>
+Maintainer: Piotr Ożarowski <piotr@debian.org>
 Uploaders: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
 Build-Depends: debhelper (>= 5.0.38)
 Build-Depends-Indep: python (>= 2.3.5-11), python-all-dev, python-central (>= 0.5.6), python-setuptools (>= 0.6b3-1), python-docutils, python-jinja
