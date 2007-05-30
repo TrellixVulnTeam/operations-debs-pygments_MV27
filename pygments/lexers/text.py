@@ -17,15 +17,18 @@ try:
     set
 except NameError:
     from sets import Set as set
+from bisect import bisect
 
-from pygments.lexer import RegexLexer, bygroups, include, using, this
+from pygments.lexer import RegexLexer, bygroups, include, using, this, \
+     do_insertions
 from pygments.token import Punctuation, \
     Text, Comment, Keyword, Name, String, Generic, Operator, Number
+from pygments.util import get_bool_opt
 
 
 __all__ = ['IniLexer', 'SourcesListLexer', 'MakefileLexer', 'DiffLexer',
            'IrcLogsLexer', 'TexLexer', 'GroffLexer', 'ApacheConfLexer',
-           'BBCodeLexer', 'MoinWikiLexer', 'RstLexer']
+           'BBCodeLexer', 'MoinWikiLexer', 'RstLexer', 'VimLexer']
 
 
 class IniLexer(RegexLexer):
@@ -119,12 +122,14 @@ class MakefileLexer(RegexLexer):
         'root': [
             (r'\s+', Text),
             (r'#.*?\n', Comment),
-            (r'(cmdswitches|error|message|include|if|ifdef|ifndef|else|'
+            (r'(cmdswitches|error|export|message|include|if|ifdef|ifndef|else|'
              r'else\s*if|else\s*ifdef|else\s*ifndef|endif|undef)\b', Keyword),
-            (r'([a-zA-Z_][a-zA-Z0-9_]*)(\s*)([?:+]?=)(\s*)',
+            # assignment
+            (r'([a-zA-Z_][a-zA-Z0-9_]*)(\s*)([?:+]?=)([ \t]*)',
              bygroups(Name.Variable, Text, Operator, Text), 'var'),
             (r'"(\\\\|\\"|[^"])*"', String.Double),
             (r"'(\\\\|\\'|[^'])*'", String.Single),
+            # targets
             (r'([^\n:]+)(:)([ \t]*)', bygroups(Name.Function, Operator, Text),
              'block-header')
         ],
@@ -135,8 +140,12 @@ class MakefileLexer(RegexLexer):
             (r'[^\\\n]+', String),
         ],
         'block-header': [
-            (r'[^,\n]', String),
+            (r'[^,\\\n#]+', Number),
             (r',', Punctuation),
+            (r'#.*?\n', Comment),
+            # line continuation
+            (r'\\\n', Text),
+            (r'\\', Text),
             (r'\n[\t ]+', Text, 'block'),
             (r'\n', Text, '#pop')
         ],
@@ -451,66 +460,213 @@ class RstLexer(RegexLexer):
     For `reStructuredText <http://docutils.sf.net/rst.html>`_ markup.
 
     *New in Pygments 0.7.*
+
+    Additional options accepted:
+
+    `handlecodeblocks`
+        Highlight the contents of ``.. sourcecode:: langauge`` and
+        ``.. code:: language`` directives with a lexer for the given
+        language (default: ``True``). *New in Pygments 0.8.*
     """
     name = 'reStructuredText'
-    aliases = ['rst', 'restructuredtext']
+    aliases = ['rst', 'rest', 'restructuredtext']
     filenames = ['*.rst', '*.rest']
     mimetypes = ["text/x-rst"]
     flags = re.MULTILINE
 
+    def _handle_sourcecode(self, match):
+        from pygments.lexers import get_lexer_by_name
+        from pygments.util import ClassNotFound
+
+        # section header
+        yield match.start(1), Punctuation, match.group(1)
+        yield match.start(2), Text, match.group(2)
+        yield match.start(3), Operator.Word, match.group(3)
+        yield match.start(4), Punctuation, match.group(4)
+        yield match.start(5), Text, match.group(5)
+        yield match.start(6), Keyword, match.group(6)
+        yield match.start(7), Text, match.group(7)
+
+        # lookup lexer if wanted and existing
+        lexer = None
+        if self.handlecodeblocks:
+            try:
+                lexer = get_lexer_by_name(match.group(6).strip())
+            except ClassNotFound:
+                pass
+        indention = match.group(8)
+        indention_size = len(indention)
+        code = (indention + match.group(9) + match.group(10) + match.group(11))
+
+        # no lexer for this language. handle it like it was a code block
+        if lexer is None:
+            yield match.start(8), String, code
+            return
+
+        # highlight the lines with the lexer.
+        ins = []
+        codelines = code.splitlines(True)
+        code = ''
+        for line in codelines:
+            if len(line) > indention_size:
+                ins.append((len(code), [(0, Text, line[:indention_size])]))
+                code += line[indention_size:]
+            else:
+                code += line
+        for item in do_insertions(ins, lexer.get_tokens_unprocessed(code)):
+            yield item
+
     tokens = {
         'root': [
             # Heading with overline
-            (r'^(=+|-+|`+|:+|\.+|\'+|"+|~+|\^+|_+|\*+|\++|#+)(\n)(.+)(\n)(\1)(\n)',
-             bygroups(Generic.Heading, Text, using(this, state='inline'),
-             Text, Generic.Heading, Text)),
+            (r'^(=+|-+|`+|:+|\.+|\'+|"+|~+|\^+|_+|\*+|\++|#+)([ \t]*\n)(.+)(\n)(\1)(\n)',
+             bygroups(Generic.Heading, Text, Generic.Heading,
+                      Text, Generic.Heading, Text)),
             # Plain heading
-            (r'^(\S.*)(\n)(=+|-+|`+|:+|\.+|\'+|"+|~+|\^+|_+|\*+|\++|#+)(\n)',
+            (r'^(\S.*)(\n)(={3,}|-{3,}|`{3,}|:{3,}|\.{3,}|\'{3,}|"{3,}|'
+             r'~{3,}|\^{3,}|_{3,}|\*{3,}|\+{3,}|#{3,})(\n)',
              bygroups(Generic.Heading, Text, Generic.Heading, Text)),
-
             # Bulleted lists
             (r'^(\s*)([-*+])( .+\n(?:\1  .+\n)*)',
-             bygroups(Text, Keyword, using(this, state='inline'))),
+             bygroups(Text, Number, using(this, state='inline'))),
             # Numbered lists
             (r'^(\s*)([0-9#ivxlcmIVXLCM]+\.)( .+\n(?:\1  .+\n)*)',
-             bygroups(Text, Keyword, using(this, state='inline'))),
+             bygroups(Text, Number, using(this, state='inline'))),
             (r'^(\s*)(\(?[0-9#ivxlcmIVXLCM]+\))( .+\n(?:\1  .+\n)*)',
-             bygroups(Text, Keyword, using(this, state='inline'))),
+             bygroups(Text, Number, using(this, state='inline'))),
             # Numbered, but keep words at BOL from becoming lists
             (r'^(\s*)([A-Z]+\.)( .+\n(?:\1  .+\n)+)',
-             bygroups(Text, Keyword, using(this, state='inline'))),
+             bygroups(Text, Number, using(this, state='inline'))),
             (r'^(\s*)(\(?[A-Za-z]+\))( .+\n(?:\1  .+\n)+)',
-             bygroups(Text, Keyword, using(this, state='inline'))),
-            # Introducing a section
-            (r'^( *\.\.)(\s*)(\w+)(::)(?:(\s*)(.+))?(\n(?:(?: +.*|)\n)+)$',
-             bygroups(Punctuation, Text, Number, Punctuation, Text, Number, Text)),
+             bygroups(Text, Number, using(this, state='inline'))),
+            # Sourcecode directives
+            (r'^( *\.\.)(\s*)((?:source)?code)(::)([ \t]*)([^\n]+)'
+             r'(\n[ \t]*\n)([ \t]+)(.*)(\n)((?:(?:\8.*|)\n)+)',
+             _handle_sourcecode),
+            # A directive
+            (r'^( *\.\.)(\s*)(\w+)(::)(?:([ \t]*)(.+))?',
+             bygroups(Punctuation, Text, Operator.Word, Punctuation, Text, Keyword)),
             # A reference target
-            (r'^( *\.\.)(\s*)(\w+:)(.*?)$',
+            (r'^( *\.\.)(\s*)([\w\t ]+:)(.*?)$',
              bygroups(Punctuation, Text, Name.Tag, using(this, state='inline'))),
             # A footnote target
             (r'^( *\.\.)(\s*)(\[.+\])(.*?)$',
              bygroups(Punctuation, Text, Name.Tag, using(this, state='inline'))),
             # Comments
             (r'^ *\.\..*(\n( +.*\n|\n)+)?', Comment.Preproc),
+            # Field list
+            (r'^( *)(:.*?:)([ \t]+)(.*?)$', bygroups(Text, Name.Class, Text,
+                                                     Name.Function)),
             # Definition list
             (r'^([^ ].*(?<!::)\n)((?:(?: +.*)\n)+)',
              bygroups(using(this, state='inline'), using(this, state='inline'))),
             # Code blocks
-            (r'(::)(\n)((?:(?: +.*|)\n)+)',
-             bygroups(String.Escape, Text, String)),
+            (r'(::)(\n[ \t]*\n)([ \t]+)(.*)(\n)((?:(?:\3.*|)\n)+)',
+             bygroups(String.Escape, Text, String, String, Text, String)),
             include('inline'),
         ],
         'inline': [
-            (r'``.+?``', String), # code
-            # Phrase reference
-            (r'(``?)(.+?)(\1__?)',
-             bygroups(Punctuation, using(this), Punctuation)),
-            (r'`.+?`', Name),
-            (r'\*\*.+?\*\*', String), # Strong emphasis
-            (r'\*.+?\*', Number), # Emphasis
+            (r'\\.', Text), # escape
+            (r'``', String, 'literal'), # code
+            (r'(`)(.+?)(`__?)',
+             bygroups(Punctuation, using(this), Punctuation)), # reference
+            (r'(`.+?`)(:[a-zA-Z0-9-]+?:)?',
+             bygroups(Name.Variable, Name.Attribute)), # role
+            (r'(:[a-zA-Z0-9-]+?:)(`.+?`)',
+             bygroups(Name.Attribute, Name.Variable)), # user-defined role
+            (r'\*\*.+?\*\*', Generic.Strong), # Strong emphasis
+            (r'\*.+?\*', Generic.Emph), # Emphasis
             (r'\[.*?\]_', String), # Footnote or citation
-            (r'<.+?>', Name.Tag),
-            (r'[^\n\[*`:]+', Text),
+            (r'<.+?>', Name.Tag), # Hyperlink
+            (r'[^\\\n\[*`:]+', Text),
+            (r'.', Text),
+        ],
+        'literal': [
+            (r'[^`\\]+', String),
+            (r'\\.', String),
+            (r'``', String, '#pop'),
+            (r'[`\\]', String),
+        ]
+    }
+
+    def __init__(self, **options):
+        self.handlecodeblocks = get_bool_opt(options, 'handlecodeblocks', True)
+        RegexLexer.__init__(self, **options)
+
+
+class VimLexer(RegexLexer):
+    """
+    Lexer for VimL script files
+    """
+    name = 'VimL'
+    aliases = ['vim']
+    filenames = ['*.vim', '.vimrc']
+    mimetypes = ['text/x-vim']
+    flags = re.MULTILINE
+
+    tokens = {
+        'root': [
+            # Who decided that doublequote was a good comment character??
+            (r'^\s*".*', Comment),
+            (r'(?<=\s)"[^\-:.%#=*].*', Comment),
+
+            (r'[ \t]+', Text),
+            # TODO: regexes can have other delims
+            (r'/(\\\\|\\/|[^\n/])*/', String.Regex),
+            (r'"(\\\\|\\"|[^\n"])*"', String.Double),
+            (r"'(\\\\|\\'|[^\n'])*'", String.Single),
+            (r'-?\d+', Number),
+            (r'^:', Punctuation),
+            (r'[()<>+=!|,~-]', Punctuation), # Inexact list.  Looks decent.
+            (r'\b(let|if|else|endif|elseif|fun|function|endfunction)\b',
+             Keyword),
+            (r'\b\w+\b', Name.Other), # These are postprocessed below
             (r'.', Text),
         ],
     }
+    def __init__(self, **options):
+        from pygments.lexers._vimbuiltins import command, option, auto
+        self._cmd = command
+        self._opt = option
+        self._aut = auto
+
+        RegexLexer.__init__(self, **options)
+
+    def is_in(self, w, mapping):
+        r"""
+        It's kind of difficult to decide if something might be a keyword
+        in VimL because it allows you to abbreviate them.  In fact,
+        'ab[breviate]' is a good example.  :ab, :abbre, or :abbreviate are
+        valid ways to call it so rather than making really awful regexps
+        like::
+
+            \bab(?:b(?:r(?:e(?:v(?:i(?:a(?:t(?:e)?)?)?)?)?)?)?)?\b
+
+        we match `\b\w+\b` and then call is_in() on those tokens.  See
+        `scripts/get_vimkw.py` for how the lists are extracted.
+        """
+        p = bisect(mapping, (w,))
+        if p > 0:
+            if mapping[p-1][0] == w[:len(mapping[p-1][0])] and \
+               mapping[p-1][1][:len(w)] == w: return True
+        if p < len(mapping):
+            return mapping[p][0] == w[:len(mapping[p][0])] and \
+                   mapping[p][1][:len(w)] == w
+        return False
+
+    def get_tokens_unprocessed(self, text):
+        # TODO: builtins are only subsequent tokens on lines
+        #       and 'keywords' only happen at the beginning except
+        #       for :au ones
+        for index, token, value in \
+            RegexLexer.get_tokens_unprocessed(self, text):
+            if token is Name.Other:
+                if self.is_in(value, self._cmd):
+                    yield index, Keyword, value
+                elif self.is_in(value, self._opt) or \
+                     self.is_in(value, self._aut):
+                    yield index, Name.Builtin, value
+                else:
+                    yield index, Text, value
+            else:
+                yield index, token, value

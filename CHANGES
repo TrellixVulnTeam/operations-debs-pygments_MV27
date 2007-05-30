@@ -1,6 +1,51 @@
 Pygments changelog
 ==================
 
+Version 0.8 (in development)
+----------------------------
+(codename Maikäfer, released May 29, 2007)
+
+- Lexers added:
+
+  * Haskell, thanks to Adam Blinkinsop
+  * Redcode, thanks to Adam Blinkinsop
+  * D, thanks to Kirk McDonald
+  * MuPad, thanks to Christopher Creutzig
+  * MiniD, thanks to Jarrett Billingsley
+  * Vim Script, by Tim Hatch
+
+- The HTML formatter now has a second line-numbers mode in which it will
+  just integrate the numbers in the same ``<pre>`` tag as the code.
+
+- The `CSharpLexer` now is Unicode-aware, which means that it has an
+  option that can be set so that it correctly lexes Unicode identifiers
+  allowed by the C# specs.
+
+- Added a `RaiseOnErrorTokenFilter` that raises an exception when the
+  lexer generates an error token, and a `VisibleWhitespaceFilter` that
+  converts whitespace (spaces, tabs, newlines) into visible characters.
+
+- Fixed the `do_insertions()` helper function to yield correct indices.
+
+- The ReST lexer now automatically highlights source code blocks in
+  ".. sourcecode:: language" and ".. code:: language" directive blocks.
+
+- Improved the default style (thanks to Tiberius Teng). The old default
+  is still available as the "emacs" style (which was an alias before).
+
+- The `get_style_defs` method of HTML formatters now uses the `cssclass`
+  option as the default selector if it was given.
+
+- Improved the ReST and Bash lexers a bit.
+
+- Fixed a few bugs in the Makefile and Bash lexers, thanks to Tim Hatch.
+
+- Fixed a bug in the command line code that disallowed ``-O`` options
+  when using the ``-S`` option.
+
+- Fixed a bug in the `RawTokenFormatter`.
+
+
 Version 0.7.1
 -------------
 (released Feb 15, 2007)

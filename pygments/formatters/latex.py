@@ -8,7 +8,7 @@
     :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
-import cStringIO
+import StringIO
 
 from pygments.formatter import Formatter
 from pygments.token import Token
@@ -73,6 +73,19 @@ class LatexFormatter(Formatter):
 
     Additional options accepted:
 
+
+    `style`
+        The style to use, can be a string or a Style subclass (default:
+        ``'default'``).
+
+    `full`
+        Tells the formatter to output a "full" document, i.e. a complete
+        self-contained document (default: ``False``).
+
+    `title`
+        If `full` is true, the title that should be used to caption the
+        document (default: ``''``).
+
     `docclass`
         If the `full` option is enabled, this is the document class to use
         (default: ``'article'``).
@@ -80,6 +93,15 @@ class LatexFormatter(Formatter):
     `preamble`
         If the `full` option is enabled, this can be further preamble commands,
         e.g. ``\usepackage`` (default: ``''``).
+
+    `linenos`
+        If set to ``True``, output line numbers (default: ``False``).
+
+    `linenostart`
+        The line number for the first line (default: ``1``).
+
+    `linenostep`
+        If set to a number n > 1, only every nth line number is printed.
 
     `verboptions`
         Additional options given to the Verbatim environment (see the *fancyvrb*
@@ -178,7 +200,7 @@ class LatexFormatter(Formatter):
 
         if self.full:
             realoutfile = outfile
-            outfile = cStringIO.StringIO()
+            outfile = StringIO.StringIO()
 
         outfile.write(r'\begin{Verbatim}[commandchars=@\[\]')
         if self.linenos:

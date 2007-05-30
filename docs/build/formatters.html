@@ -138,7 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
-.syntax { background: #ffffff; }
+.syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .syntax .k { color: #008800; font-weight: bold } /* Keyword */
@@ -149,12 +149,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #999999 } /* Generic.Heading */
+.syntax .gh { color: #303030 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #aaaaaa } /* Generic.Subheading */
+.syntax .gu { color: #606060 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -176,6 +176,7 @@ div.toc h2 {
 .syntax .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
 .syntax .nv { color: #336699 } /* Name.Variable */
 .syntax .ow { color: #008800 } /* Operator.Word */
+.syntax .w { color: #bbbbbb } /* Text.Whitespace */
 .syntax .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
 .syntax .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
 .syntax .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
@@ -249,7 +250,68 @@ Therefore, <cite>outencoding</cite> has been introduced which overrides <cite>en
 for the formatter if given.</p>
 </dd>
 </dl>
-<p>The <cite>HtmlFormatter</cite> and <cite>LatexFormatter</cite> classes support these options:</p>
+</div>
+<div class="section">
+<h3><a id="formatter-classes" name="formatter-classes">Formatter classes</a></h3>
+<p>All these classes are importable from <cite>pygments.formatters</cite>.</p>
+<div class="section">
+<h4><a id="bbcodeformatter" name="bbcodeformatter"><cite>BBCodeFormatter</cite></a></h4>
+<blockquote>
+<p>Format tokens with BBcodes. These formatting codes are used by many
+bulletin boards, so you can highlight your sourcecode with pygments before
+posting it there.</p>
+<p>This formatter has no support for background colors and borders, as there
+are no common BBcode tags for that.</p>
+<p>Some board systems (e.g. phpBB) don't support colors in their [code] tag,
+so you can't use the highlighting together with that tag.
+Text in a [code] tag usually is shown with a monospace font (which this
+formatter can do with the <tt class="docutils literal"><span class="pre">monofont</span></tt> option) and no spaces (which you
+need for indentation) are removed.</p>
+<p>Additional options accepted:</p>
+<dl class="docutils">
+<dt><cite>style</cite></dt>
+<dd>The style to use, can be a string or a Style subclass (default:
+<tt class="docutils literal"><span class="pre">'default'</span></tt>).</dd>
+<dt><cite>codetag</cite></dt>
+<dd>If set to true, put the output into <tt class="docutils literal"><span class="pre">[code]</span></tt> tags (default:
+<tt class="docutils literal"><span class="pre">false</span></tt>)</dd>
+<dt><cite>monofont</cite></dt>
+<dd>If set to true, add a tag to show the code with a monospace font
+(default: <tt class="docutils literal"><span class="pre">false</span></tt>).</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">bbcode, bb</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</div>
+<div class="section">
+<h4><a id="latexformatter" name="latexformatter"><cite>LatexFormatter</cite></a></h4>
+<blockquote>
+<p>Format tokens as LaTeX code. This needs the <cite>fancyvrb</cite> and <cite>color</cite>
+standard packages.</p>
+<p>Without the <cite>full</cite> option, code is formatted as one <tt class="docutils literal"><span class="pre">Verbatim</span></tt>
+environment, like this:</p>
+<div class="syntax"><pre><span class="k">\begin</span><span class="nb">{</span>Verbatim<span class="nb">}</span>[commandchars=@<span class="sb">\[</span><span class="s">\]</span>]
+@Can[def ]@Cax[foo](bar):
+    @Can[pass]
+<span class="k">\end</span><span class="nb">{</span>Verbatim<span class="nb">}</span>
+</pre></div>
+<p>The command sequences used here (<tt class="docutils literal"><span class="pre">&#64;Can</span></tt> etc.) are generated from the given
+<cite>style</cite> and can be retrieved using the <cite>get_style_defs</cite> method.</p>
+<p>With the <cite>full</cite> option, a complete LaTeX document is output, including
+the command definitions in the preamble.</p>
+<p>The <cite>get_style_defs(arg='')</cite> method of a <cite>LatexFormatter</cite> returns a string
+containing <tt class="docutils literal"><span class="pre">\newcommand</span></tt> commands defining the commands used inside the
+<tt class="docutils literal"><span class="pre">Verbatim</span></tt> environments. If the argument <cite>arg</cite> is true,
+<tt class="docutils literal"><span class="pre">\renewcommand</span></tt> is used instead.</p>
+<p>Additional options accepted:</p>
 <dl class="docutils">
 <dt><cite>style</cite></dt>
 <dd>The style to use, can be a string or a Style subclass (default:
@@ -260,17 +322,54 @@ self-contained document (default: <tt class="docutils literal"><span class="pre"
 <dt><cite>title</cite></dt>
 <dd>If <cite>full</cite> is true, the title that should be used to caption the
 document (default: <tt class="docutils literal"><span class="pre">''</span></tt>).</dd>
+<dt><cite>docclass</cite></dt>
+<dd>If the <cite>full</cite> option is enabled, this is the document class to use
+(default: <tt class="docutils literal"><span class="pre">'article'</span></tt>).</dd>
+<dt><cite>preamble</cite></dt>
+<dd>If the <cite>full</cite> option is enabled, this can be further preamble commands,
+e.g. <tt class="docutils literal"><span class="pre">\usepackage</span></tt> (default: <tt class="docutils literal"><span class="pre">''</span></tt>).</dd>
 <dt><cite>linenos</cite></dt>
 <dd>If set to <tt class="docutils literal"><span class="pre">True</span></tt>, output line numbers (default: <tt class="docutils literal"><span class="pre">False</span></tt>).</dd>
 <dt><cite>linenostart</cite></dt>
 <dd>The line number for the first line (default: <tt class="docutils literal"><span class="pre">1</span></tt>).</dd>
 <dt><cite>linenostep</cite></dt>
 <dd>If set to a number n &gt; 1, only every nth line number is printed.</dd>
+<dt><cite>verboptions</cite></dt>
+<dd>Additional options given to the Verbatim environment (see the <em>fancyvrb</em>
+docs for possible values) (default: <tt class="docutils literal"><span class="pre">''</span></tt>).</dd>
+<dt><cite>commandprefix</cite></dt>
+<dd>The LaTeX commands used to produce colored output are constructed
+using this prefix and some letters (default: <tt class="docutils literal"><span class="pre">'C'</span></tt>).
+<em>New in Pygments 0.7.</em></dd>
 </dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">latex, tex</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.tex</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 </div>
 <div class="section">
-<h3><a id="formatter-classes" name="formatter-classes">Formatter classes</a></h3>
-<p>All these classes are importable from <cite>pygments.formatters</cite>.</p>
+<h4><a id="nullformatter" name="nullformatter"><cite>NullFormatter</cite></a></h4>
+<blockquote>
+<p>Output the text unchanged without any formatting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">text, null</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.txt</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</div>
 <div class="section">
 <h4><a id="rawtokenformatter" name="rawtokenformatter"><cite>RawTokenFormatter</cite></a></h4>
 <blockquote>
@@ -288,7 +387,7 @@ compression algorithm after encoding (default: <tt class="docutils literal"><spa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">raw, tokens</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">raw, tokens</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.raw</td>
 </tr>
@@ -334,8 +433,8 @@ would result in the following CSS classes:</p>
 <span class="nt">td</span> <span class="nc">.code</span> <span class="nc">.cm</span> <span class="p">{</span> <span class="k">color</span><span class="o">:</span> <span class="m">#999999</span> <span class="p">}</span>
 <span class="o">...</span>
 </pre></div>
-<p>If you have pygments 0.6 or higher you can also pass a list of tuple to the
-<cite>get_style_defs</cite> method to request multiple prefixes for the tokens:</p>
+<p>If you have Pygments 0.6 or higher, you can also pass a list or tuple to the
+<cite>get_style_defs()</cite> method to request multiple prefixes for the tokens:</p>
 <div class="syntax"><pre><span class="n">formatter</span><span class="o">.</span><span class="n">get_style_defs</span><span class="p">([</span><span class="s">&#39;div.syntax pre&#39;</span><span class="p">,</span> <span class="s">&#39;pre.syntax&#39;</span><span class="p">])</span>
 </pre></div>
 <p>The output would then look like this:</p>
@@ -349,7 +448,16 @@ would result in the following CSS classes:</p>
 <dl class="docutils">
 <dt><cite>nowrap</cite></dt>
 <dd>If set to <tt class="docutils literal"><span class="pre">True</span></tt>, don't wrap the tokens at all, not even inside a <tt class="docutils literal"><span class="pre">&lt;pre&gt;</span></tt>
-tag. This disables all other options (default: <tt class="docutils literal"><span class="pre">False</span></tt>).</dd>
+tag. This disables most other options (default: <tt class="docutils literal"><span class="pre">False</span></tt>).</dd>
+<dt><cite>full</cite></dt>
+<dd>Tells the formatter to output a &quot;full&quot; document, i.e. a complete
+self-contained document (default: <tt class="docutils literal"><span class="pre">False</span></tt>).</dd>
+<dt><cite>title</cite></dt>
+<dd>If <cite>full</cite> is true, the title that should be used to caption the
+document (default: <tt class="docutils literal"><span class="pre">''</span></tt>).</dd>
+<dt><cite>style</cite></dt>
+<dd>The style to use, can be a string or a Style subclass (default:
+<tt class="docutils literal"><span class="pre">'default'</span></tt>).</dd>
 <dt><cite>noclasses</cite></dt>
 <dd>If set to true, token <tt class="docutils literal"><span class="pre">&lt;span&gt;</span></tt> tags will not use CSS classes, but
 inline styles. This is not recommended for larger pieces of code since
@@ -361,7 +469,9 @@ with some of your own class names. In this case you can use the
 CSS class names for token types.
 Note that this option also affects the output of <cite>get_style_defs()</cite>.</dd>
 <dt><cite>cssclass</cite></dt>
-<dd>CSS class for the wrapping <tt class="docutils literal"><span class="pre">&lt;div&gt;</span></tt> tag (default: <tt class="docutils literal"><span class="pre">'highlight'</span></tt>).</dd>
+<dd>CSS class for the wrapping <tt class="docutils literal"><span class="pre">&lt;div&gt;</span></tt> tag (default: <tt class="docutils literal"><span class="pre">'highlight'</span></tt>).
+If you set this option, the default selector for <cite>get_style_defs()</cite>
+will be this class.</dd>
 <dt><cite>cssstyles</cite></dt>
 <dd>Inline CSS styles for the wrapping <tt class="docutils literal"><span class="pre">&lt;div&gt;</span></tt> tag (default: <tt class="docutils literal"><span class="pre">''</span></tt>).</dd>
 <dt><cite>cssfile</cite></dt>
@@ -370,6 +480,22 @@ name of an external file. If the filename does not include an absolute
 path, the file's path will be assumed to be relative to the main output
 file's path, if the latter can be found. The stylesheet is then written
 to this file instead of the HTML file. <em>New in Pygments 0.6.</em></dd>
+<dt><cite>linenos</cite></dt>
+<dd><p class="first">If set to <tt class="docutils literal"><span class="pre">'table'</span></tt>, output line numbers as a table with two cells,
+one containing the line numbers, the other the whole code.  This is
+copy-and-paste-friendly, but may cause alignment problems with some
+browsers or fonts.  If set to <tt class="docutils literal"><span class="pre">'inline'</span></tt>, the line numbers will be
+integrated in the <tt class="docutils literal"><span class="pre">&lt;pre&gt;</span></tt> tag that contains the code (that setting
+is <em>new in Pygments 0.8</em>).</p>
+<p>For compatibility with Pygments 0.7 and earlier, every true value
+except <tt class="docutils literal"><span class="pre">'inline'</span></tt> means the same as <tt class="docutils literal"><span class="pre">'table'</span></tt> (in particular, that
+means also <tt class="docutils literal"><span class="pre">True</span></tt>).</p>
+<p class="last">The default value is <tt class="docutils literal"><span class="pre">False</span></tt>, which means no line numbers at all.</p>
+</dd>
+<dt><cite>linenostart</cite></dt>
+<dd>The line number for the first line (default: <tt class="docutils literal"><span class="pre">1</span></tt>).</dd>
+<dt><cite>linenostep</cite></dt>
+<dd>If set to a number n &gt; 1, only every nth line number is printed.</dd>
 <dt><cite>linenospecial</cite></dt>
 <dd>If set to a number n &gt; 0, every nth line number is given the CSS
 class <tt class="docutils literal"><span class="pre">&quot;special&quot;</span></tt> (default: <tt class="docutils literal"><span class="pre">0</span></tt>).</dd>
@@ -426,59 +552,9 @@ HTML yielded by the wrapped generator is output.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">html</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.html, *.htm</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-</div>
-<div class="section">
-<h4><a id="bbcodeformatter" name="bbcodeformatter"><cite>BBCodeFormatter</cite></a></h4>
-<blockquote>
-<p>Format tokens with BBcodes. These formatting codes are used by many
-bulletin boards, so you can highlight your sourcecode with pygments before
-posting it there.</p>
-<p>This formatter has no support for background colors and borders, as there
-are no common BBcode tags for that.</p>
-<p>Some board systems (e.g. phpBB) don't support colors in their [code] tag,
-so you can't use the highlighting together with that tag.
-Text in a [code] tag usually is shown with a monospace font (which this
-formatter can do with the <tt class="docutils literal"><span class="pre">monofont</span></tt> option) and no spaces (which you
-need for indentation) are removed.</p>
-<p>Additional options accepted:</p>
-<dl class="docutils">
-<dt><cite>codetag</cite></dt>
-<dd>If set to true, put the output into <tt class="docutils literal"><span class="pre">[code]</span></tt> tags (default:
-<tt class="docutils literal"><span class="pre">false</span></tt>)</dd>
-<dt><cite>monofont</cite></dt>
-<dd>If set to true, add a tag to show the code with a monospace font
-(default: <tt class="docutils literal"><span class="pre">false</span></tt>).</dd>
-</dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">bbcode, bb</td>
-</tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-</div>
-<div class="section">
-<h4><a id="nullformatter" name="nullformatter"><cite>NullFormatter</cite></a></h4>
-<blockquote>
-<p>Output the text unchanged without any formatting.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">text, null</td>
-</tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.txt</td>
 </tr>
 </tbody>
 </table>
@@ -493,6 +569,9 @@ Paste into Microsoft® Word® documents.</p>
 <p><em>New in Pygments 0.6.</em></p>
 <p>Additional options accepted:</p>
 <dl class="docutils">
+<dt><cite>style</cite></dt>
+<dd>The style to use, can be a string or a Style subclass (default:
+<tt class="docutils literal"><span class="pre">'default'</span></tt>).</dd>
 <dt><cite>fontface</cite></dt>
 <dd>The used font famliy, for example <tt class="docutils literal"><span class="pre">Bitstream</span> <span class="pre">Vera</span> <span class="pre">Sans</span></tt>. Defaults to
 some generic font which is supposed to have fixed width.</dd>
@@ -501,7 +580,7 @@ some generic font which is supposed to have fixed width.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">rtf</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">rtf</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.rtf</td>
 </tr>
@@ -530,57 +609,9 @@ no support for common styles.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">terminal, console</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">terminal, console</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-</div>
-<div class="section">
-<h4><a id="latexformatter" name="latexformatter"><cite>LatexFormatter</cite></a></h4>
-<blockquote>
-<p>Format tokens as LaTeX code. This needs the <cite>fancyvrb</cite> and <cite>color</cite>
-standard packages.</p>
-<p>Without the <cite>full</cite> option, code is formatted as one <tt class="docutils literal"><span class="pre">Verbatim</span></tt>
-environment, like this:</p>
-<div class="syntax"><pre><span class="k">\begin</span><span class="nb">{</span>Verbatim<span class="nb">}</span>[commandchars=@<span class="sb">\[</span><span class="s">\]</span>]
-@Can[def ]@Cax[foo](bar):
-    @Can[pass]
-<span class="k">\end</span><span class="nb">{</span>Verbatim<span class="nb">}</span>
-</pre></div>
-<p>The command sequences used here (<tt class="docutils literal"><span class="pre">&#64;Can</span></tt> etc.) are generated from the given
-<cite>style</cite> and can be retrieved using the <cite>get_style_defs</cite> method.</p>
-<p>With the <cite>full</cite> option, a complete LaTeX document is output, including
-the command definitions in the preamble.</p>
-<p>The <cite>get_style_defs(arg='')</cite> method of a <cite>LatexFormatter</cite> returns a string
-containing <tt class="docutils literal"><span class="pre">\newcommand</span></tt> commands defining the commands used inside the
-<tt class="docutils literal"><span class="pre">Verbatim</span></tt> environments. If the argument <cite>arg</cite> is true,
-<tt class="docutils literal"><span class="pre">\renewcommand</span></tt> is used instead.</p>
-<p>Additional options accepted:</p>
-<dl class="docutils">
-<dt><cite>docclass</cite></dt>
-<dd>If the <cite>full</cite> option is enabled, this is the document class to use
-(default: <tt class="docutils literal"><span class="pre">'article'</span></tt>).</dd>
-<dt><cite>preamble</cite></dt>
-<dd>If the <cite>full</cite> option is enabled, this can be further preamble commands,
-e.g. <tt class="docutils literal"><span class="pre">\usepackage</span></tt> (default: <tt class="docutils literal"><span class="pre">''</span></tt>).</dd>
-<dt><cite>verboptions</cite></dt>
-<dd>Additional options given to the Verbatim environment (see the <em>fancyvrb</em>
-docs for possible values) (default: <tt class="docutils literal"><span class="pre">''</span></tt>).</dd>
-<dt><cite>commandprefix</cite></dt>
-<dd>The LaTeX commands used to produce colored output are constructed
-using this prefix and some letters (default: <tt class="docutils literal"><span class="pre">'C'</span></tt>).
-<em>New in Pygments 0.7.</em></dd>
-</dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">latex, tex</td>
-</tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.tex</td>
 </tr>
 </tbody>
 </table>
@@ -590,6 +621,6 @@ using this prefix and some letters (default: <tt class="docutils literal"><span 
 
   </div>
 </body>
-<!-- generated on: 2007-02-15 19:40:58.199101
+<!-- generated on: 2007-05-30 16:07:34.433690
      file id: formatters -->
 </html>

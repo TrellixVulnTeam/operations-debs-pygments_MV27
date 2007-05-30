@@ -2,7 +2,7 @@
    "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-  <title>Quickstart &mdash; Pygments</title>
+  <title>Introduction and Quickstart &mdash; Pygments</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <style type="text/css">
     body {
@@ -138,7 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
-.syntax { background: #ffffff; }
+.syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .syntax .k { color: #008800; font-weight: bold } /* Keyword */
@@ -149,12 +149,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #999999 } /* Generic.Heading */
+.syntax .gh { color: #303030 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #aaaaaa } /* Generic.Subheading */
+.syntax .gu { color: #606060 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -176,6 +176,7 @@ div.toc h2 {
 .syntax .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
 .syntax .nv { color: #336699 } /* Name.Variable */
 .syntax .ow { color: #008800 } /* Operator.Word */
+.syntax .w { color: #bbbbbb } /* Text.Whitespace */
 .syntax .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
 .syntax .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
 .syntax .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
@@ -201,7 +202,7 @@ div.toc h2 {
 <body>
   <div id="content">
     <h1 class="heading">Pygments</h1>
-    <h2 class="subheading">Quickstart</h2>
+    <h2 class="subheading">Introduction and Quickstart</h2>
     
       <a id="backlink" href="index.html">&laquo; Back To Index</a>
     
@@ -209,6 +210,8 @@ div.toc h2 {
       <div class="toc">
         <h2>Contents</h2>
         <ul class="contents">
+        
+          <li><a href="#architecture">Architecture</a></li>
         
           <li><a href="#example">Example</a></li>
         
@@ -224,10 +227,25 @@ div.toc h2 {
       </div>
     
     <!-- -*- mode: rst -*- -->
-<p>Pygments comes with a wide range of lexers for modern languages which are all
-accessible through the pygments.lexers package. A lexer enables Pygments to
-parse the source code into tokens which then are passed to a formatter. Currently
-formatters exist for HTML, LaTeX, RTF and ANSI sequences.</p>
+<p>Welcome to Pygments! This document explains the basic concepts and terms and
+gives a few examples of how to use the library.</p>
+<div class="section">
+<h3><a id="architecture" name="architecture">Architecture</a></h3>
+<p>There are four types of components that work together highlighting a piece of
+code:</p>
+<ul class="simple">
+<li>A <strong>lexer</strong> splits the source into tokens, fragments of the source that
+have a token type that determines what the text represents semantically
+(e.g., keyword, string, or comment). There is a lexer for every language
+or markup format that Pygments supports.</li>
+<li>The token stream can be piped through <strong>filters</strong>, which usually modify
+the token types or text fragments, e.g. uppercasing all keywords.</li>
+<li>A <strong>formatter</strong> then takes the token stream and writes it to an output
+file, in a format such as HTML, LaTeX or RTF.</li>
+<li>While writing the output, a <strong>style</strong> determines how to highlight all the
+different token types. It maps them to attributes like &quot;red and bold&quot;.</li>
+</ul>
+</div>
 <div class="section">
 <h3><a id="example" name="example">Example</a></h3>
 <p>Here is a small example for highlighting Python code:</p>
@@ -275,8 +293,17 @@ arguments either to the class or to the lookup method:</p>
 (<cite>stripall</cite> option), lets the formatter output line numbers (<cite>linenos</cite> option),
 and sets the wrapping <tt class="docutils literal"><span class="pre">&lt;div&gt;</span></tt>'s class to <tt class="docutils literal"><span class="pre">source</span></tt> (instead of
 <tt class="docutils literal"><span class="pre">highlight</span></tt>).</p>
+<p>Important options include:</p>
+<dl class="docutils">
+<dt><cite>encoding</cite> <span class="classifier-delimiter">:</span> <span class="classifier">for lexers and formatters</span></dt>
+<dd>Since Pygments uses Unicode strings internally, this determines which
+encoding will be used to convert to or from byte strings.</dd>
+<dt><cite>style</cite> <span class="classifier-delimiter">:</span> <span class="classifier">for formatters</span></dt>
+<dd>The name of the style to use when writing the output.</dd>
+</dl>
 <p>For an overview of builtin lexers and formatters and their options, visit the
 <a class="reference" href="./lexers.html">lexer</a> and <a class="reference" href="./formatters.html">formatters</a> lists.</p>
+<p>For a documentation on filters, see <a class="reference" href="./filters.html">this page</a>.</p>
 </div>
 <div class="section">
 <h3><a id="lexer-and-formatter-lookup" name="lexer-and-formatter-lookup">Lexer and formatter lookup</a></h3>
@@ -347,6 +374,6 @@ $ pygmentize -S default -f html &gt; style.css
 
   </div>
 </body>
-<!-- generated on: 2007-02-15 19:41:01.597448
+<!-- generated on: 2007-05-30 16:07:36.598036
      file id: quickstart -->
 </html>
