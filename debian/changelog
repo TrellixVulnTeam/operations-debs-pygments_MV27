@@ -1,3 +1,11 @@
+pygments (0.8-1) unstable; urgency=low
+
+  * New upstream release
+  * Bump required Jinja version (build dependency)
+  * Added python-setuptools to Recommends
+
+ -- Piotr Ożarowski <piotr@debian.org>  Wed, 30 May 2007 19:33:29 +0200
+
 pygments (0.7.1-2) unstable; urgency=low
 
   * Upload to unstable
