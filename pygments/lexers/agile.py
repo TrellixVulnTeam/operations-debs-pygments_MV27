@@ -87,14 +87,14 @@ class PythonLexer(RegexLexer):
              r'UserWarning|ValueError|Warning|ZeroDivisionError'
              r')\b', Name.Exception),
             ('`.*?`', String.Backtick),
-            ('r"""', String, 'tdqs'),
-            ("r'''", String, 'tsqs'),
-            ('r"', String, 'dqs'),
-            ("r'", String, 'sqs'),
-            ('"""', String, combined('stringescape', 'tdqs')),
-            ("'''", String, combined('stringescape', 'tsqs')),
-            ('"', String, combined('stringescape', 'dqs')),
-            ("'", String, combined('stringescape', 'sqs')),
+            ('(?:[rR]|[uU][rR]|[rR][uU])"""', String, 'tdqs'),
+            ("(?:[rR]|[uU][rR]|[rR][uU])'''", String, 'tsqs'),
+            ('(?:[rR]|[uU][rR]|[rR][uU])"', String, 'dqs'),
+            ("(?:[rR]|[uU][rR]|[rR][uU])'", String, 'sqs'),
+            ('[uU]?"""', String, combined('stringescape', 'tdqs')),
+            ("[uU]?'''", String, combined('stringescape', 'tsqs')),
+            ('[uU]?"', String, combined('stringescape', 'dqs')),
+            ("[uU]?'", String, combined('stringescape', 'sqs')),
             ('[a-zA-Z_][a-zA-Z0-9_]*', Name),
             (r'(\d+\.\d*|\d*\.\d+)([eE][+-]?[0-9]+)?', Number.Float),
             (r'0\d+', Number.Oct),
@@ -109,7 +109,7 @@ class PythonLexer(RegexLexer):
             ('[a-zA-Z_][a-zA-Z0-9_]*', Name.Class, '#pop')
         ],
         'import': [
-            (r'(\s*)(as)(\s*)', bygroups(Text, Keyword, Text)),
+            (r'(\s+)(as)(\s+)', bygroups(Text, Keyword, Text)),
             (r'[a-zA-Z_][a-zA-Z0-9_.]*', Name.Namespace),
             (r'(\s*)(,)(\s*)', bygroups(Text, Operator, Text)),
             (r'', Text, '#pop') # all else: go back
@@ -409,7 +409,7 @@ class RubyLexer(ExtendedRegexLexer):
     tokens = {
         'root': [
             (r'#.*?$', Comment.Single),
-            (r'=begin\n.*?\n=end', Comment.Multiline),
+            (r'=begin\s.*?\n=end', Comment.Multiline),
             # keywords
             (r'(BEGIN|END|alias|begin|break|case|defined\?|'
              r'do|else|elsif|end|ensure|for|if|in|next|redo|'
@@ -903,9 +903,8 @@ class MiniDLexer(RegexLexer):
             (r'(as|break|case|class|catch|continue|coroutine|default'
              r'|do|else|finally|for|foreach|function|global'
              r'|if|import|in|is|local|module|return|super|switch'
-             r'|this|throw|try|vararg|while|with|yield)', Keyword
-            ),
-            (r'(false|true|null)', Keyword.Constant),
+             r'|this|throw|try|vararg|while|with|yield)\b', Keyword),
+            (r'(false|true|null)\b', Keyword.Constant),
             # FloatLiteral
             (r'([0-9][0-9_]*)?\.[0-9_]+([eE][+\-]?[0-9_]+)?', Number.Float),
             # IntegerLiteral
