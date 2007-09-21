@@ -7,9 +7,10 @@ Build-Depends: debhelper (>= 5.0.38)
 Build-Depends-Indep: python (>= 2.3.5-11), python-all-dev, python-central (>= 0.5.6),
  python-setuptools (>= 0.6b3-1), python-docutils, python-jinja (>= 1.0)
 Standards-Version: 3.7.2
+Homepage: http://pygments.pocoo.org/
 XS-Python-Version: >= 2.3
 XS-Vcs-Svn: svn://svn.debian.org/python-modules/packages/pygments/trunk/
-XS-Vcs-Browser: http://svn.debian.org/wsvn/python-modules/packages/pygments/trunk/?op=log
+XS-Vcs-Browser: http://svn.debian.org/wsvn/python-modules/packages/pygments/?op=log
 
 Package: python-pygments
 Architecture: all
@@ -28,5 +29,3 @@ Description: syntax highlighting package written in Python
    * a number of output formats, presently HTML, LaTeX and ANSI sequences
    * it is usable as a command-line tool and as a library
    * ... and it highlights even Brainfuck!
- .
-  Homepage: http://pygments.pocoo.org/
