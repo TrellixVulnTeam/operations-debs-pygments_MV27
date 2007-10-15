@@ -6,7 +6,8 @@
     Lexers for agile languages.
 
     :copyright: 2006-2007 by Georg Brandl, Armin Ronacher,
-                Lukas Meuser, Tim Hatch, Jarrett Billingsley.
+                Lukas Meuser, Tim Hatch, Jarrett Billingsley,
+                Tassilo Schweyer.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -40,7 +41,7 @@ class PythonLexer(RegexLexer):
 
     name = 'Python'
     aliases = ['python', 'py']
-    filenames = ['*.py', '*.pyw']
+    filenames = ['*.py', '*.pyw', '*.sc', 'SConstruct', 'SConscript']
     mimetypes = ['text/x-python', 'application/x-python']
 
     tokens = {
@@ -96,7 +97,7 @@ class PythonLexer(RegexLexer):
             ('[uU]?"', String, combined('stringescape', 'dqs')),
             ("[uU]?'", String, combined('stringescape', 'sqs')),
             ('[a-zA-Z_][a-zA-Z0-9_]*', Name),
-            (r'(\d+\.\d*|\d*\.\d+)([eE][+-]?[0-9]+)?', Number.Float),
+            (r'(\d+\.?\d*|\d*\.\d+)([eE][+-]?[0-9]+)?', Number.Float),
             (r'0\d+', Number.Oct),
             (r'0x[a-fA-F0-9]+', Number.Hex),
             (r'\d+L', Number.Integer.Long),
@@ -195,6 +196,11 @@ class PythonConsoleLexer(Lexer):
                 insertions.append((len(curcode),
                                    [(0, Generic.Prompt, line[:4])]))
                 curcode += line[4:]
+            elif line.rstrip() == '...':
+                tb = 0
+                insertions.append((len(curcode),
+                                   [(0, Generic.Prompt, '...')]))
+                curcode += line[3:]
             else:
                 if curcode:
                     for item in do_insertions(insertions,
@@ -241,7 +247,7 @@ class PythonTracebackLexer(RegexLexer):
              bygroups(Text, Name.Builtin, Text, Number, Text, Name.Identifier, Text)),
             (r'^(    )(.+)(\n)',
              bygroups(Text, using(PythonLexer), Text)),
-            (r'^(...)(\n)',
+            (r'^[ \t]*(...)(\n)',
              bygroups(Comment, Text)), # for doctests...
             (r'^(.+)(: )(.+)(\n)',
              bygroups(Name.Class, Text, Name.Identifier, Text), '#pop'),
@@ -529,14 +535,23 @@ class RubyLexer(ExtendedRegexLexer):
             (r'\s+', Text)
         ],
         'funcname': [
+            (r'\(', Punctuation, 'defexpr'),
             (r'(?:([a-zA-Z_][a-zA-Z0-9_]*)(\.))?'
              r'([a-zA-Z_][\w_]*[\!\?]?|\*\*?|[-+]@?|'
              r'[/%&|^`~]|\[\]=?|<<|>>|<=?>|>=?|===?)',
-             bygroups(Name.Class, Operator, Name.Function), '#pop')
+             bygroups(Name.Class, Operator, Name.Function), '#pop'),
+            (r'', Text, '#pop')
         ],
         'classname': [
+            (r'\(', Punctuation, 'defexpr'),
             (r'<<', Operator, '#pop'),
-            (r'[a-zA-Z_][\w_]*', Name.Class, '#pop')
+            (r'[A-Z_][\w_]*', Name.Class, '#pop'),
+            (r'', Text, '#pop')
+        ],
+        'defexpr': [
+            (r'(\))(\.|::)?', bygroups(Punctuation, Operator), '#pop'),
+            (r'\(', Operator, '#push'),
+            include('root')
         ],
         'in-intp': [
             ('}', String.Interpol, '#pop'),
@@ -681,9 +696,9 @@ class PerlLexer(RegexLexer):
             (r"\$[\\\"\[\]'&`+*.,;=%~?@$!<>(^|/-](?!\w)", Name.Variable.Global),
             (r'[$@%#]+', Name.Variable, 'varname'),
             (r'0_?[0-7]+(_[0-7]+)*', Number.Oct),
-            (r'\d+', Number.Integer),
             (r'0x[0-9A-Fa-f]+(_[0-9A-Fa-f]+)*', Number.Hex),
             (r'0b[01]+(_[01]+)*', Number.Bin),
+            (r'\d+', Number.Integer),
             (r"'(\\\\|\\'|[^'])*'", String),
             (r'"(\\\\|\\"|[^"])*"', String),
             (r'`(\\\\|\\`|[^`])*`', String.Backtick),
@@ -723,6 +738,7 @@ class PerlLexer(RegexLexer):
             # argument declaration
             (r'(\([$@%]*\))(\s*)', bygroups(Punctuation, Text)),
             (r'.*?{', Punctuation, '#pop'),
+            (r';', Punctuation, '#pop'),
         ],
         'cb-string': [
             (r'\\[\{\}\\]', String.Other),
@@ -791,6 +807,7 @@ class LuaLexer(RegexLexer):
 
     tokens = {
         'root': [
+            (r'(?s)--\[(=*)\[.*?\]\1\]', Comment.Multiline),
             ('--.*$', Comment.Single),
 
             (r'(?i)(\d*\.\d+|\d+\.\d*)(e[+-]?\d+)?', Number.Float),
@@ -901,7 +918,7 @@ class MiniDLexer(RegexLexer):
             (r'/\+', Comment, 'nestedcomment'),
             # Keywords
             (r'(as|break|case|class|catch|continue|coroutine|default'
-             r'|do|else|finally|for|foreach|function|global'
+             r'|do|else|finally|for|foreach|function|global|namespace'
              r'|if|import|in|is|local|module|return|super|switch'
              r'|this|throw|try|vararg|while|with|yield)\b', Keyword),
             (r'(false|true|null)\b', Keyword.Constant),
@@ -923,16 +940,16 @@ class MiniDLexer(RegexLexer):
             ),
             # StringLiteral
             # -- WysiwygString
-            (r'(?s)@"[^"]*"', String),
+            (r'@"[^"]*"', String),
             # -- AlternateWysiwygString
-            (r'(?s)`[^`]*`', String),
+            (r'`[^`]*`', String),
             # -- DoubleQuotedString
-            (r'(?s)"(\\"|[^"])*"', String),
+            (r'"(\\\\|\\"|[^"])*"', String),
             # Tokens
             (
              r'(~=|\^=|%=|\*=|==|!=|>>>=|>>>|>>=|>>|>=|<=>|\?='
              r'|<<=|<<|<=|\+\+|\+=|--|-=|\|\||\|=|&&|&=|\.\.|/=)'
-             r'|[-/.&|\+<>!()\[\]{}?,;:=*%^~#]', Text #Punctuation
+             r'|[-/.&|\+<>!()\[\]{}?,;:=*%^~#]', Punctuation
             ),
             # Identifier
             (r'[a-zA-Z_]\w*', Name),

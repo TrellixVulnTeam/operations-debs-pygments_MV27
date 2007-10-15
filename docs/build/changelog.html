@@ -211,6 +211,8 @@ div.toc h2 {
         <h2>Contents</h2>
         <ul class="contents">
         
+          <li><a href="#version-0-9">Version 0.9</a></li>
+        
           <li><a href="#version-0-8-1">Version 0.8.1</a></li>
         
           <li><a href="#version-0-8">Version 0.8</a></li>
@@ -229,6 +231,46 @@ div.toc h2 {
       </div>
     
     <div class="section">
+<h3><a id="version-0-9" name="version-0-9">Version 0.9</a></h3>
+<p>(codename Herbstzeitlose, released Oct 14, 2007)</p>
+<ul class="simple">
+<li>Lexers added:<ul>
+<li>Erlang</li>
+<li>ActionScript</li>
+<li>Literate Haskell</li>
+<li>Common Lisp</li>
+<li>Various assembly languages</li>
+<li>Gettext catalogs</li>
+<li>Squid configuration</li>
+<li>Debian control files</li>
+<li>MySQL-style SQL</li>
+<li>MOOCode</li>
+</ul>
+</li>
+<li>Lexers improved:<ul>
+<li>Greatly improved the Haskell and OCaml lexers.</li>
+<li>Improved the Bash lexer's handling of nested constructs.</li>
+<li>The C# and Java lexers exhibited abysmal performance with some
+input code; this should now be fixed.</li>
+<li>The IRC logs lexer is now able to colorize weechat logs too.</li>
+<li>The Lua lexer now recognizes multi-line comments.</li>
+<li>Fixed bugs in the D and MiniD lexer.</li>
+</ul>
+</li>
+<li>The encoding handling of the command line mode (pygmentize) was
+enhanced. You shouldn't get UnicodeErrors from it anymore if you
+don't give an encoding option.</li>
+<li>Added a <tt class="docutils literal"><span class="pre">-P</span></tt> option to the command line mode which can be used
+to give options whose values contain commas or equals signs.</li>
+<li>Added 256-color terminal formatter.</li>
+<li>Added an experimental SVG formatter.</li>
+<li>Added the <tt class="docutils literal"><span class="pre">lineanchors</span></tt> option to the HTML formatter, thanks to
+Ian Charnas for the idea.</li>
+<li>Gave the line numbers table a CSS class in the HTML formatter.</li>
+<li>Added a Vim 7-like style.</li>
+</ul>
+</div>
+<div class="section">
 <h3><a id="version-0-8-1" name="version-0-8-1">Version 0.8.1</a></h3>
 <p>(released Jun 27, 2007)</p>
 <ul class="simple">
@@ -375,6 +417,6 @@ continuations.</li>
 
   </div>
 </body>
-<!-- generated on: 2007-06-27 20:57:10.959660
+<!-- generated on: 2007-10-14 22:21:01.137360
      file id: changelog -->
 </html>

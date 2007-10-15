@@ -42,6 +42,14 @@ characters, such as spaces or expansion wildcards like ``*``. If an option
 expects a list value, separate the list entries with spaces (you'll have to
 quote the option value in this case too, so that the shell doesn't split it).
 
+Since the ``-O`` option argument is split at commas and expects the split values
+to be of the form ``name=value``, you can't give an option value that contains
+commas or equals signs.  Therefore, an option ``-P`` is provided (as of Pygments
+0.9) that works like ``-O`` but can only pass one option per ``-P``. Its value
+can then contain all characters::
+
+    $ pygmentize -P "heading=Pygments, the Python highlighter" ...
+
 Filters are added to the token stream using the ``-F`` option::
 
     $ pygmentize -f html -l pascal -F keywordcase:case=upper main.pas
@@ -79,6 +87,28 @@ will print the help for the HTML formatter, while ::
     $ pygmentize -H lexer python
 
 will print the help for the Python lexer, etc.
+
+
+A note on encodings
+-------------------
+
+*New in Pygments 0.9.*
+
+Pygments tries to be smart regarding encodings in the formatting process:
+
+* If you give an ``encoding`` option, it will be used as the input and
+  output encoding.
+
+* If you give an ``outencoding`` option, it will override ``encoding``
+  as the output encoding.
+
+* If you don't give an encoding and have given an output file, the default
+  encoding for lexer and formatter is ``latin1`` (which will pass through
+  all non-ASCII characters).
+
+* If you don't give an encoding and haven't given an output file (that means
+  output is written to the console), the default encoding for lexer and
+  formatter is the terminal encoding (`sys.stdout.encoding`).
 
 
 .. _a particular formatter: formatters.txt

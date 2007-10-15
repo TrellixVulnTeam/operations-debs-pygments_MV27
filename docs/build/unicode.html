@@ -230,10 +230,11 @@ output encoding. You can do so by passing the formatters an <cite>encoding</cite
 source and the output stream does not accept Unicode written to it!</strong>
 This is the case for all regular files and for terminals.</p>
 <p>Note: The Terminal formatter tries to be smart: if its output stream has an
-<cite>encoding</cite> attribute, and you haven't set the option,
-it will encode any Unicode string with this encoding
-before writing it. This is the case for <cite>sys.stdout</cite>, for example. The other
-formatters don't have that behavior.</p>
+<cite>encoding</cite> attribute, and you haven't set the option, it will encode any
+Unicode string with this encoding before writing it. This is the case for
+<cite>sys.stdout</cite>, for example. The other formatters don't have that behavior.</p>
+<p>Another note: If you call Pygments via the command line (<cite>pygmentize</cite>),
+encoding is handled differently, see <a class="reference" href="./cmdline.html">the command line docs</a>.</p>
 <p><em>New in Pygments 0.7</em>: the formatters now also accept an <cite>outencoding</cite> option
 which will override the <cite>encoding</cite> option if given. This makes it possible to
 use a single options dict with lexers and formatters, and still have different
@@ -241,6 +242,6 @@ input and output encodings.</p>
 
   </div>
 </body>
-<!-- generated on: 2007-06-27 20:57:12.980790
+<!-- generated on: 2007-10-14 22:21:10.577053
      file id: unicode -->
 </html>

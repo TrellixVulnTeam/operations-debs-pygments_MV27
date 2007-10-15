@@ -207,76 +207,20 @@ div.toc h2 {
       <a id="backlink" href="index.html">&laquo; Back To Index</a>
     
     
-    <p>Many Python people use <a class="reference" href="http://docutils.sf.net/rst.html">ReST</a> for documentation their sourcecode, programs,
+    <!-- -*- mode: rst -*- -->
+<p>Many Python people use <a class="reference" href="http://docutils.sf.net/rst.html">ReST</a> for documentation their sourcecode, programs,
 scripts et cetera. This also means that documentation often includes sourcecode
 samples or snippets.</p>
 <p>You can easily enable Pygments support for your ReST texts using a custom
 directive -- this is also how this documentation displays source code.</p>
-<p>Add this code to the script you use for building the HTML documentation:</p>
-<div class="syntax"><pre><span class="k">from</span> <span class="nn">docutils</span> <span class="k">import</span> <span class="n">nodes</span>
-<span class="k">from</span> <span class="nn">docutils.parsers.rst</span> <span class="k">import</span> <span class="n">directives</span>
-<span class="k">from</span> <span class="nn">pygments</span> <span class="k">import</span> <span class="n">highlight</span>
-<span class="k">from</span> <span class="nn">pygments.lexers</span> <span class="k">import</span> <span class="n">get_lexer_by_name</span>
-<span class="k">from</span> <span class="nn">pygments.formatters</span> <span class="k">import</span> <span class="n">HtmlFormatter</span>
-
-<span class="n">pygments_formatter</span> <span class="o">=</span> <span class="n">HtmlFormatter</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">pygments_directive</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span>
-                       <span class="n">content_offset</span><span class="p">,</span> <span class="n">block_text</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">state_machine</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">lexer</span> <span class="o">=</span> <span class="n">get_lexer_by_name</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="c"># no lexer found - use the text one instead of an exception</span>
-        <span class="n">lexer</span> <span class="o">=</span> <span class="n">get_lexer_by_name</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">)</span>
-    <span class="n">parsed</span> <span class="o">=</span> <span class="n">highlight</span><span class="p">(</span><span class="s">u&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="p">),</span> <span class="n">lexer</span><span class="p">,</span> <span class="n">pygments_formatter</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">nodes</span><span class="o">.</span><span class="n">raw</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">parsed</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;html&#39;</span><span class="p">)]</span>
-<span class="n">pygments_directive</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">pygments_directive</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">directives</span><span class="o">.</span><span class="n">register_directive</span><span class="p">(</span><span class="s">&#39;sourcecode&#39;</span><span class="p">,</span> <span class="n">pygments_directive</span><span class="p">)</span>
-</pre></div>
-<p>Now you should be able to use Pygments to highlight source code in your ReST
-files using this syntax:</p>
-<pre class="literal-block">
-.. sourcecode:: language
-
-    your code here
-</pre>
-<p>If you want to have two or more variants of the directive, you can utilize
-ReST <em>directive options</em>, like so:</p>
-<div class="syntax"><pre><span class="n">normal_fmter</span> <span class="o">=</span> <span class="n">HtmlFormatter</span><span class="p">()</span>
-<span class="n">lineno_fmter</span> <span class="o">=</span> <span class="n">HtmlFormatter</span><span class="p">(</span><span class="n">linenos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">pygments_directive</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span>
-                       <span class="n">content_offset</span><span class="p">,</span> <span class="n">block_text</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">state_machine</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">lexer</span> <span class="o">=</span> <span class="n">get_lexer_by_name</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="c"># no lexer found - use the text one instead of an exception</span>
-        <span class="n">lexer</span> <span class="o">=</span> <span class="n">get_lexer_by_name</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">)</span>
-    <span class="n">formatter</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;linenos&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="p">)</span> <span class="ow">and</span> <span class="n">lineno_fmter</span> <span class="ow">or</span> <span class="n">normal_fmter</span>
-    <span class="n">parsed</span> <span class="o">=</span> <span class="n">highlight</span><span class="p">(</span><span class="s">u&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="p">),</span> <span class="n">lexer</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">nodes</span><span class="o">.</span><span class="n">raw</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">parsed</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;html&#39;</span><span class="p">)]</span>
-<span class="n">pygments_directive</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">pygments_directive</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">pygments_directive</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;linenos&#39;</span><span class="p">:</span> <span class="n">directives</span><span class="o">.</span><span class="n">flag</span><span class="p">}</span>
-<span class="n">directives</span><span class="o">.</span><span class="n">register_directive</span><span class="p">(</span><span class="s">&#39;sourcecode&#39;</span><span class="p">,</span> <span class="n">pygments_directive</span><span class="p">)</span>
-</pre></div>
-<p>And use it like so:</p>
-<pre class="literal-block">
-.. sourcecode:: language
-   :linenos:
-
-   the code starts here...
-</pre>
-<p>to get line numbers (to use the normal formatter, just leave out the option
-like above).</p>
-<p>Look at the <a class="reference" href="http://docutils.sourceforge.net/docs/howto/rst-directives.html">directive documentation</a> to get all the gory details.</p>
+<p>From Pygments 0.9, the directive is shipped in the distribution as
+<cite>external/rst-directive.py</cite>.  You can copy and adapt this code to your liking.</p>
 <p><em>Loosely related note:</em> The ReST lexer now recognizes <tt class="docutils literal"><span class="pre">..</span> <span class="pre">sourcecode::</span></tt> and
 <tt class="docutils literal"><span class="pre">..</span> <span class="pre">code::</span></tt> directives and highlights the contents in the specified language
 if the <cite>handlecodeblocks</cite> option is true.</p>
 
   </div>
 </body>
-<!-- generated on: 2007-06-27 20:57:13.302901
+<!-- generated on: 2007-10-14 22:21:09.261828
      file id: rstdirective -->
 </html>

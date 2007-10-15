@@ -426,6 +426,8 @@ are pushed onto the stack, then the lexer continues in the directive state
 until it finds the closing <tt class="docutils literal"><span class="pre">&gt;</span></tt>, then it continues in the comment state until
 the closing <tt class="docutils literal"><span class="pre">*/</span></tt>. Then, both states are popped from the stack again and
 lexing continues in the root state.</p>
+<p><em>New in Pygments 0.9:</em> The tuple can contain the special <tt class="docutils literal"><span class="pre">'#push'</span></tt> and
+<tt class="docutils literal"><span class="pre">'#pop'</span></tt> (but not <tt class="docutils literal"><span class="pre">'#pop:n'</span></tt>) directives.</p>
 </li>
 <li><p class="first">You can include the rules of a state in the definition of another.  This is
 done by using <cite>include</cite> from <cite>pygments.lexer</cite>:</p>
@@ -585,8 +587,8 @@ and <tt class="docutils literal"><span class="pre">value</span></tt> the associa
 <span class="k">class</span> <span class="nc">HypotheticLexer</span><span class="p">(</span><span class="n">RegexLexer</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">headline_callback</span><span class="p">(</span><span class="n">lexer</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
-        <span class="n">equal_signs</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">equal_signs</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mf">1</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mf">2</span><span class="p">)</span>
         <span class="k">yield</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="n">Generic</span><span class="o">.</span><span class="n">Headline</span><span class="p">,</span> <span class="n">equal_signs</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="n">equal_signs</span>
 
     <span class="n">tokens</span> <span class="o">=</span> <span class="p">{</span>
@@ -636,8 +638,8 @@ For example, this is how the hypothetical lexer above would be written with the
 <span class="k">class</span> <span class="nc">ExHypotheticLexer</span><span class="p">(</span><span class="n">ExtendedRegexLexer</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">headline_callback</span><span class="p">(</span><span class="n">lexer</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
-        <span class="n">equal_signs</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">equal_signs</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mf">1</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mf">2</span><span class="p">)</span>
         <span class="k">yield</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="n">Generic</span><span class="o">.</span><span class="n">Headline</span><span class="p">,</span> <span class="n">equal_signs</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="n">equal_signs</span>
         <span class="n">ctx</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
 
@@ -679,6 +681,6 @@ the <tt class="docutils literal"><span class="pre">get_tokens_unprocessed()</spa
 
   </div>
 </body>
-<!-- generated on: 2007-06-27 20:57:13.776085
+<!-- generated on: 2007-10-14 22:21:04.291770
      file id: lexerdevelopment -->
 </html>

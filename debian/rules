@@ -3,18 +3,19 @@
 #export DH_VERBOSE=1
 
 UPSTREAM_VERSION ?= $(shell dpkg-parsechangelog \
-	| grep ^Version: | cut -d ' ' -f 2 | cut -d '-' -f 1 | cut -d '~' -f 1)
-
+	| sed -rne 's,^Version: ([^-]+).*,\1,p')
 PYVERS ?= $(shell pyversions -vr)
 
-clean:
+include /usr/share/quilt/quilt.make
+
+clean: unpatch
 	dh_testdir
 	dh_testroot
 	rm -rf build Pygments.egg-info build-indep
-	find . -name "*\.py[co]" -exec rm {} \;
+	find . -name "*\.py[co]" -delete
 	dh_clean
 
-build: build-indep
+build: patch build-indep
 
 build-indep:
 	dh_testdir
