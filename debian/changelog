@@ -1,9 +1,12 @@
-pygments (0.8.1-2) UNRELEASED; urgency=low
+pygments (0.9-1) unstable; urgency=low
 
+  * New upstream release
+  * Add patch that disables ez_setup at build time
+    - quilt added to Build-Depends
   * Homepage field added
   * Rename XS-Vcs-* fields to Vcs-* (dpkg supports them now)
 
- -- Piotr Ożarowski <piotr@debian.org>  Sat,  6 Oct 2007 23:46:51 +0200
+ -- Piotr Ożarowski <piotr@debian.org>  Mon, 15 Oct 2007 22:37:08 +0200
 
 pygments (0.8.1-1) unstable; urgency=low
 
