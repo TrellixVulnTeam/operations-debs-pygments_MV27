@@ -1,6 +1,7 @@
 pygments (0.9-2) unstable; urgency=low
 
-  * Add pygmentize_without_setuptools patch (closes: 455222)
+  * Install original pygmentize script (not touched by setuptools)
+    (closes: 455222)
 
  -- Piotr Ożarowski <piotr@debian.org>  Mon, 10 Dec 2007 19:59:55 +0100
 
