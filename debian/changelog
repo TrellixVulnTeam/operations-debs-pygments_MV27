@@ -1,3 +1,9 @@
+pygments (0.9-2) unstable; urgency=low
+
+  * Add pygmentize_without_setuptools patch (closes: 455222)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Mon, 10 Dec 2007 19:59:55 +0100
+
 pygments (0.9-1) unstable; urgency=low
 
   * New upstream release
