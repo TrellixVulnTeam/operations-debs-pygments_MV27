@@ -3,9 +3,9 @@ Section: python
 Priority: optional
 Maintainer: Piotr Ożarowski <piotr@debian.org>
 Uploaders: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
-Build-Depends: debhelper (>= 5.0.38), quilt (>=0.40-1)
-Build-Depends-Indep: python (>= 2.3.5-11), python-all-dev, python-central (>= 0.5.6),
- python-setuptools (>= 0.6b3-1), python-docutils, python-jinja (>= 1.0)
+Build-Depends: debhelper (>= 5), quilt (>=0.40)
+Build-Depends-Indep: python (>= 2.3.5-11), python-all-dev, python-support (>= 0.6.4),
+ python-setuptools (>= 0.6b3), python-docutils, python-jinja (>= 1.0)
 Standards-Version: 3.7.3
 Homepage: http://pygments.pocoo.org/
 XS-Python-Version: >= 2.3
@@ -15,7 +15,7 @@ Vcs-Browser: http://svn.debian.org/wsvn/python-modules/packages/pygments/trunk/?
 Package: python-pygments
 Architecture: all
 Depends: ${python:Depends}
-Recommends: python-chardet, python-setuptools (>= 0.6b3-1)
+Recommends: python-chardet, python-pkg-resources
 XB-Python-Version: ${python:Versions}
 Description: syntax highlighting package written in Python
  Pygments aims to be a generic syntax highlighter for general use in all kinds
