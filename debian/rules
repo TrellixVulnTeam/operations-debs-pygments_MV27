@@ -2,8 +2,6 @@
 
 #export DH_VERBOSE=1
 
-UPSTREAM_VERSION ?= $(shell dpkg-parsechangelog \
-	| sed -rne 's,^Version: ([^-]+).*,\1,p')
 PYVERS ?= $(shell pyversions -vr)
 
 include /usr/share/quilt/quilt.make
@@ -11,9 +9,9 @@ include /usr/share/quilt/quilt.make
 clean: unpatch
 	dh_testdir
 	dh_testroot
-	rm -rf build Pygments.egg-info build-indep
+	rm -rf build Pygments.egg-info
 	find . -name "*\.py[co]" -delete
-	dh_clean
+	dh_clean build-indep $(PYVERS:%=install-python%)
 
 build: patch build-indep
 
@@ -27,27 +25,25 @@ install: build $(PYVERS:%=install-python%)
 install-python%:
 	python$* setup.py install --single-version-externally-managed \
 		--root debian/python-pygments
-	mv debian/python-pygments/usr/lib/python$*/site-packages/Pygments-${UPSTREAM_VERSION}-py$*.egg-info \
-	   debian/python-pygments/usr/lib/python$*/site-packages/Pygments-${UPSTREAM_VERSION}.egg-info
-	sed -i -e '1 s/python.*/python/' debian/python-pygments/usr/bin/pygmentize
+	touch $@
 
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs CHANGES
-	dh_installdocs
-	dh_installman
-	dh_install pygmentize /usr/bin/
-	dh_pycentral
-	dh_compress -X.py
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
+	dh_installchangelogs -i CHANGES
+	dh_installdocs -i
+	dh_installman -i
+	dh_install -i pygmentize /usr/bin/
+	dh_pysupport -i
+	dh_compress -i -X.py
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i -- -Z bzip2
 
 binary-arch:
 
 binary: binary-indep binary-arch
 
-.PHONY: build clean binary-indep binary-arch binary install configure
+.PHONY: build clean binary-indep binary-arch binary install
