@@ -1,0 +1,60 @@
+Index: pygments-0.10/pygments/cmdline.py
+===================================================================
+--- pygments-0.10.orig/pygments/cmdline.py
++++ pygments-0.10/pygments/cmdline.py
+@@ -351,17 +351,17 @@ def main(args=sys.argv):
+             return 2
+         code = sys.stdin.read()
+ 
+-    # No encoding given? Use latin1 if output file given,
++    # No encoding given? Use utf-8 if output file given,
+     # stdin/stdout encoding otherwise.
+     # (This is a compromise, I'm not too happy with it...)
+     if 'encoding' not in parsed_opts and 'outencoding' not in parsed_opts:
+         if outfn:
+             # encoding pass-through
+-            fmter.encoding = 'latin1'
++            fmter.encoding = 'utf-8'
+         else:
+             # use terminal encoding
+-            lexer.encoding = getattr(sys.stdin, 'encoding', None) or 'ascii'
+-            fmter.encoding = getattr(sys.stdout, 'encoding', None) or 'ascii'
++            lexer.encoding = getattr(sys.stdin, 'encoding', None) or 'utf-8'
++            fmter.encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
+ 
+     # ... and do it!
+     try:
+Index: pygments-0.10/pygments/formatters/latex.py
+===================================================================
+--- pygments-0.10.orig/pygments/formatters/latex.py
++++ pygments-0.10/pygments/formatters/latex.py
+@@ -236,6 +236,6 @@ class LatexFormatter(Formatter):
+                 dict(docclass  = self.docclass,
+                      preamble  = self.preamble,
+                      title     = self.title,
+-                     encoding  = self.encoding or 'latin1',
++                     encoding  = self.encoding or 'utf-8',
+                      styledefs = self.get_style_defs(),
+                      code      = outfile.getvalue()))
+Index: pygments-0.10/pygments/lexer.py
+===================================================================
+--- pygments-0.10.orig/pygments/lexer.py
++++ pygments-0.10/pygments/lexer.py
+@@ -56,7 +56,7 @@ class Lexer(object):
+     ``encoding``
+         If given, must be an encoding name. This encoding will be used to
+         convert the input string to Unicode, if it is not already a Unicode
+-        string (default: ``'latin1'``).
++        string (default: ``'utf-8'``).
+         Can also be ``'guess'`` to use a simple UTF-8 / Latin1 detection, or
+         ``'chardet'`` to use the chardet library, if it is installed.
+     """
+@@ -83,7 +83,7 @@ class Lexer(object):
+         self.stripnl = get_bool_opt(options, 'stripnl', True)
+         self.stripall = get_bool_opt(options, 'stripall', False)
+         self.tabsize = get_int_opt(options, 'tabsize', 0)
+-        self.encoding = options.get('encoding', 'latin1')
++        self.encoding = options.get('encoding', 'utf-8')
+         # self.encoding = options.get('inencoding', None) or self.encoding
+         self.filters = []
+         for filter_ in get_list_opt(options, 'filters', ()):

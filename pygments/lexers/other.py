@@ -5,7 +5,8 @@
 
     Lexers for other languages.
 
-    :copyright: 2006-2007 by Georg Brandl, Tim Hatch <tim@timhatch.com>.
+    :copyright: 2006-2008 by Georg Brandl, Tim Hatch <tim@timhatch.com>,
+                Stou Sandalski, Paulo Moura, Clara Dimene.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -18,7 +19,8 @@ from pygments.util import shebang_matches
 
 
 __all__ = ['SqlLexer', 'MySqlLexer', 'BrainfuckLexer', 'BashLexer',
-           'BatchLexer', 'BefungeLexer', 'RedcodeLexer', 'MOOCodeLexer']
+           'BatchLexer', 'BefungeLexer', 'RedcodeLexer', 'MOOCodeLexer',
+           'SmalltalkLexer', 'TcshLexer', 'LogtalkLexer']
 
 
 class SqlLexer(RegexLexer):
@@ -285,6 +287,7 @@ class BashLexer(RegexLexer):
     tokens = {
         'root': [
             include('basic'),
+            (r'\$\(\(', Keyword, 'math'),
             (r'\$\(', Keyword, 'paren'),
             (r'\${#?', Keyword, 'curly'),
             (r'`', String.Backtick, 'backticks'),
@@ -306,10 +309,12 @@ class BashLexer(RegexLexer):
             (r'(\b\w+)(\s*)(=)', bygroups(Name.Variable, Text, Operator)),
             (r'[\[\]{}()=]+', Operator),
             (r'<<\s*(\'?)\\?(\w+)[\w\W]+?\2', String),
+            (r'&&|\|\|', Operator),
         ],
         'data': [
             (r'"(\\\\|\\[0-7]+|\\.|[^"])*"', String.Double),
             (r"'(\\\\|\\[0-7]+|\\.|[^'])*'", String.Single),
+            (r';', Text),
             (r'\s+', Text),
             (r'[^=\s\n\[\]{}()$"\'`\\]+', Text),
             (r'\d+(?= |\Z)', Number),
@@ -325,6 +330,12 @@ class BashLexer(RegexLexer):
         ],
         'paren': [
             (r'\)', Keyword, '#pop'),
+            include('root'),
+        ],
+        'math': [
+            (r'\)\)', Keyword, '#pop'),
+            (r'[-+*/%^|&]|\*\*|\|\|', Operator),
+            (r'\d+', Number),
             include('root'),
         ],
         'backticks': [
@@ -354,19 +365,20 @@ class BatchLexer(RegexLexer):
         'root': [
             # Lines can start with @ to prevent echo
             (r'^\s*@', Punctuation),
+            (r'^(\s*)(rem\s.*)$', bygroups(Text, Comment)),
             (r'".*?"', String.Double),
             (r"'.*?'", String.Single),
             # If made more specific, make sure you still allow expansions
             # like %~$VAR:zlt
             (r'%%?[~$:\w]+%?', Name.Variable),
-            (r'(::|rem).*', Comment), # Technically :: only works at BOL
+            (r'::.*', Comment), # Technically :: only works at BOL
             (r'(set)(\s+)(\w+)', bygroups(Keyword, Text, Name.Variable)),
             (r'(call)(\s+)(:\w+)', bygroups(Keyword, Text, Name.Label)),
             (r'(goto)(\s+)(\w+)', bygroups(Keyword, Text, Name.Label)),
-            (r'\b(set|call|echo|on|off|endlocal|for|do|goto|if|pause|rem|'
+            (r'\b(set|call|echo|on|off|endlocal|for|do|goto|if|pause|'
              r'setlocal|shift|errorlevel|exist|defined|cmdextversion|'
              r'errorlevel|else|cd|md|del|deltree|cls|choice)\b', Keyword),
-            (r'equ|neq|lss|leq|gtr|geq', Operator),
+            (r'\b(equ|neq|lss|leq|gtr|geq)\b', Operator),
             include('basic'),
             (r'.', Text),
         ],
@@ -467,5 +479,331 @@ class MOOCodeLexer(RegexLexer):
             (r'([a-z_A-Z0-9]+)(\()', bygroups(Name.Function, Operator)),
             # variables
             (r'([a-zA-Z_0-9]+)', Text),
+        ]
+    }
+
+class SmalltalkLexer(RegexLexer):
+    """
+    For `Smalltalk <http://www.smalltalk.org/>`_ syntax.
+    Contributed by Stefan Matthias Aust.
+
+    *New in Pygments 0.10.*
+    """
+    name = 'Smalltalk'
+    filenames = ['*.st']
+    aliases = ['smalltalk', 'squeak']
+    mimetypes = ['text/x-smalltalk']
+
+    tokens = {
+        'root' : [
+            # Squeak fileout format (optional)
+            (r'^"[^"]*"!', Keyword),
+            (r"^'[^']*'!", Keyword),
+            (r'^(!)(\w+)( commentStamp: )(.*?)( prior: .*?!\n)(.*?)(!)',
+                bygroups(Keyword, Name.Class, Keyword, String, Keyword, Text, Keyword)),
+            (r'^(!)(\w+(?: class)?)( methodsFor: )(\'[^\']*\')(.*?!)',
+                bygroups(Keyword, Name.Class, Keyword, String, Keyword)),
+            (r'^(\w+)( subclass: )(#\w+)'
+             r'(\s+instanceVariableNames: )(.*?)'
+             r'(\s+classVariableNames: )(.*?)'
+             r'(\s+poolDictionaries: )(.*?)'
+             r'(\s+category: )(.*?)(!)',
+                bygroups(Name.Class, Keyword, String.Symbol, Keyword, String, Keyword,
+                         String, Keyword, String, Keyword, String, Keyword)),
+            (r'^(\w+(?: class)?)(\s+instanceVariableNames: )(.*?)(!)',
+                bygroups(Name.Class, Keyword, String, Keyword)),
+            (r'(!\n)(\].*)(! !)$', bygroups(Keyword, Text, Keyword)),
+            (r'! !$', Keyword),
+            # skip whitespace and comments
+            (r'\s+', Text),
+            (r'"[^"]*"', Comment),
+            # method patterns
+            (r'^(\w+)(\s*:\s*)(\w+\s*)', bygroups(Name.Function, Punctuation,
+                                                  Name.Variable), 'pattern'),
+            (r'^([-+*/\\~<>=|&!?,@%]+\s*)(\w+)', bygroups(Name.Function, Name.Variable)),
+            (r'^(\w+)', Name.Function),
+            # literals
+            (r'\'[^\']*\'', String),
+            (r'\$.', String.Char),
+            (r'#\(', String.Symbol, 'parenth'),
+            (r'(\d+r)?-?\d+(\.\d+)?(e-?\d+)?', Number),
+            (r'#("[^"]*"|[-+*/\\~<>=|&!?,@%]+|[\w:]+)', String.Symbol),
+            # blocks variables
+            (r'(\[\s*)((?::\w+\s*)+)(\|)', bygroups(Text, Name.Variable, Text)),
+            # temporaries
+            (r'(\|)([\w\s]*)(\|)', bygroups(Operator, Name.Variable, Operator)),
+            # names
+            (r'\b(ifTrue:|ifFalse:|whileTrue:|whileFalse:|timesRepeat:)', Name.Builtin),
+            (r'\b(self|super)\b', Name.Builtin.Pseudo),
+            (r'\b[A-Z]\w*:', Name),
+            (r'\b[A-Z]\w*\b', Name), #Name.Class),
+            (r'\w+:?|[-+*/\\~<>=|&!?,@%]+', Name), #Name.Function),
+            # syntax
+            (r'\^|:=', Operator),
+            (r'[\[\](){}.;]', Text),
+        ],
+        'parenth' : [
+            (r'\)', String.Symbol, '#pop'),
+            include('root'),
+        ],
+        'pattern' : [
+            (r'(\w+)(\s*:\s*)(\w+\s*)', bygroups(Name.Function, Punctuation,
+                                                 Name.Variable)),
+            (r'', Text, '#pop'),
+        ],
+    }
+
+
+class TcshLexer(RegexLexer):
+    """
+    Lexer for tcsh scripts.
+
+    *New in Pygments 0.10.*
+    """
+
+    name = 'Tcsh'
+    aliases = ['tcsh', 'csh']
+    filenames = ['*.tcsh', '*.csh']
+    mimetypes = ['application/x-csh']
+
+    tokens = {
+        'root': [
+            include('basic'),
+            (r'\$\(', Keyword, 'paren'),
+            (r'\${#?', Keyword, 'curly'),
+            (r'`', String.Backtick, 'backticks'),
+            include('data'),
+        ],
+        'basic': [
+            (r'\b(if|endif|else|while|then|foreach|case|default|'
+             r'continue|goto|breaksw|end|switch|endsw)\s*\b',
+             Keyword),
+            (r'\b(alias|alloc|bg|bindkey|break|builtins|bye|caller|cd|chdir|'
+             r'complete|dirs|echo|echotc|eval|exec|exit|'
+             r'fg|filetest|getxvers|glob|getspath|hashstat|history|hup|inlib|jobs|kill|'
+             r'limit|log|login|logout|ls-F|migrate|newgrp|nice|nohup|notify|'
+             r'onintr|popd|printenv|pushd|rehash|repeat|rootnode|popd|pushd|set|shift|'
+             r'sched|setenv|setpath|settc|setty|setxvers|shift|source|stop|suspend|'
+             r'source|suspend|telltc|time|'
+             r'umask|unalias|uncomplete|unhash|universe|unlimit|unset|unsetenv|'
+             r'ver|wait|warp|watchlog|where|which)\s*\b',
+             Name.Builtin),
+            (r'#.*\n', Comment),
+            (r'\\[\w\W]', String.Escape),
+            (r'(\b\w+)(\s*)(=)', bygroups(Name.Variable, Text, Operator)),
+            (r'[\[\]{}()=]+', Operator),
+            (r'<<\s*(\'?)\\?(\w+)[\w\W]+?\2', String),
+        ],
+        'data': [
+            (r'"(\\\\|\\[0-7]+|\\.|[^"])*"', String.Double),
+            (r"'(\\\\|\\[0-7]+|\\.|[^'])*'", String.Single),
+            (r'\s+', Text),
+            (r'[^=\s\n\[\]{}()$"\'`\\]+', Text),
+            (r'\d+(?= |\Z)', Number),
+            (r'\$#?(\w+|.)', Name.Variable),
+        ],
+        'curly': [
+            (r'}', Keyword, '#pop'),
+            (r':-', Keyword),
+            (r'[a-zA-Z0-9_]+', Name.Variable),
+            (r'[^}:"\'`$]+', Punctuation),
+            (r':', Punctuation),
+            include('root'),
+        ],
+        'paren': [
+            (r'\)', Keyword, '#pop'),
+            include('root'),
+        ],
+        'backticks': [
+            (r'`', String.Backtick, '#pop'),
+            include('root'),
+        ],
+    }
+
+
+class LogtalkLexer(RegexLexer):
+    """
+    For `Logtalk <http://logtalk.org/>`_ source code.
+
+    *New in Pygments 0.10.*
+    """
+
+    name = 'Logtalk'
+    aliases = ['logtalk']
+    filenames = ['*.lgt']
+    mimetypes = ['text/x-logtalk']
+
+    tokens = {
+        'root': [
+            # Directives
+            (r'^\s*:-\s',Punctuation,'directive'),
+            # Comments
+            (r'%.*?\n', Comment),
+            (r'/\*(.|\n)*?\*/',Comment),
+            # Whitespace
+            (r'\n', Text),
+            (r'\s+', Text),
+            # Numbers
+            (r"0'.", Number),
+            (r'0b[01]+', Number),
+            (r'0o[0-7]+', Number),
+            (r'0x[0-9a-fA-F]+', Number),
+            (r'\d+\.?\d*((e|E)(\+|-)?\d+)?', Number),
+            # Variables
+            (r'([A-Z_][a-zA-Z0-9_]*)', Name.Variable),
+            # Event handlers
+            (r'(after|before)(?=[(])', Keyword),
+            # Execution-context methods
+            (r'(parameter|this|se(lf|nder))(?=[(])', Keyword),
+            # Reflection
+            (r'(current_predicate|predicate_property)(?=[(])', Keyword),
+            # DCGs and term expansion
+            (r'(expand_term|(goal|term)_expansion|phrase)(?=[(])', Keyword),
+            # Entity
+            (r'(abolish|c(reate|urrent))_(object|protocol|category)(?=[(])', Keyword),
+            (r'(object|protocol|category)_property(?=[(])', Keyword),
+            # Entity relations
+            (r'complements_object(?=[(])', Keyword),
+            (r'extends_(object|protocol|category)(?=[(])', Keyword),
+            (r'imp(lements_protocol|orts_category)(?=[(])', Keyword),
+            (r'(instantiat|specializ)es_class(?=[(])', Keyword),
+            # Events
+            (r'(current_event|(abolish|define)_events)(?=[(])', Keyword),
+            # Flags
+            (r'(current|set)_logtalk_flag(?=[(])', Keyword),
+            # Compiling, loading, and library paths
+            (r'logtalk_(compile|l(ibrary_path|oad))(?=[(])', Keyword),
+            # Database
+            (r'(clause|retract(all)?)(?=[(])', Keyword),
+            (r'a(bolish|ssert(a|z))(?=[(])', Keyword),
+            # Control
+            (r'(ca(ll|tch)|throw)(?=[(])', Keyword),
+            (r'(fail|true)\b', Keyword),
+            # All solutions
+            (r'((bag|set)of|f(ind|or)all)(?=[(])', Keyword),
+            # Multi-threading meta-predicates
+            (r'threaded(_(call|once|ignore|exit|peek|wait|notify))?(?=[(])', Keyword),
+            # Term unification
+            (r'unify_with_occurs_check(?=[(])', Keyword),
+            # Term creation and decomposition
+            (r'(functor|arg|copy_term)(?=[(])', Keyword),
+            # Evaluable functors
+            (r'(rem|mod|abs|sign)(?=[(])', Keyword),
+            (r'float(_(integer|fractional)_part)?(?=[(])', Keyword),
+            (r'(floor|truncate|round|ceiling)(?=[(])', Keyword),
+            # Other arithmetic functors
+            (r'(cos|atan|exp|log|s(in|qrt))(?=[(])', Keyword),
+            # Term testing
+            (r'(var|atom(ic)?|integer|float|compound|n(onvar|umber))(?=[(])', Keyword),
+            # Stream selection and control
+            (r'(curren|se)t_(in|out)put(?=[(])', Keyword),
+            (r'(open|close)(?=[(])', Keyword),
+            (r'flush_output(?=[(])', Keyword),
+            (r'(at_end_of_stream|flush_output)\b', Keyword),
+            (r'(stream_property|at_end_of_stream|set_stream_position)(?=[(])', Keyword),
+            # Character and byte input/output
+            (r'(nl|(get|peek|put)_(byte|c(har|ode)))(?=[(])', Keyword),
+            (r'\bnl\b', Keyword),
+            # Term input/output
+            (r'read(_term)?(?=[(])', Keyword),
+            (r'write(q|_(canonical|term))?(?=[(])', Keyword),
+            (r'(current_)?op(?=[(])', Keyword),
+            (r'(current_)?char_conversion(?=[(])', Keyword),
+            # Atomic term processing
+            (r'atom_(length|c(hars|o(ncat|des)))(?=[(])', Keyword),
+            (r'(char_code|sub_atom)(?=[(])', Keyword),
+            (r'number_c(har|ode)s(?=[(])', Keyword),
+            # Implementation defined hooks functions
+            (r'(se|curren)t_prolog_flag(?=[(])', Keyword),
+            (r'\bhalt\b', Keyword),
+            (r'halt(?=[(])', Keyword),
+            # Message sending operators
+            (r'(::|:|\^\^)', Operator),
+            # External call
+            (r'[{}]', Keyword),
+            # Logic and control
+            (r'\bonce(?=[(])', Keyword),
+            (r'\brepeat\b', Keyword),
+            # Bitwise functors
+            (r'(>>|<<|/\\|\\\\|\\)', Operator),
+            # Arithemtic evaluation
+            (r'\bis\b', Keyword),
+            # Arithemtic comparison
+            (r'(=:=|=\\=|<|=<|>=|>)', Operator),
+            # Term creation and decomposition
+            (r'=\.\.', Operator),
+            # Term unification
+            (r'(=|\\=)', Operator),
+            # Term comparison
+            (r'(==|\\==|@=<|@<|@>=|@>)', Operator),
+            # Evaluable functors
+            (r'(//|[-+*/])', Operator),
+            (r'\b(mod|rem)\b', Operator),
+            # Other arithemtic functors
+            (r'\b\*\*\b', Operator),
+            # DCG rules
+            (r'-->', Operator),
+            # Control constructs
+            (r'([!;]|->)', Operator),
+            # Logic and control
+            (r'\\+', Operator),
+            # Mode operators
+            (r'[?@]', Operator),
+            # Strings
+            (r'"(\\\\|\\"|[^"])*"', String),
+            # Ponctuation
+            (r'[()\[\],.|]', Text),
+            # Atoms
+            (r"[a-z][a-zA-Z0-9_]*", Text),
+            (r"[']", String, 'quoted_atom'),
+        ],
+
+        'quoted_atom': [
+            (r"['][']", String),
+            (r"[']", String, '#pop'),
+            (r'\\([\\abfnrtv"\']|(x[a-fA-F0-9]+|[0-7]+)\\)', String.Escape),
+            (r"[^\\'\n]+", String),
+            (r'\\', String),
+        ],
+
+        'directive': [
+            # Entity directives
+            (r'(category|object|protocol)(?=[(])', Keyword, 'entityrelations'),		
+            (r'(end_(category|object|protocol))[.]',Keyword, 'root'),
+            # Predicate scope directives
+            (r'(public|protected|private)(?=[(])', Keyword, 'root'),
+            # Other directives
+            (r'\be(ncoding|xport)(?=[(])', Keyword, 'root'),
+            (r'\bin(fo|itialization)(?=[(])', Keyword, 'root'),
+            (r'\b(dynamic|synchronized|threaded)[.]', Keyword, 'root'),
+            (r'\b(alias|d(ynamic|iscontiguous)|m(eta_predicate|ode|ultifile)|synchronized)(?=[(])', Keyword, 'root'),
+            (r'\bop(?=[(])', Keyword, 'root'),
+            (r'\b(calls|use(s|_module))(?=[(])', Keyword, 'root'),
+        ],
+
+        'entityrelations': [
+            (r'(extends|i(nstantiates|mp(lements|orts))|specializes)(?=[(])', Keyword),
+            # Numbers
+            (r"0'.", Number),
+            (r'0b[01]+', Number),
+            (r'0o[0-7]+', Number),
+            (r'0x[0-9a-fA-F]+', Number),
+            (r'\d+\.?\d*((e|E)(\+|-)?\d+)?', Number),
+            # Variables
+            (r'([A-Z_][a-zA-Z0-9_]*)', Name.Variable),
+            # Atoms
+            (r"[a-z][a-zA-Z0-9_]*", Text),
+            (r"[']", String, 'quoted_atom'),
+            # Strings
+            (r'"(\\\\|\\"|[^"])*"', String),
+            # End of entity-opening directive
+            (r'([)]\.\n)', Text, 'root'),
+            # Scope operator
+            (r'(::)', Operator),
+            # Ponctuation
+            (r'[()\[\],.|]', Text),
+            # Whitespace
+            (r'\n', Text),
+            (r'\s+', Text),
         ]
     }

@@ -16,11 +16,15 @@
     * it is usable as a command-line tool and as a library
     * ... and it highlights even Brainfuck!
 
+    The `Pygments tip`_ is installable with ``easy_install Pygments==dev``.
+
+    .. _Pygments tip: http://dev.pocoo.org/hg/pygments-main/archive/tip.tar.gz#egg=Pygments-dev
+
     :copyright: 2006-2007 by Georg Brandl, Armin Ronacher and others.
     :license: BSD, see LICENSE for more details.
 """
 
-__version__ = '0.9'
+__version__ = '0.10'
 __author__ = 'Georg Brandl <g.brandl@gmx.net>'
 __url__ = 'http://pygments.org/'
 __license__ = 'BSD License'

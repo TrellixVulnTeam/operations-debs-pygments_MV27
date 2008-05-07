@@ -211,6 +211,8 @@ div.toc h2 {
         <h2>Contents</h2>
         <ul class="contents">
         
+          <li><a href="#version-0-10">Version 0.10</a></li>
+        
           <li><a href="#version-0-9">Version 0.9</a></li>
         
           <li><a href="#version-0-8-1">Version 0.8.1</a></li>
@@ -231,6 +233,46 @@ div.toc h2 {
       </div>
     
     <div class="section">
+<h3><a id="version-0-10" name="version-0-10">Version 0.10</a></h3>
+<p>(codename Malzeug, released May 06, 2008)</p>
+<ul class="simple">
+<li>Lexers added:<ul>
+<li>Io</li>
+<li>Smalltalk</li>
+<li>Darcs patches</li>
+<li>Tcl</li>
+<li>Matlab</li>
+<li>Matlab sessions</li>
+<li>FORTRAN</li>
+<li>XSLT</li>
+<li>tcsh</li>
+<li>NumPy</li>
+<li>Python 3</li>
+<li>S, S-plus, R statistics languages</li>
+<li>Logtalk</li>
+</ul>
+</li>
+<li>In the LatexFormatter, the <em>commandprefix</em> option is now by default
+'PY' instead of 'C', since the latter resulted in several collisions
+with other packages.  Also, the special meaning of the <em>arg</em> argument
+to <tt class="docutils literal"><span class="pre">get_style_defs()</span></tt> was removed.</li>
+<li>Added ImageFormatter, to format code as PNG, JPG, GIF or BMP.
+(Needs the Python Imaging Library.)</li>
+<li>Support doc comments in the PHP lexer.</li>
+<li>Handle format specifications in the Perl lexer.</li>
+<li>Fix comment handling in the Batch lexer.</li>
+<li>Add more file name extensions for the C++, INI and XML lexers.</li>
+<li>Fixes in the IRC and MuPad lexers.</li>
+<li>Fix function and interface name highlighting in the Java lexer.</li>
+<li>Fix at-rule handling in the CSS lexer.</li>
+<li>Handle KeyboardInterrupts gracefully in pygmentize.</li>
+<li>Added BlackWhiteStyle.</li>
+<li>Bash lexer now correctly highlights math, does not require whitespace
+after semicolons, and correctly highlights boolean operators.</li>
+<li>Makefile lexer is now capable of handling BSD and GNU make syntax.</li>
+</ul>
+</div>
+<div class="section">
 <h3><a id="version-0-9" name="version-0-9">Version 0.9</a></h3>
 <p>(codename Herbstzeitlose, released Oct 14, 2007)</p>
 <ul class="simple">
@@ -417,6 +459,6 @@ continuations.</li>
 
   </div>
 </body>
-<!-- generated on: 2007-10-14 22:21:01.137360
+<!-- generated on: 2008-05-06 18:28:07.603749
      file id: changelog -->
 </html>

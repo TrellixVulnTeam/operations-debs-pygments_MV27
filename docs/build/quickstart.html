@@ -364,16 +364,25 @@ $ pygmentize test.py
 <pre class="literal-block">
 $ pygmentize -f html -o test.html test.py
 </pre>
-<p>to write an HTML-highlighted version of test.py to the file test.html.</p>
-<p>The stylesheet can be created with:</p>
+<p>to write an HTML-highlighted version of test.py to the file test.html.
+Note that it will only be a snippet of HTML, if you want a full HTML document,
+use the &quot;full&quot; option:</p>
+<pre class="literal-block">
+$ pygmentize -f html -O full -o test.html test.py
+</pre>
+<p>This will produce a full HTML document with included stylesheet.</p>
+<p>A style can be selected with <tt class="docutils literal"><span class="pre">-O</span> <span class="pre">style=&lt;name&gt;</span></tt>.</p>
+<p>If you need a stylesheet for an existing HTML file using Pygments CSS classes,
+it can be created with:</p>
 <pre class="literal-block">
 $ pygmentize -S default -f html &gt; style.css
 </pre>
+<p>where <tt class="docutils literal"><span class="pre">default</span></tt> is the style name.</p>
 <p>More options and tricks and be found in the <a class="reference" href="./cmdline.html">command line referene</a>.</p>
 </div>
 
   </div>
 </body>
-<!-- generated on: 2007-10-14 22:21:09.008762
+<!-- generated on: 2008-05-06 18:28:10.058943
      file id: quickstart -->
 </html>

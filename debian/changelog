@@ -1,3 +1,13 @@
+pygments (0.10-1) unstable; urgency=low
+
+  * New upstream release
+  * Add make_utf8_default patch - useful while using pygmentize with pipes
+    (use: pygmentize -P 'encoding=ascii' if you want old behaviour)
+  * Install debian/pygmentize instead of script created by setuptools
+  * Change Debian packaging licence to match upstream
+
+ -- Piotr Ożarowski <piotr@debian.org>  Wed, 07 May 2008 20:38:26 +0200
+
 pygments (0.9-3) unstable; urgency=low
 
   [ Sandro Tosi ]
