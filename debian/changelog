@@ -1,3 +1,12 @@
+pygments (0.11.1-1) experimental; urgency=low
+
+  * New upstream release (upload to experimental due to Lenny freeze, to ease
+    testing rev. dependencies)
+  * Standards-Version bumped to 3.8.0:
+    + debian/README.source file added
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 31 Aug 2008 16:48:09 +0200
+
 pygments (0.10-1) unstable; urgency=low
 
   * New upstream release
