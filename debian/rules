@@ -3,6 +3,8 @@
 #export DH_VERBOSE=1
 
 PYVERS ?= $(shell pyversions -vr)
+DEB_UPSTREAM_VERSION=$(shell dpkg-parsechangelog | sed -rne 's,^Version: ([^-]+).*,\1,p')
+
 
 include /usr/share/quilt/quilt.make
 
@@ -18,29 +20,33 @@ build: patch build-indep
 build-indep:
 	dh_testdir
 	dh_installdirs
-	PYTHONPATH='.' python docs/generate.py html debian/python-pygments/usr/share/doc/python-pygments/
 	touch $@
 
 install: build $(PYVERS:%=install-python%)
 install-python%:
 	python$* setup.py install --single-version-externally-managed \
 		--root debian/python-pygments
+	# share Egg dir - remove Python version from dir name
+	mv debian/python-pygments/usr/lib/python$*/site-packages/Pygments-${DEB_UPSTREAM_VERSION}-py$*.egg-info \
+	   debian/python-pygments/usr/lib/python$*/site-packages/Pygments-${DEB_UPSTREAM_VERSION}.egg-info
+
 	touch $@
 
 binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs -i CHANGES
-	dh_installdocs -i
+	dh_installdocs -i docs/build/*
 	dh_installman -i
 	dh_install -i debian/pygmentize /usr/bin/
 	dh_pysupport -i
+	rm -rf debian/python-pygments/usr/lib/
 	dh_compress -i -X.py
 	dh_fixperms -i
 	dh_installdeb -i
 	dh_gencontrol -i
 	dh_md5sums -i
-	dh_builddeb -i -- -Z bzip2
+	dh_builddeb -i
 
 binary-arch:
 
