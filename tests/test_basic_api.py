@@ -3,7 +3,7 @@
     Pygments basic API tests
     ~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: 2006-2007 by Georg Brandl.
+    :copyright: 2006-2008 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -16,6 +16,10 @@ from pygments import lexers, formatters, filters, format
 from pygments.token import _TokenType, Text
 from pygments.lexer import RegexLexer
 from pygments.formatters.img import FontNotFound
+
+import support
+
+TESTFILE, TESTDIR = support.location(__file__)
 
 test_content = [chr(i) for i in xrange(33, 128)] * 5
 random.shuffle(test_content)
@@ -90,7 +94,7 @@ class FiltersTest(unittest.TestCase):
         for x in filters.FILTERS.keys():
             lx = lexers.PythonLexer()
             lx.add_filter(x, **filter_args.get(x, {}))
-            text = file(os.path.join(testdir, testfile)).read().decode('utf-8')
+            text = file(TESTFILE).read().decode('utf-8')
             tokens = list(lx.get_tokens(text))
             roundtext = ''.join([t[1] for t in tokens])
             if x not in ('whitespace', 'keywordcase'):
@@ -106,16 +110,32 @@ class FiltersTest(unittest.TestCase):
     def test_whitespace(self):
         lx = lexers.PythonLexer()
         lx.add_filter('whitespace', spaces='%')
-        text = file(os.path.join(testdir, testfile)).read().decode('utf-8')
+        text = file(TESTFILE).read().decode('utf-8')
         lxtext = ''.join([t[1] for t in list(lx.get_tokens(text))])
         self.failIf(' ' in lxtext)
 
     def test_keywordcase(self):
         lx = lexers.PythonLexer()
         lx.add_filter('keywordcase', case='capitalize')
-        text = file(os.path.join(testdir, testfile)).read().decode('utf-8')
+        text = file(TESTFILE).read().decode('utf-8')
         lxtext = ''.join([t[1] for t in list(lx.get_tokens(text))])
         self.assert_('Def' in lxtext and 'Class' in lxtext)
+
+    def test_codetag(self):
+        lx = lexers.PythonLexer()
+        lx.add_filter('codetagify')
+        text = u'# BUG: text'
+        tokens = list(lx.get_tokens(text))
+        self.assertEquals('# ', tokens[0][1])
+        self.assertEquals('BUG', tokens[1][1])
+
+    def test_codetag_boundary(self):
+        # http://dev.pocoo.org/projects/pygments/ticket/368
+        lx = lexers.PythonLexer()
+        lx.add_filter('codetagify')
+        text = u'# DEBUG: text'
+        tokens = list(lx.get_tokens(text))
+        self.assertEquals('# DEBUG: text', tokens[0][1])
 
 
 class FormattersTest(unittest.TestCase):
@@ -136,7 +156,11 @@ class FormattersTest(unittest.TestCase):
                 inst = formatter(opt1="val1")
             except (ImportError, FontNotFound):
                 continue
-            inst.get_style_defs()
+            try:
+                inst.get_style_defs()
+            except NotImplementedError:
+                # may be raised by formatters for which it doesn't make sense
+                pass
             inst.format(ts, out)
 
     def test_encodings(self):

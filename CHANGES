@@ -1,6 +1,56 @@
 Pygments changelog
 ==================
 
+Version 1.0
+-----------
+(codename Dreiundzwanzig, released Nov 23, 2008)
+
+- Don't use join(splitlines()) when converting newlines to ``\n``,
+  because that doesn't keep all newlines at the end when the
+  ``stripnl`` lexer option is False.
+
+- Add ``-N`` option to command-line interface to get a lexer name
+  for a given filename.
+
+- Add Tango style, written by Andre Roberge for the Crunchy project.
+
+- Add Python3TracebackLexer and ``python3`` option to 
+  PythonConsoleLexer.
+
+- Fix a few bugs in the Haskell lexer.
+
+- Fix PythonTracebackLexer to be able to recognize SyntaxError and
+  KeyboardInterrupt (#360).
+
+- Provide one formatter class per image format, so that surprises like::
+
+    pygmentize -f gif -o foo.gif foo.py
+
+  creating a PNG file are avoided.
+
+- Actually use the `font_size` option of the image formatter.
+
+- Fixed numpy lexer that it doesn't listen for `*.py` any longer.
+
+- Fixed HTML formatter so that text options can be Unicode
+  strings (#371).
+
+- Unified Diff lexer supports the "udiff" alias now.
+
+- Fix a few issues in Scala lexer (#367).
+
+- RubyConsoleLexer now supports simple prompt mode (#363).
+
+- JavascriptLexer is smarter about what constitutes a regex (#356).
+
+- Add Applescript lexer, thanks to Andreas Amann (#330).
+
+- Make the codetags more strict about matching words (#368).
+
+- NginxConfLexer is a little more accurate on mimetypes and
+  variables (#370).
+
+
 Version 0.11.1
 --------------
 (released Aug 24, 2008)
@@ -30,6 +80,7 @@ fixes and new features.
   * Scala source files, thanks to Krzysiek Goj
 
 - Lexers improved:
+
   * C lexer highlights standard library functions now and supports C99
     types.
   * Bash lexer now correctly highlights heredocs without preceding
