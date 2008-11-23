@@ -6,7 +6,7 @@ pygments (1.0-1) experimental; urgency=low
   [ Piotr Ożarowski ]
   * New upstream release (upload to experimental due to Lenny freeze, to ease
     testing rev. dependencies)
-  * Install scripts from extrnal directory as examples (closes: #497532)
+  * Install scripts from external directory as examples (closes: #497532)
   * debian/copyright: list of copyright holders updated
 
  -- Piotr Ożarowski <piotr@debian.org>  Sun, 23 Nov 2008 20:14:31 +0100
