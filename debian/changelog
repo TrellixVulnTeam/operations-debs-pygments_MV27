@@ -1,9 +1,15 @@
-pygments (0.11.1-2) UNRELEASED; urgency=low
+pygments (1.0-1) experimental; urgency=low
 
-  * debian/control
-    - switch Vcs-Browser field to viewsvn
+  [ Sandro Tosi ]
+  * Switch Vcs-Browser field to viewsvn
 
- -- Sandro Tosi <morph@debian.org>  Mon, 03 Nov 2008 22:14:18 +0100
+  [ Piotr Ożarowski ]
+  * New upstream release (upload to experimental due to Lenny freeze, to ease
+    testing rev. dependencies)
+  * Install scripts from extrnal directory as examples (closes: #497532)
+  * debian/copyright: list of copyright holders updated
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 23 Nov 2008 20:14:31 +0100
 
 pygments (0.11.1-1) experimental; urgency=low
 
