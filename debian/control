@@ -28,4 +28,3 @@ Description: syntax highlighting package written in Python
    * support for new languages and formats are added easily
    * a number of output formats, presently HTML, LaTeX and ANSI sequences
    * it is usable as a command-line tool and as a library
-   * ... and it highlights even Brainfuck!

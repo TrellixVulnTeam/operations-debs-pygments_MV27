@@ -1,3 +1,5 @@
+python-setuptools is in Build-Depends-Indep, no need to download it at build time
+
 Index: pygments-0.9/setup.py
 ===================================================================
 --- pygments-0.9.orig/setup.py
