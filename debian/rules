@@ -11,7 +11,7 @@ clean: unpatch
 	dh_testroot
 	rm -rf build Pygments.egg-info
 	find . -name "*\.py[co]" -delete
-	dh_clean build-indep $(PYVERS:%=install-python%)
+	dh_clean build-indep $(PYVERS:%=install-python%-stamp)
 
 build: patch build-indep
 
@@ -21,8 +21,8 @@ build-indep:
 	PYTHONPATH='.' python docs/generate.py html debian/python-pygments/usr/share/doc/python-pygments/
 	touch $@
 
-install: build $(PYVERS:%=install-python%)
-install-python%:
+install: build $(PYVERS:%=install-python%-stamp)
+install-python%-stamp:
 	python$* setup.py install --single-version-externally-managed \
 		--root debian/python-pygments
 	touch $@
