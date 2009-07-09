@@ -1,2 +1,3 @@
 make_utf8_default.patch
 disable_ez_setup.patch
+use_jinja2_to_generate_docs.patch

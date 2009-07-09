@@ -4,13 +4,13 @@ use UTF-8 by default
 upstream knows about this patch (will not apply it as not all distributions are
 using UTF-8 by defauly, like Debian does)
 
-Index: pygments-0.10/pygments/cmdline.py
+Index: pygments-1.0/pygments/cmdline.py
 ===================================================================
---- pygments-0.10.orig/pygments/cmdline.py
-+++ pygments-0.10/pygments/cmdline.py
-@@ -351,17 +351,17 @@ def main(args=sys.argv):
-             return 2
-         code = sys.stdin.read()
+--- pygments-1.0.orig/pygments/cmdline.py
++++ pygments-1.0/pygments/cmdline.py
+@@ -394,17 +394,17 @@ def main(args=sys.argv):
+         else:
+             code = sys.stdin.read()
  
 -    # No encoding given? Use latin1 if output file given,
 +    # No encoding given? Use utf-8 if output file given,
@@ -30,11 +30,11 @@ Index: pygments-0.10/pygments/cmdline.py
  
      # ... and do it!
      try:
-Index: pygments-0.10/pygments/formatters/latex.py
+Index: pygments-1.0/pygments/formatters/latex.py
 ===================================================================
---- pygments-0.10.orig/pygments/formatters/latex.py
-+++ pygments-0.10/pygments/formatters/latex.py
-@@ -236,6 +236,6 @@ class LatexFormatter(Formatter):
+--- pygments-1.0.orig/pygments/formatters/latex.py
++++ pygments-1.0/pygments/formatters/latex.py
+@@ -245,6 +245,6 @@ class LatexFormatter(Formatter):
                  dict(docclass  = self.docclass,
                       preamble  = self.preamble,
                       title     = self.title,
@@ -42,10 +42,10 @@ Index: pygments-0.10/pygments/formatters/latex.py
 +                     encoding  = self.encoding or 'utf-8',
                       styledefs = self.get_style_defs(),
                       code      = outfile.getvalue()))
-Index: pygments-0.10/pygments/lexer.py
+Index: pygments-1.0/pygments/lexer.py
 ===================================================================
---- pygments-0.10.orig/pygments/lexer.py
-+++ pygments-0.10/pygments/lexer.py
+--- pygments-1.0.orig/pygments/lexer.py
++++ pygments-1.0/pygments/lexer.py
 @@ -56,7 +56,7 @@ class Lexer(object):
      ``encoding``
          If given, must be an encoding name. This encoding will be used to
