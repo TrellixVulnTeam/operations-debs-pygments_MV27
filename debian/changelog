@@ -1,3 +1,11 @@
+pygments (1.0-3) unstable; urgency=low
+
+  * Add use_jinja2_to_generate_docs patch and replace python-jinja with
+    python-jinja2 build dependency
+  * Standards-Version bumped to 3.8.2 (no changes needed)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Thu, 09 Jul 2009 22:30:15 +0200
+
 pygments (1.0-2) unstable; urgency=low
 
   * Add description to the patches
