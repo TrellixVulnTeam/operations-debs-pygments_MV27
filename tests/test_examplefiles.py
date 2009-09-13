@@ -3,8 +3,8 @@
     Pygments tests with example files
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: 2006-2008 by Georg Brandl.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 import os
@@ -13,7 +13,7 @@ import unittest
 from pygments import highlight
 from pygments.lexers import get_lexer_for_filename, get_lexer_by_name
 from pygments.token import Error
-from pygments.util import ClassNotFound
+from pygments.util import ClassNotFound, b
 
 
 # generate methods
@@ -40,8 +40,9 @@ def test_example_files():
         yield check_lexer, lx, absfn
 
 def check_lexer(lx, absfn):
-    text = file(absfn, 'U').read()
-    text = text.strip('\n') + '\n'
+    text = open(absfn, 'rb').read()
+    text = text.replace(b('\r\n'), b('\n'))
+    text = text.strip(b('\n')) + b('\n')
     try:
         text = text.decode('utf-8')
     except UnicodeError:
@@ -49,6 +50,7 @@ def check_lexer(lx, absfn):
     ntext = []
     for type, val in lx.get_tokens(text):
         ntext.append(val)
-        assert type != Error, 'lexer generated error token for ' + absfn
+        assert type != Error, 'lexer %s generated error token for %s' % \
+                (lx, absfn)
     if u''.join(ntext) != text:
         raise AssertionError('round trip failed for ' + absfn)

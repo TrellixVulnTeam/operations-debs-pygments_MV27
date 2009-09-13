@@ -18,24 +18,22 @@
 
     The `Pygments tip`_ is installable with ``easy_install Pygments==dev``.
 
-    .. _Pygments tip: http://dev.pocoo.org/hg/pygments-main/archive/tip.tar.gz#egg=Pygments-dev
+    .. _Pygments tip:
+       http://dev.pocoo.org/hg/pygments-main/archive/tip.tar.gz#egg=Pygments-dev
 
-    :copyright: 2006-2008 by Georg Brandl, Armin Ronacher and others.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
-__version__ = '1.0'
-__author__ = 'Georg Brandl <g.brandl@gmx.net>'
-__url__ = 'http://pygments.org/'
-__license__ = 'BSD License'
+__version__ = '1.1.1'
 __docformat__ = 'restructuredtext'
 
 __all__ = ['lex', 'format', 'highlight']
 
 
 import sys, os
-from StringIO import StringIO
-from cStringIO import StringIO as CStringIO
+
+from pygments.util import StringIO, BytesIO
 
 
 def lex(code, lexer):
@@ -62,8 +60,8 @@ def format(tokens, formatter, outfile=None):
     """
     try:
         if not outfile:
-            # if we want Unicode output, we have to use Python StringIO
-            realoutfile = formatter.encoding and CStringIO() or StringIO()
+            #print formatter, 'using', formatter.encoding
+            realoutfile = formatter.encoding and BytesIO() or StringIO()
             formatter.format(tokens, realoutfile)
             return realoutfile.getvalue()
         else:

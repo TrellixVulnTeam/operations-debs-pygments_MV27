@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -222,13 +224,13 @@ div.toc h2 {
 output. For example, you can highlight special words in comments, convert
 keywords to upper or lowercase to enforce a style guide etc.</p>
 <p>To apply a filter, you can use the <cite>add_filter()</cite> method of a lexer:</p>
-<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pygments.lexers</span> <span class="k">import</span> <span class="n">PythonLexer</span>
+<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygments.lexers</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># add a filter given by a string and options</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">add_filter</span><span class="p">(</span><span class="s">&#39;codetagify&#39;</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">filters</span>
 <span class="go">[&lt;pygments.filters.CodeTagFilter object at 0xb785decc&gt;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pygments.filters</span> <span class="k">import</span> <span class="n">KeywordCaseFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygments.filters</span> <span class="kn">import</span> <span class="n">KeywordCaseFilter</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c"># or give an instance</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">add_filter</span><span class="p">(</span><span class="n">KeywordCaseFilter</span><span class="p">(</span><span class="n">case</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">))</span>
 </pre></div>
@@ -237,9 +239,9 @@ the constructor of the filter.</p>
 <p>To get a list of all registered filters by name, you can use the
 <cite>get_all_filters()</cite> function from the <cite>pygments.filters</cite> module that returns an
 iterable for all known filters.</p>
-<p>If you want to write your own filter, have a look at <a class="reference" href="./filterdevelopment.html">Write your own filter</a>.</p>
-<div class="section">
-<h3><a id="builtin-filters" name="builtin-filters">Builtin Filters</a></h3>
+<p>If you want to write your own filter, have a look at <a class="reference external" href="./filterdevelopment.html">Write your own filter</a>.</p>
+<div class="section" id="builtin-filters">
+<h3>Builtin Filters</h3>
 <p><cite>NameHighlightFilter</cite></p>
 <blockquote>
 <p>Highlight a normal Name token with a different token type.</p>
@@ -370,6 +372,6 @@ disrupt background colors.  The default is <tt class="docutils literal"><span cl
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:10.556783
+<!-- generated on: 2009-09-15 12:36:52.182079
      file id: filters -->
 </html>

@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -224,8 +226,8 @@ div.toc h2 {
     
     <!-- -*- mode: rst -*- -->
 <p>This page describes the Pygments API.</p>
-<div class="section">
-<h3><a id="high-level-api" name="high-level-api">High-level API</a></h3>
+<div class="section" id="high-level-api">
+<h3>High-level API</h3>
 <p>Functions from the <cite>pygments</cite> module:</p>
 <dl class="docutils">
 <dt>def <cite>lex(code, lexer):</cite></dt>
@@ -265,7 +267,7 @@ found.</p>
 </dd>
 <dt>def <cite>guess_lexer(text, **options):</cite></dt>
 <dd><p class="first">Return a <cite>Lexer</cite> subclass instance that's guessed from the text
-in <cite>text</cite>. For that, the <cite>analyze_text()</cite> method of every known
+in <cite>text</cite>. For that, the <cite>analyse_text()</cite> method of every known
 lexer class is called with the text as argument, and the lexer
 which returned the highest value will be instantiated and returned.</p>
 <p class="last"><cite>pygments.util.ClassNotFound</cite> is raised if no lexer thinks it can handle the
@@ -316,8 +318,8 @@ are listed in <cite>pygments.styles.STYLE_MAP</cite>.</p>
 </dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="lexers" name="lexers">Lexers</a></h3>
+<div class="section" id="lexers">
+<h3>Lexers</h3>
 <p>A lexer (derived from <cite>pygments.lexer.Lexer</cite>) has the following functions:</p>
 <dl class="docutils">
 <dt>def <cite>__init__(self, **options):</cite></dt>
@@ -332,7 +334,7 @@ the <cite>Lexer</cite> constructor, since it processes the <cite>stripnl</cite>,
 </pre></div>
 <p class="last">As these options must all be specifiable as strings (due to the
 command line usage), there are various utility functions
-available to help with that, see <a class="reference" href="#option-processing">Option processing</a>.</p>
+available to help with that, see <a class="reference internal" href="#option-processing">Option processing</a>.</p>
 </dd>
 <dt>def <cite>get_tokens(self, text):</cite></dt>
 <dd><p class="first">This method is the basic interface of a lexer. It is called by
@@ -349,13 +351,13 @@ with the <tt class="docutils literal"><span class="pre">index</span></tt> droppe
 position of the token within the input text.</p>
 <p class="last">This method must be overridden by subclasses.</p>
 </dd>
-<dt>def <cite>analyze_text(text):</cite></dt>
-<dd>A static method which is called for lexer guessing. It should analyze
+<dt>def <cite>analyse_text(text):</cite></dt>
+<dd>A static method which is called for lexer guessing. It should analyse
 the text and return a float in the range from <tt class="docutils literal"><span class="pre">0.0</span></tt> to <tt class="docutils literal"><span class="pre">1.0</span></tt>.
 If it returns <tt class="docutils literal"><span class="pre">0.0</span></tt>, the lexer will not be selected as the most
 probable one, if it returns <tt class="docutils literal"><span class="pre">1.0</span></tt>, it will be selected immediately.</dd>
 </dl>
-<p>For a list of known tokens have a look at the <a class="reference" href="./tokens.html">Tokens</a> page.</p>
+<p>For a list of known tokens have a look at the <a class="reference external" href="./tokens.html">Tokens</a> page.</p>
 <p>A lexer also can have the following attributes (in fact, they are mandatory
 except <cite>alias_filenames</cite>) that are used by the builtin lookup mechanism.</p>
 <dl class="docutils">
@@ -380,8 +382,8 @@ this list.</dd>
 lexer.</dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="formatters" name="formatters">Formatters</a></h3>
+<div class="section" id="formatters">
+<h3>Formatters</h3>
 <p>A formatter (derived from <cite>pygments.formatter.Formatter</cite>) has the following
 functions:</p>
 <dl class="docutils">
@@ -398,7 +400,7 @@ in the <cite>HTMLFormatter</cite>).</p>
 <p>The optional argument <cite>arg</cite> can be used to modify the generation and
 is formatter dependent (it is standardized because it can be given on
 the command line).</p>
-<p class="last">This method is called by the <tt class="docutils literal"><span class="pre">-S</span></tt> <a class="reference" href="./cmdline.html">command-line option</a>, the <cite>arg</cite>
+<p class="last">This method is called by the <tt class="docutils literal"><span class="pre">-S</span></tt> <a class="reference external" href="./cmdline.html">command-line option</a>, the <cite>arg</cite>
 is then given by the <tt class="docutils literal"><span class="pre">-a</span></tt> option.</p>
 </dd>
 <dt>def <cite>format(self, tokensource, outfile):</cite></dt>
@@ -421,8 +423,8 @@ can produce output. The patterns in this list should be unique among
 all formatters.</dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="option-processing" name="option-processing">Option processing</a></h3>
+<div class="section" id="option-processing">
+<h3>Option processing</h3>
 <p>The <cite>pygments.util</cite> module has some utility functions usable for option
 processing:</p>
 <dl class="docutils">
@@ -451,6 +453,6 @@ or a tuple, it is returned as a list.</dd>
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:10.334410
+<!-- generated on: 2009-09-15 12:36:50.249548
      file id: api -->
 </html>

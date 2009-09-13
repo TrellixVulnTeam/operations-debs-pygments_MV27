@@ -8,11 +8,11 @@
         python run.py [testfile ...]
 
 
-    :copyright: 2006-2007 by Georg Brandl.
-    :license: GNU GPL, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
-import sys, os, new
+import sys, os
 import unittest
 
 from os.path import dirname, basename, join, abspath

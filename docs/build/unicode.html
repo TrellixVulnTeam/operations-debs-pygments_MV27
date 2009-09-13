@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -214,16 +216,16 @@ wrong encoding.</p>
 If you pass a lexer a string object (not unicode), it tries to decode the data
 using this encoding.
 You can override the encoding using the <cite>encoding</cite> lexer option. If you have the
-<a class="reference" href="http://chardet.feedparser.org/">chardet</a> library installed and set the encoding to <tt class="docutils literal"><span class="pre">chardet</span></tt> if will ananlyse
+<a class="reference external" href="http://chardet.feedparser.org/">chardet</a> library installed and set the encoding to <tt class="docutils literal"><span class="pre">chardet</span></tt> if will ananlyse
 the text and use the encoding it thinks is the right one automatically:</p>
-<div class="syntax"><pre><span class="k">from</span> <span class="nn">pygments.lexers</span> <span class="k">import</span> <span class="n">PythonLexer</span>
+<div class="syntax"><pre><span class="kn">from</span> <span class="nn">pygments.lexers</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
 <span class="n">lexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s">&#39;chardet&#39;</span><span class="p">)</span>
 </pre></div>
 <p>The best way is to pass Pygments unicode objects. In that case you can't get
 unexpected output.</p>
 <p>The formatters now send Unicode objects to the stream if you don't set the
 output encoding. You can do so by passing the formatters an <cite>encoding</cite> option:</p>
-<div class="syntax"><pre><span class="k">from</span> <span class="nn">pygments.formatters</span> <span class="k">import</span> <span class="n">HtmlFormatter</span>
+<div class="syntax"><pre><span class="kn">from</span> <span class="nn">pygments.formatters</span> <span class="kn">import</span> <span class="n">HtmlFormatter</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">HtmlFormatter</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
 </pre></div>
 <p><strong>You will have to set this option if you have non-ASCII characters in the
@@ -234,7 +236,7 @@ This is the case for all regular files and for terminals.</p>
 Unicode string with this encoding before writing it. This is the case for
 <cite>sys.stdout</cite>, for example. The other formatters don't have that behavior.</p>
 <p>Another note: If you call Pygments via the command line (<cite>pygmentize</cite>),
-encoding is handled differently, see <a class="reference" href="./cmdline.html">the command line docs</a>.</p>
+encoding is handled differently, see <a class="reference external" href="./cmdline.html">the command line docs</a>.</p>
 <p><em>New in Pygments 0.7</em>: the formatters now also accept an <cite>outencoding</cite> option
 which will override the <cite>encoding</cite> option if given. This makes it possible to
 use a single options dict with lexers and formatters, and still have different
@@ -242,6 +244,6 @@ input and output encodings.</p>
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:10.194871
+<!-- generated on: 2009-09-15 12:36:59.802096
      file id: unicode -->
 </html>

@@ -3,8 +3,8 @@
     Pygments HTML formatter tests
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: 2006-2008 by Georg Brandl.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 import os
@@ -22,7 +22,8 @@ import support
 
 TESTFILE, TESTDIR = support.location(__file__)
 
-tokensource = list(PythonLexer(encoding='utf-8').get_tokens(file(TESTFILE).read()))
+tokensource = list(PythonLexer(encoding='utf-8').get_tokens(open(TESTFILE).read()))
+
 
 class HtmlFormatterTest(unittest.TestCase):
     def test_correct_output(self):
