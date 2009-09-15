@@ -3,14 +3,13 @@ Tue, 24 Oct 2006 17:54:36 +0200.
 
 It was downloaded from http://pygments.pocoo.org/download/
 
-Upstream Author: Georg Brandl <g.brandl@gmx.net>
+Upstream Author: Georg Brandl <georg@python.org>
 
-Copyright: 2006-2008 by Georg Brandl, Armin Ronacher, Lukas Meuser and others
-(see AUTHORS file)
+Copyright: 2006-2009 by the Pygments team, see AUTHORS
 
 License:
 
- Copyright (c) 2006 by the respective authors (see AUTHORS file).
+ Copyright (c) 2006-2009 by the respective authors (see AUTHORS file).
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -24,10 +23,6 @@ License:
        copyright notice, this list of conditions and the following
        disclaimer in the documentation and/or other materials provided
        with the distribution.
- 
-     * The names of the contributors may not be used to endorse or
-       promote products derived from this software without specific
-       prior written permission.
  
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -71,3 +66,40 @@ Files with different copyright holders:
 
 The Debian packaging is Â© 2006-2009, Piotr OÅ¼arowski <piotr@debian.org> and
 is licensed under the same licence as Pygments.
+
+../tests/examplefiles/format.ml:
+	Copyright 1996 Institut National de Recherche en Informatique et
+	en Automatique.  All rights reserved.  This file is distributed
+	under the terms of the GNU Library General Public License, with
+	the special exception on linking described in file ../LICENSE.
+../tests/examplefiles/test.html:
+	2006-2007 by Georg Brandl.
+	license: GNU GPL, see LICENSE for more details.
+../tests/examplefiles/test.html:    :copyright: 2006-2007 by Armin Ronacher.
+../tests/examplefiles/RegexMatcher.ns2:The Regular Expression Matcher (''The Software'') is Copyright (C) 1996, 1999 Vassili Bykov. 
+../tests/examplefiles/RegexMatcher.ns2:You may distribute this software with the restrictions that no fee (with the exception of a reasonable fee to cover the cost of distribution media) may be charged for the distribution without a prior written consent of the author, and the software must be distributed with its documentation and copyright notices included and intact.
+../tests/examplefiles/RegexMatcher.ns2:is Copyright (C) 1996, 1999 Vassili Bykov.  
+../tests/examplefiles/example.rb:# Copyright:: Copyright (c) 2003, 04 by Johannes Barre
+../tests/examplefiles/ltmain.sh:# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005
+../tests/examplefiles/ltmain.sh:    $echo "Copyright (C) 2005  Free Software Foundation, Inc."
+../tests/examplefiles/zmlrpc.f90:!!$    (C) Copyright 2006 Salvatore Filippone    University of Rome Tor Vergata
+../tests/examplefiles/test.cs:// MIT X11 license, Copyright (c) 2005-2006 by:                               //
+../tests/examplefiles/example.c:  Copyright (C) 1993-2003 Yukihiro Matsumoto
+../tests/examplefiles/example.c:  Copyright (C) 2000  Network Applied Communication Laboratory, Inc.
+../tests/examplefiles/example.c:  Copyright (C) 2000  Information-technology Promotion Agency, Japan
+../tests/examplefiles/Intro.java: * Copyright (c) 2003 Sun Microsystems, Inc. All  Rights Reserved.
+../tests/examplefiles/DancingSudoku.lhs: The usual BSD license applies, copyright 2006.
+../tests/examplefiles/example.xhtml:<!-- Copyright © 2006 Kashia Buch (kashia@vfemail.net), Fabian Buch (fabian@fabian-buch.de). All rights reserved. -->
+../tests/examplefiles/genclass.clj:;   Copyright (c) Rich Hickey. All rights reserved.
+../tests/examplefiles/Sudoku.lhs:% Copyright 2005 Brian Alliet
+../tests/examplefiles/test.plot:# Copyright (c) 1991, Jos van der Woude, jvdwoude@hut.nl
+../tests/examplefiles/test.plot:print "        Copyright (c) 1991, 1992, Jos van de Woude, jvdwoude@hut.nl"
+../tests/examplefiles/boot-9.scm:;;;; Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+../tests/examplefiles/example.cpp:    copyright            : (C) 2004 by André Simon
+../tests/examplefiles/example.cpp: * Copyright (c) 1998,1999,2000,2001,2002 Tal Davidson. All rights reserved.
+../tests/examplefiles/ANTLRv3.g: Copyright (c) 2005-2007 Terence Parr
+../tests/examplefiles/test.java: * Copyright (C) 2004, 2005, 2006 Aelitis, All Rights Reserved.
+../tests/examplefiles/test.pas:{       Copyright (c) 1997 Borland International        }
+../tests/examplefiles/test.php: *  @copyright   Copyright (c) 2006, Manni
+../tests/examplefiles/Constants.mo:Copyright &copy; 1998-2009, Modelica Association and DLR.
+../scripts/vim2pygments.py:    :copyright 2006 by Armin Ronacher.

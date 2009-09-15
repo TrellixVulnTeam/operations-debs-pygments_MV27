@@ -4,11 +4,11 @@ use UTF-8 by default
 upstream knows about this patch (will not apply it as not all distributions are
 using UTF-8 by defauly, like Debian does)
 
-Index: pygments-1.0/pygments/cmdline.py
+Index: pygments-1.1/pygments/cmdline.py
 ===================================================================
---- pygments-1.0.orig/pygments/cmdline.py
-+++ pygments-1.0/pygments/cmdline.py
-@@ -394,17 +394,17 @@ def main(args=sys.argv):
+--- pygments-1.1.orig/pygments/cmdline.py
++++ pygments-1.1/pygments/cmdline.py
+@@ -394,20 +394,20 @@ def main(args=sys.argv):
          else:
              code = sys.stdin.read()
  
@@ -22,19 +22,22 @@ Index: pygments-1.0/pygments/cmdline.py
 -            fmter.encoding = 'latin1'
 +            fmter.encoding = 'utf-8'
          else:
-             # use terminal encoding
--            lexer.encoding = getattr(sys.stdin, 'encoding', None) or 'ascii'
--            fmter.encoding = getattr(sys.stdout, 'encoding', None) or 'ascii'
-+            lexer.encoding = getattr(sys.stdin, 'encoding', None) or 'utf-8'
-+            fmter.encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
+             if sys.version_info < (3,):
+                 # use terminal encoding; Python 3's terminals already do that
+                 lexer.encoding = getattr(sys.stdin, 'encoding',
+-                                         None) or 'ascii'
++                                         None) or 'utf-8'
+                 fmter.encoding = getattr(sys.stdout, 'encoding',
+-                                         None) or 'ascii'
++                                         None) or 'utf-8'
  
      # ... and do it!
      try:
-Index: pygments-1.0/pygments/formatters/latex.py
+Index: pygments-1.1/pygments/formatters/latex.py
 ===================================================================
---- pygments-1.0.orig/pygments/formatters/latex.py
-+++ pygments-1.0/pygments/formatters/latex.py
-@@ -245,6 +245,6 @@ class LatexFormatter(Formatter):
+--- pygments-1.1.orig/pygments/formatters/latex.py
++++ pygments-1.1/pygments/formatters/latex.py
+@@ -299,6 +299,6 @@ class LatexFormatter(Formatter):
                  dict(docclass  = self.docclass,
                       preamble  = self.preamble,
                       title     = self.title,
@@ -42,10 +45,10 @@ Index: pygments-1.0/pygments/formatters/latex.py
 +                     encoding  = self.encoding or 'utf-8',
                       styledefs = self.get_style_defs(),
                       code      = outfile.getvalue()))
-Index: pygments-1.0/pygments/lexer.py
+Index: pygments-1.1/pygments/lexer.py
 ===================================================================
---- pygments-1.0.orig/pygments/lexer.py
-+++ pygments-1.0/pygments/lexer.py
+--- pygments-1.1.orig/pygments/lexer.py
++++ pygments-1.1/pygments/lexer.py
 @@ -56,7 +56,7 @@ class Lexer(object):
      ``encoding``
          If given, must be an encoding name. This encoding will be used to
@@ -64,3 +67,38 @@ Index: pygments-1.0/pygments/lexer.py
          # self.encoding = options.get('inencoding', None) or self.encoding
          self.filters = []
          for filter_ in get_list_opt(options, 'filters', ()):
+@@ -134,7 +134,7 @@ class Lexer(object):
+                     if text.startswith(u'\ufeff'):
+                         text = text[len(u'\ufeff'):]
+                 except UnicodeDecodeError:
+-                    text = text.decode('latin1')
++                    text = text.decode('utf-8')
+             elif self.encoding == 'chardet':
+                 try:
+                     import chardet
+Index: pygments-1.1/pygments/lexers/__init__.py
+===================================================================
+--- pygments-1.1.orig/pygments/lexers/__init__.py
++++ pygments-1.1/pygments/lexers/__init__.py
+@@ -105,7 +105,7 @@ def get_lexer_for_filename(_fn, code=Non
+ 
+     if sys.version_info > (3,) and isinstance(code, bytes):
+         # decode it, since all analyse_text functions expect unicode
+-        code = code.decode('latin1')
++        code = code.decode('utf-8')
+ 
+     def get_rating(cls):
+         # The class _always_ defines analyse_text because it's included in
+Index: pygments-1.1/pygments/formatters/other.py
+===================================================================
+--- pygments-1.1.orig/pygments/formatters/other.py
++++ pygments-1.1/pygments/formatters/other.py
+@@ -64,7 +64,7 @@ class RawTokenFormatter(Formatter):
+         if self.encoding:
+             raise OptionError('the raw formatter does not support the '
+                               'encoding option')
+-        self.encoding = 'ascii'  # let pygments.format() do the right thing
++        self.encoding = 'utf-8'  # let pygments.format() do the right thing
+         self.compress = get_choice_opt(options, 'compress',
+                                        ['', 'none', 'gz', 'bz2'], '')
+         self.error_color = options.get('error_color', None)

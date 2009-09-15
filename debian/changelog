@@ -1,3 +1,15 @@
+pygments (1.1.1-1) UNRELEASED; urgency=low
+
+TODO: fix debian/copyright
+  * New upstream release
+  * use_jinja2_to_generate_docs patch removed (incorporated upstream)
+  * disable_ez_setup.patch no longer needed
+  * make_utf8_default.patch updated
+  * debian/copyright file updated
+  * Standards-Version bumped to 3.8.3 (no changes needed)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 13 Sep 2009 10:13:17 +0200
+
 pygments (1.0-3) unstable; urgency=low
 
   * Add use_jinja2_to_generate_docs patch and replace python-jinja with
