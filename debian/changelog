@@ -1,7 +1,10 @@
-pygments (1.1.1-1) UNRELEASED; urgency=low
+pygments (1.1.1+dfsg-1) unstable; urgency=low
 
-TODO: fix debian/copyright
   * New upstream release
+    - upstream tarball repackaged: tests/examplefiles removed (at least one
+      of example files is not DFSG-free and I'm too lazy to review the rest
+      as most of them have different copyright holder and license),
+      get-orig-source target added, debian/watch file updated
   * use_jinja2_to_generate_docs patch removed (incorporated upstream)
   * disable_ez_setup.patch no longer needed
   * make_utf8_default.patch updated
