@@ -3,8 +3,8 @@
     Basic CLexer Test
     ~~~~~~~~~~~~~~~~~
 
-    :copyright: 2006-2007 by Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 import unittest
@@ -29,7 +29,3 @@ class CLexerTest(unittest.TestCase):
             wanted.append((Text, ' '))
         wanted = [(Text, '')] + wanted[:-1] + [(Text, '\n')]
         self.assertEqual(list(self.lexer.get_tokens(code)), wanted)
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -5,8 +5,8 @@
 
     pygments version of my "native" vim theme.
 
-    :copyright: 2006-2007 by Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 from pygments.style import Style
@@ -20,6 +20,7 @@ class NativeStyle(Style):
     """
 
     background_color = '#202020'
+    highlight_color = '#404040'
 
     styles = {
         Token:              '#d0d0d0',

@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -223,18 +225,18 @@ div.toc h2 {
       </div>
     
     <!-- -*- mode: rst -*- -->
-<p>As well as creating <a class="reference" href="./lexerdevelopment.html">your own lexer</a>, writing a new
+<p>As well as creating <a class="reference external" href="./lexerdevelopment.html">your own lexer</a>, writing a new
 formatter for Pygments is easy and straightforward.</p>
 <p>A formatter is a class that is initialized with some keyword arguments (the
 formatter options) and that must provides a <cite>format()</cite> method.
 Additionally a formatter should provide a <cite>get_style_defs()</cite> method that
 returns the style definitions from the style in a form usable for the
 formatter's output format.</p>
-<div class="section">
-<h3><a id="quickstart" name="quickstart">Quickstart</a></h3>
+<div class="section" id="quickstart">
+<h3>Quickstart</h3>
 <p>The most basic formatter shipped with Pygments is the <cite>NullFormatter</cite>. It just
 sends the value of a token to the output stream:</p>
-<div class="syntax"><pre><span class="k">from</span> <span class="nn">pygments.formatter</span> <span class="k">import</span> <span class="n">Formatter</span>
+<div class="syntax"><pre><span class="kn">from</span> <span class="nn">pygments.formatter</span> <span class="kn">import</span> <span class="n">Formatter</span>
 
 <span class="k">class</span> <span class="nc">NullFormatter</span><span class="p">(</span><span class="n">Formatter</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokensource</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
@@ -247,8 +249,8 @@ the latter a file like object with a <cite>write()</cite> method.</p>
 <p>Because the formatter is that basic it doesn't overwrite the <cite>get_style_defs()</cite>
 method.</p>
 </div>
-<div class="section">
-<h3><a id="styles" name="styles">Styles</a></h3>
+<div class="section" id="styles">
+<h3>Styles</h3>
 <p>Styles aren't instantiated but their metaclass provides some class functions
 so that you can access the style definitions easily.</p>
 <p>Styles are iterable and yield tuples in the form <tt class="docutils literal"><span class="pre">(ttype,</span> <span class="pre">d)</span></tt> where <cite>ttype</cite>
@@ -273,12 +275,12 @@ blue) or <cite>None</cite> for no border.</dd>
 <p>Additional keys might appear in the future, formatters should ignore all keys
 they don't support.</p>
 </div>
-<div class="section">
-<h3><a id="html-3-2-formatter" name="html-3-2-formatter">HTML 3.2 Formatter</a></h3>
+<div class="section" id="html-3-2-formatter">
+<h3>HTML 3.2 Formatter</h3>
 <p>For an more complex example, let's implement a HTML 3.2 Formatter. We don't
 use CSS but inline markup (<tt class="docutils literal"><span class="pre">&lt;u&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;font&gt;</span></tt>, etc). Because this isn't good
 style this formatter isn't in the standard library ;-)</p>
-<div class="syntax"><pre><span class="k">from</span> <span class="nn">pygments.formatter</span> <span class="k">import</span> <span class="n">Formatter</span>
+<div class="syntax"><pre><span class="kn">from</span> <span class="nn">pygments.formatter</span> <span class="kn">import</span> <span class="n">Formatter</span>
 
 <span class="k">class</span> <span class="nc">OldHtmlFormatter</span><span class="p">(</span><span class="n">Formatter</span><span class="p">):</span>
 
@@ -356,8 +358,8 @@ style this formatter isn't in the standard library ;-)</p>
 inline HTML markup, we would need to generate the CSS first. For that
 purpose the <cite>get_style_defs()</cite> method exists:</p>
 </div>
-<div class="section">
-<h3><a id="generating-style-definitions" name="generating-style-definitions">Generating Style Definitions</a></h3>
+<div class="section" id="generating-style-definitions">
+<h3>Generating Style Definitions</h3>
 <p>Some formatters like the <cite>LatexFormatter</cite> and the <cite>HtmlFormatter</cite> don't
 output inline markup but reference either macros or css classes. Because
 the definitions of those are not part of the output, the <cite>get_style_defs()</cite>
@@ -367,6 +369,6 @@ is up to the formatter) and has to return a string or <tt class="docutils litera
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:08.104027
+<!-- generated on: 2009-09-15 12:36:52.412801
      file id: formatterdevelopment -->
 </html>

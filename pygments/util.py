@@ -5,10 +5,11 @@
 
     Utility functions.
 
-    :copyright: 2006-2007 by Georg Brandl.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 import re
+import sys
 
 
 split_path_re = re.compile(r'[/\\ ]')
@@ -20,7 +21,7 @@ doctype_lookup_re = re.compile(r'''(?smx)
      "[^"]*")
      [^>]*>
 ''')
-tag_re = re.compile(r'<(.+?)(\s.*?)?>.*?</\1>(?uism)')
+tag_re = re.compile(r'<(.+?)(\s.*?)?>.*?</.+?>(?uism)')
 
 
 class ClassNotFound(ValueError):
@@ -33,8 +34,10 @@ class OptionError(Exception):
     pass
 
 
-def get_choice_opt(options, optname, allowed, default=None):
+def get_choice_opt(options, optname, allowed, default=None, normcase=False):
     string = options.get(optname, default)
+    if normcase:
+        string = string.lower()
     if string not in allowed:
         raise OptionError('Value for option %s must be one of %s' %
                           (optname, ', '.join(map(str, allowed))))
@@ -179,11 +182,41 @@ def html_doctype_matches(text):
     return doctype_matches(text, r'html\s+PUBLIC\s+"-//W3C//DTD X?HTML.*')
 
 
+_looks_like_xml_cache = {}
 def looks_like_xml(text):
     """
     Check if a doctype exists or if we have some tags.
     """
-    m = doctype_lookup_re.match(text)
-    if m is not None:
-        return True
-    return tag_re.search(text) is not None
+    key = hash(text)
+    try:
+        return _looks_like_xml_cache[key]
+    except KeyError:
+        m = doctype_lookup_re.match(text)
+        if m is not None:
+            return True
+        rv = tag_re.search(text[:1000]) is not None
+        _looks_like_xml_cache[key] = rv
+        return rv
+
+# Python 2/3 compatibility
+
+if sys.version_info < (3,0):
+    b = bytes = str
+    u_prefix = 'u'
+    import StringIO, cStringIO
+    BytesIO = cStringIO.StringIO
+    StringIO = StringIO.StringIO
+else:
+    import builtins
+    bytes = builtins.bytes
+    u_prefix = ''
+    def b(s):
+        if isinstance(s, str):
+            return bytes(map(ord, s))
+        elif isinstance(s, bytes):
+            return s
+        else:
+            raise TypeError("Invalid argument %r for b()" % (s,))
+    import io
+    BytesIO = io.BytesIO
+    StringIO = io.StringIO

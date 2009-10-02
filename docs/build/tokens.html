@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -232,7 +234,7 @@ div.toc h2 {
 <p>Inside the <cite>pygments.token</cite> module, there is a special object called <cite>Token</cite>
 that is used to create token types.</p>
 <p>You can create a new token type by accessing an attribute of <cite>Token</cite>:</p>
-<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pygments.token</span> <span class="k">import</span> <span class="n">Token</span>
+<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Token</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Token</span><span class="o">.</span><span class="n">String</span>
 <span class="go">Token.String</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Token</span><span class="o">.</span><span class="n">String</span> <span class="ow">is</span> <span class="n">Token</span><span class="o">.</span><span class="n">String</span>
@@ -241,13 +243,13 @@ that is used to create token types.</p>
 <p>Note that tokens are singletons so you can use the <tt class="docutils literal"><span class="pre">is</span></tt> operator for comparing
 token types.</p>
 <p>As of Pygments 0.7 you can also use the <tt class="docutils literal"><span class="pre">in</span></tt> operator to perform set tests:</p>
-<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pygments.token</span> <span class="k">import</span> <span class="n">Comment</span>
+<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Comment</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Comment</span><span class="o">.</span><span class="n">Single</span> <span class="ow">in</span> <span class="n">Comment</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Comment</span> <span class="ow">in</span> <span class="n">Comment</span><span class="o">.</span><span class="n">Multi</span>
 <span class="go">False</span>
 </pre></div>
-<p>This can be useful in <a class="reference" href="./filters.html">filters</a> and if you write lexers on your own without
+<p>This can be useful in <a class="reference external" href="./filters.html">filters</a> and if you write lexers on your own without
 using the base lexers.</p>
 <p>You can also split a token type into a hierarchy, and get the parent of it:</p>
 <div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">String</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -260,7 +262,7 @@ guarantee that a style would define style rules for a token type. Because of
 that, Pygments proposes some global token types defined in the
 <cite>pygments.token.STANDARD_TYPES</cite> dict.</p>
 <p>For some tokens aliases are already defined:</p>
-<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pygments.token</span> <span class="k">import</span> <span class="n">String</span>
+<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">String</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">String</span>
 <span class="go">Token.Literal.String</span>
 </pre></div>
@@ -341,7 +343,7 @@ introduced in Pygments 0.7, the function still exists for backwards
 compatiblity.)</p>
 <p>With Pygments 0.7, it's also possible to convert strings to token types (for example
 if you want to supply a token from the command line):</p>
-<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pygments.token</span> <span class="k">import</span> <span class="n">String</span><span class="p">,</span> <span class="n">string_to_tokentype</span>
+<div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">String</span><span class="p">,</span> <span class="n">string_to_tokentype</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string_to_tokentype</span><span class="p">(</span><span class="s">&quot;String&quot;</span><span class="p">)</span>
 <span class="go">Token.Literal.String</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string_to_tokentype</span><span class="p">(</span><span class="s">&quot;Token.Literal.String&quot;</span><span class="p">)</span>
@@ -349,8 +351,8 @@ if you want to supply a token from the command line):</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">string_to_tokentype</span><span class="p">(</span><span class="n">String</span><span class="p">)</span>
 <span class="go">Token.Literal.String</span>
 </pre></div>
-<div class="section">
-<h3><a id="keyword-tokens" name="keyword-tokens">Keyword Tokens</a></h3>
+<div class="section" id="keyword-tokens">
+<h3>Keyword Tokens</h3>
 <dl class="docutils">
 <dt><cite>Keyword</cite></dt>
 <dd>For any kind of keyword (especially if it doesn't match any of the
@@ -360,6 +362,9 @@ subtypes of course).</dd>
 <dt><cite>Keyword.Declaration</cite></dt>
 <dd>For keywords used for variable declaration (e.g. <tt class="docutils literal"><span class="pre">var</span></tt> in some programming
 languages like JavaScript).</dd>
+<dt><cite>Keyword.Namespace</cite></dt>
+<dd>For keywords used for namespace declarations (e.g. <tt class="docutils literal"><span class="pre">import</span></tt> in Python and
+Java and <tt class="docutils literal"><span class="pre">package</span></tt> in Java).</dd>
 <dt><cite>Keyword.Pseudo</cite></dt>
 <dd>For keywords that aren't really keywords (e.g. <tt class="docutils literal"><span class="pre">None</span></tt> in old Python
 versions).</dd>
@@ -370,8 +375,8 @@ versions).</dd>
 <tt class="docutils literal"><span class="pre">char</span></tt> etc. in C).</dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="name-tokens" name="name-tokens">Name Tokens</a></h3>
+<div class="section" id="name-tokens">
+<h3>Name Tokens</h3>
 <dl class="docutils">
 <dt><cite>Name</cite></dt>
 <dd>For any name (variable names, function names, classes).</dd>
@@ -420,8 +425,8 @@ example).</dd>
 <dd>same as <cite>Name.Variable</cite> but for instance variables.</dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="literals" name="literals">Literals</a></h3>
+<div class="section" id="literals">
+<h3>Literals</h3>
 <dl class="docutils">
 <dt><cite>Literal</cite></dt>
 <dd>For any literal (if not further defined).</dd>
@@ -466,8 +471,8 @@ in Ruby).</dd>
 <dd>Token type for octal literals.</dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="operators" name="operators">Operators</a></h3>
+<div class="section" id="operators">
+<h3>Operators</h3>
 <dl class="docutils">
 <dt><cite>Operator</cite></dt>
 <dd>For any punctuation operator (e.g. <tt class="docutils literal"><span class="pre">+</span></tt>, <tt class="docutils literal"><span class="pre">-</span></tt>).</dd>
@@ -475,16 +480,16 @@ in Ruby).</dd>
 <dd>For any operator that is a word (e.g. <tt class="docutils literal"><span class="pre">not</span></tt>).</dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="punctuation" name="punctuation">Punctuation</a></h3>
+<div class="section" id="punctuation">
+<h3>Punctuation</h3>
 <p><em>New in Pygments 0.7.</em></p>
 <dl class="docutils">
 <dt><cite>Punctuation</cite></dt>
 <dd>For any punctuation which is not an operator (e.g. <tt class="docutils literal"><span class="pre">[</span></tt>, <tt class="docutils literal"><span class="pre">(</span></tt>...)</dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="comments" name="comments">Comments</a></h3>
+<div class="section" id="comments">
+<h3>Comments</h3>
 <dl class="docutils">
 <dt><cite>Comment</cite></dt>
 <dd>Token type for any comment.</dd>
@@ -499,8 +504,8 @@ in Ruby).</dd>
 informations etc.</dd>
 </dl>
 </div>
-<div class="section">
-<h3><a id="generic-tokens" name="generic-tokens">Generic Tokens</a></h3>
+<div class="section" id="generic-tokens">
+<h3>Generic Tokens</h3>
 <p>Generic tokens are for special lexers like the <cite>DiffLexer</cite> that doesn't really
 highlight a programming language but a patch file.</p>
 <dl class="docutils">
@@ -531,6 +536,6 @@ highlight a programming language but a patch file.</p>
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:11.468462
+<!-- generated on: 2009-09-15 12:36:59.168145
      file id: tokens -->
 </html>

@@ -5,13 +5,14 @@
 
     Other formatters: NullFormatter, RawTokenFormatter.
 
-    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 from pygments.formatter import Formatter
-from pygments.util import get_choice_opt
-
+from pygments.util import OptionError, get_choice_opt, b
+from pygments.token import Token
+from pygments.console import colorize
 
 __all__ = ['NullFormatter', 'RawTokenFormatter']
 
@@ -41,11 +42,16 @@ class RawTokenFormatter(Formatter):
     be converted to a token stream with the `RawTokenLexer`, described in the
     `lexer list <lexers.txt>`_.
 
-    Only one option is accepted:
+    Only two options are accepted:
 
     `compress`
         If set to ``'gz'`` or ``'bz2'``, compress the output with the given
         compression algorithm after encoding (default: ``''``).
+    `error_color`
+        If set to a color name, highlight error tokens using that color.  If
+        set but with no value, defaults to ``'red'``.
+        *New in Pygments 0.11.*
+
     """
     name = 'Raw tokens'
     aliases = ['raw', 'tokens']
@@ -55,29 +61,57 @@ class RawTokenFormatter(Formatter):
 
     def __init__(self, **options):
         Formatter.__init__(self, **options)
+        if self.encoding:
+            raise OptionError('the raw formatter does not support the '
+                              'encoding option')
+        self.encoding = 'ascii'  # let pygments.format() do the right thing
         self.compress = get_choice_opt(options, 'compress',
                                        ['', 'none', 'gz', 'bz2'], '')
+        self.error_color = options.get('error_color', None)
+        if self.error_color is True:
+            self.error_color = 'red'
+        if self.error_color is not None:
+            try:
+                colorize(self.error_color, '')
+            except KeyError:
+                raise ValueError("Invalid color %r specified" %
+                                 self.error_color)
 
     def format(self, tokensource, outfile):
+        try:
+            outfile.write(b(''))
+        except TypeError:
+            raise TypeError('The raw tokens formatter needs a binary '
+                            'output file')
         if self.compress == 'gz':
             import gzip
             outfile = gzip.GzipFile('', 'wb', 9, outfile)
-            write = outfile.write
+            def write(text):
+                outfile.write(text.encode())
             flush = outfile.flush
         elif self.compress == 'bz2':
             import bz2
             compressor = bz2.BZ2Compressor(9)
             def write(text):
-                outfile.write(compressor.compress(text))
+                outfile.write(compressor.compress(text.encode()))
             def flush():
                 outfile.write(compressor.flush())
                 outfile.flush()
         else:
-            write = outfile.write
+            def write(text):
+                outfile.write(text.encode())
             flush = outfile.flush
 
         lasttype = None
         lastval = u''
-        for ttype, value in tokensource:
-            write("%s\t%r\n" % (ttype, value))
+        if self.error_color:
+            for ttype, value in tokensource:
+                line = "%s\t%r\n" % (ttype, value)
+                if ttype is Token.Error:
+                    write(colorize(self.error_color, line))
+                else:
+                    write(line)
+        else:
+            for ttype, value in tokensource:
+                write("%s\t%r\n" % (ttype, value))
         flush()

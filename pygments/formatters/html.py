@@ -5,15 +5,20 @@
 
     Formatter for HTML output.
 
-    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 import sys, os
 import StringIO
 
+try:
+    set
+except NameError:
+    from sets import Set as set
+
 from pygments.formatter import Formatter
 from pygments.token import Token, Text, STANDARD_TYPES
-from pygments.util import get_bool_opt, get_int_opt
+from pygments.util import get_bool_opt, get_int_opt, get_list_opt, bytes
 
 
 __all__ = ['HtmlFormatter']
@@ -129,6 +134,9 @@ class HtmlFormatter(Formatter):
 
     Wrapping can be disabled using the `nowrap` option.
 
+    A list of lines can be specified using the `hl_lines` option to make these
+    lines highlighted (as of Pygments 0.11).
+
     With the `full` option, a complete HTML 4 document is output, including
     the style definitions inside a ``<style>`` tag, or in a separate file if
     the `cssfile` option is given.
@@ -178,7 +186,9 @@ class HtmlFormatter(Formatter):
 
     `style`
         The style to use, can be a string or a Style subclass (default:
-        ``'default'``).
+        ``'default'``). This option has no effect if the `cssfile`
+        and `noclobber_cssfile` option are given and the file specified in
+        `cssfile` exists.
 
     `noclasses`
         If set to true, token ``<span>`` tags will not use CSS classes, but
@@ -204,12 +214,22 @@ class HtmlFormatter(Formatter):
     `cssstyles`
         Inline CSS styles for the wrapping ``<div>`` tag (default: ``''``).
 
+    `prestyles`
+        Inline CSS styles for the ``<pre>`` tag (default: ``''``).  *New in
+        Pygments 0.11.*
+
     `cssfile`
         If the `full` option is true and this option is given, it must be the
         name of an external file. If the filename does not include an absolute
         path, the file's path will be assumed to be relative to the main output
         file's path, if the latter can be found. The stylesheet is then written
         to this file instead of the HTML file. *New in Pygments 0.6.*
+
+    `noclobber_cssfile`
+        If `cssfile` is given and the specified file exists, the css file will
+        not be overwritten. This allows the use of the `full` option in
+        combination with a user specified css file. Default is ``False``.
+        *New in Pygments 1.1.*
 
     `linenos`
         If set to ``'table'``, output line numbers as a table with two cells,
@@ -230,6 +250,9 @@ class HtmlFormatter(Formatter):
         unless you give the enclosing ``<pre>`` tags an explicit ``line-height``
         CSS property (you get the default line spacing with ``line-height:
         125%``).
+
+    `hl_lines`
+        Specify a list of lines to be highlighted.  *New in Pygments 0.11.*
 
     `linenostart`
         The line number for the first line (default: ``1``).
@@ -258,6 +281,10 @@ class HtmlFormatter(Formatter):
         If set to a nonempty string, e.g. ``foo``, the formatter will wrap each
         output line in an anchor tag with a ``name`` of ``foo-linenumber``.
         This allows easy linking to certain lines. *New in Pygments 0.9.*
+
+    `anchorlinenos`
+        If set to `True`, will wrap line numbers in <a> tags. Used in
+        combination with `linenos` and `lineanchors`.
 
 
     **Subclassing the HTML formatter**
@@ -315,12 +342,16 @@ class HtmlFormatter(Formatter):
 
     def __init__(self, **options):
         Formatter.__init__(self, **options)
+        self.title = self._decodeifneeded(self.title)
         self.nowrap = get_bool_opt(options, 'nowrap', False)
         self.noclasses = get_bool_opt(options, 'noclasses', False)
         self.classprefix = options.get('classprefix', '')
-        self.cssclass = options.get('cssclass', 'highlight')
-        self.cssstyles = options.get('cssstyles', '')
-        self.cssfile = options.get('cssfile', '')
+        self.cssclass = self._decodeifneeded(options.get('cssclass', 'highlight'))
+        self.cssstyles = self._decodeifneeded(options.get('cssstyles', ''))
+        self.prestyles = self._decodeifneeded(options.get('prestyles', ''))
+        self.cssfile = self._decodeifneeded(options.get('cssfile', ''))
+        self.noclobber_cssfile = get_bool_opt(options, 'noclobber_cssfile', False)
+
         linenos = options.get('linenos', False)
         if linenos == 'inline':
             self.linenos = 2
@@ -335,6 +366,13 @@ class HtmlFormatter(Formatter):
         self.nobackground = get_bool_opt(options, 'nobackground', False)
         self.lineseparator = options.get('lineseparator', '\n')
         self.lineanchors = options.get('lineanchors', '')
+        self.anchorlinenos = options.get('anchorlinenos', False)
+        self.hl_lines = set()
+        for lineno in get_list_opt(options, 'hl_lines', []):
+            try:
+                self.hl_lines.add(int(lineno))
+            except ValueError:
+                pass
 
         self._class_cache = {}
         self._create_stylesheet()
@@ -405,7 +443,17 @@ class HtmlFormatter(Formatter):
                 text_style = ' ' + self.class2style[self.ttype2class[Text]][0]
             lines.insert(0, '%s { background: %s;%s }' %
                          (prefix(''), self.style.background_color, text_style))
+        if self.style.highlight_color is not None:
+            lines.insert(0, '%s.hll { background-color: %s }' %
+                         (prefix(''), self.style.highlight_color))
         return '\n'.join(lines)
+
+    def _decodeifneeded(self, value):
+        if isinstance(value, bytes):
+            if self.encoding:
+                return value.decode(self.encoding)
+            return value.decode()
+        return value
 
     def _wrap_full(self, inner, outfile):
         if self.cssfile:
@@ -418,17 +466,19 @@ class HtmlFormatter(Formatter):
                     if not filename or filename[0] == '<':
                         # pseudo files, e.g. name == '<fdopen>'
                         raise AttributeError
-                    cssfilename = os.path.join(os.path.dirname(filename), self.cssfile)
+                    cssfilename = os.path.join(os.path.dirname(filename),
+                                               self.cssfile)
                 except AttributeError:
                     print >>sys.stderr, 'Note: Cannot determine output file name, ' \
                           'using current directory as base for the CSS file name'
                     cssfilename = self.cssfile
-            # write CSS file
+            # write CSS file only if noclobber_cssfile isn't given as an option.
             try:
-                cf = open(cssfilename, "w")
-                cf.write(CSSFILE_TEMPLATE %
-                         {'styledefs': self.get_style_defs('body')})
-                cf.close()
+                if not os.path.exists(cssfilename) or not self.noclobber_cssfile:
+                    cf = open(cssfilename, "w")
+                    cf.write(CSSFILE_TEMPLATE %
+                            {'styledefs': self.get_style_defs('body')})
+                    cf.close()
             except IOError, err:
                 err.strerror = 'Error writing CSS file: ' + err.strerror
                 raise
@@ -459,19 +509,45 @@ class HtmlFormatter(Formatter):
         mw = len(str(lncount + fl - 1))
         sp = self.linenospecial
         st = self.linenostep
+        la = self.lineanchors
+        aln = self.anchorlinenos
         if sp:
-            ls = '\n'.join([(i%st == 0 and
-                             (i%sp == 0 and '<span class="special">%*d</span>'
-                              or '%*d') % (mw, i)
-                             or '')
-                            for i in range(fl, fl + lncount)])
-        else:
-            ls = '\n'.join([(i%st == 0 and ('%*d' % (mw, i)) or '')
-                            for i in range(fl, fl + lncount)])
+            lines = []
 
+            for i in range(fl, fl+lncount):
+                if i % st == 0:
+                    if i % sp == 0:
+                        if aln:
+                            lines.append('<a href="#%s-%d" class="special">%*d</a>' %
+                                         (la, i, mw, i))
+                        else:
+                            lines.append('<span class="special">%*d</span>' % (mw, i))
+                    else:
+                        if aln:
+                            lines.append('<a href="#%s-%d">%*d</a>' % (la, i, mw, i))
+                        else:
+                            lines.append('%*d' % (mw, i))
+                else:
+                    lines.append('')
+            ls = '\n'.join(lines)
+        else:
+            lines = []
+            for i in range(fl, fl+lncount):
+                if i % st == 0:
+                    if aln:
+                        lines.append('<a href="#%s-%d">%*d</a>' % (la, i, mw, i))
+                    else:
+                        lines.append('%*d' % (mw, i))
+                else:
+                    lines.append('')
+            ls = '\n'.join(lines)
+
+        # in case you wonder about the seemingly redundant <div> here: since the
+        # content in the other cell also is wrapped in a div, some browsers in
+        # some configurations seem to mess up the formatting...
         yield 0, ('<table class="%stable">' % self.cssclass +
-                  '<tr><td class="linenos"><pre>' +
-                  ls + '</pre></td><td class="code">')
+                  '<tr><td class="linenos"><div class="linenodiv"><pre>' +
+                  ls + '</pre></div></td><td class="code">')
         yield 0, dummyoutfile.getvalue()
         yield 0, '</td></tr></table>'
 
@@ -486,7 +562,8 @@ class HtmlFormatter(Formatter):
         if sp:
             for t, line in lines:
                 yield 1, '<span class="lineno%s">%*s</span> ' % (
-                    num%sp == 0 and ' special' or '', mw, (num%st and ' ' or num)) + line
+                    num%sp == 0 and ' special' or '', mw,
+                    (num%st and ' ' or num)) + line
                 num += 1
         else:
             for t, line in lines:
@@ -512,7 +589,8 @@ class HtmlFormatter(Formatter):
         yield 0, '</div>\n'
 
     def _wrap_pre(self, inner):
-        yield 0, '<pre>'
+        yield 0, ('<pre'
+                  + (self.prestyles and ' style="%s"' % self.prestyles) + '>')
         for tup in inner:
             yield tup
         yield 0, '</pre>'
@@ -523,7 +601,6 @@ class HtmlFormatter(Formatter):
         Yield individual lines.
         """
         nocls = self.noclasses
-        enc = self.encoding
         lsep = self.lineseparator
         # for <span style=""> lookup only
         getcls = self.ttype2class.get
@@ -541,9 +618,6 @@ class HtmlFormatter(Formatter):
             else:
                 cls = self._get_css_class(ttype)
                 cspan = cls and '<span class="%s">' % cls or ''
-
-            if enc:
-                value = value.encode(enc)
 
             parts = escape_html(value).split('\n')
 
@@ -576,6 +650,21 @@ class HtmlFormatter(Formatter):
         if line:
             yield 1, line + (lspan and '</span>') + lsep
 
+    def _highlight_lines(self, tokensource):
+        """
+        Highlighted the lines specified in the `hl_lines` option by
+        post-processing the token stream coming from `_format_lines`.
+        """
+        hls = self.hl_lines
+
+        for i, (t, value) in enumerate(tokensource):
+            if t != 1:
+                yield t, value
+            if i + 1 in hls: # i + 1 because Python indexes start at 0
+                yield 1, '<span class="hll">%s</span>' % value
+            else:
+                yield 1, value
+
     def wrap(self, source, outfile):
         """
         Wrap the ``source``, which is a generator yielding
@@ -584,7 +673,7 @@ class HtmlFormatter(Formatter):
         """
         return self._wrap_div(self._wrap_pre(source))
 
-    def format(self, tokensource, outfile):
+    def format_unencoded(self, tokensource, outfile):
         """
         The formatting process uses several nested generators; which of
         them are used is determined by the user's options.
@@ -599,6 +688,8 @@ class HtmlFormatter(Formatter):
         linewise, e.g. line number generators.
         """
         source = self._format_lines(tokensource)
+        if self.hl_lines:
+            source = self._highlight_lines(source)
         if not self.nowrap:
             if self.linenos == 2:
                 source = self._wrap_inlinelinenos(source)

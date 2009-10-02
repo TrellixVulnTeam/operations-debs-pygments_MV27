@@ -1,13 +1,61 @@
-pygments (0.10-1~bpo40+1) etch-backports; urgency=low
+pygments (1.1.1+dfsg-1~bpo50+1) lenny-backports; urgency=low
 
-  * Rebuild for etch-backports
-  * Use python-support 0.5.6
-    + rename Egg dir in debian/rules
-    + remove empty /usr/lib/ dir
-  * Don't use bzip2 to compress binary package
-  * Don't build docs - Etch's python-jinja package is too old, ship upstream's
+  * Rebuild for lenny-backports.
 
- -- Piotr Ożarowski <piotr@debian.org>  Thu, 02 Oct 2008 19:16:01 +0200
+ -- Alexander Wirt <formorer@debian.org>  Fri, 02 Oct 2009 06:28:18 +0000
+
+pygments (1.1.1+dfsg-1) unstable; urgency=low
+
+  * New upstream release
+    - upstream tarball repackaged: tests/examplefiles removed (at least one
+      of example files is not DFSG-free and I'm too lazy to review the rest
+      as most of them have different copyright holder and license),
+      get-orig-source target added, debian/watch file updated
+  * use_jinja2_to_generate_docs patch removed (incorporated upstream)
+  * disable_ez_setup.patch no longer needed
+  * make_utf8_default.patch updated
+  * debian/copyright file updated
+  * Standards-Version bumped to 3.8.3 (no changes needed)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 13 Sep 2009 10:13:17 +0200
+
+pygments (1.0-3) unstable; urgency=low
+
+  * Add use_jinja2_to_generate_docs patch and replace python-jinja with
+    python-jinja2 build dependency
+  * Standards-Version bumped to 3.8.2 (no changes needed)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Thu, 09 Jul 2009 22:30:15 +0200
+
+pygments (1.0-2) unstable; urgency=low
+
+  * Add description to the patches
+  * Remove brainf*ck from long description (LP: #302898)
+  * Upload to unstable
+
+ -- Piotr Ożarowski <piotr@debian.org>  Tue, 10 Feb 2009 19:14:36 +0100
+
+pygments (1.0-1) experimental; urgency=low
+
+  [ Sandro Tosi ]
+  * Switch Vcs-Browser field to viewsvn
+
+  [ Piotr Ożarowski ]
+  * New upstream release (upload to experimental due to Lenny freeze, to ease
+    testing rev. dependencies)
+  * Install scripts from external directory as examples (closes: #497532)
+  * debian/copyright: list of copyright holders updated
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 23 Nov 2008 20:14:31 +0100
+
+pygments (0.11.1-1) experimental; urgency=low
+
+  * New upstream release (upload to experimental due to Lenny freeze, to ease
+    testing rev. dependencies)
+  * Standards-Version bumped to 3.8.0:
+    + debian/README.source file added
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 31 Aug 2008 16:48:09 +0200
 
 pygments (0.10-1) unstable; urgency=low
 

@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -222,36 +224,36 @@ div.toc h2 {
 <p>Pygments requires at least Python 2.3 to work correctly. Just to clarify:
 there <em>won't</em> ever be support for Python versions below 2.3. However, there
 are no other dependencies.</p>
-<div class="section">
-<h3><a id="installing-a-released-version" name="installing-a-released-version">Installing a released version</a></h3>
-<div class="section">
-<h4><a id="as-a-python-egg-via-easy-install" name="as-a-python-egg-via-easy-install">As a Python egg (via easy_install)</a></h4>
-<p>You can install the most recent Pygments version using <a class="reference" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a>:</p>
+<div class="section" id="installing-a-released-version">
+<h3>Installing a released version</h3>
+<div class="section" id="as-a-python-egg-via-easy-install">
+<h4>As a Python egg (via easy_install)</h4>
+<p>You can install the most recent Pygments version using <a class="reference external" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a>:</p>
 <pre class="literal-block">
 sudo easy_install Pygments
 </pre>
 <p>This will install a Pygments egg in your Python installation's site-packages
 directory.</p>
 </div>
-<div class="section">
-<h4><a id="from-the-tarball-release" name="from-the-tarball-release">From the tarball release</a></h4>
+<div class="section" id="from-the-tarball-release">
+<h4>From the tarball release</h4>
 <ol class="arabic simple">
-<li>Download the most recent tarball from the <a class="reference" href="http://pygments.org/download/">download page</a></li>
+<li>Download the most recent tarball from the <a class="reference external" href="http://pygments.org/download/">download page</a></li>
 <li>Unpack the tarball</li>
 <li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt></li>
 </ol>
 <p>Note that the last command will automatically download and install
-<a class="reference" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a> if you don't already have it installed. This requires a working
+<a class="reference external" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a> if you don't already have it installed. This requires a working
 internet connection.</p>
 <p>This will install Pygments into your Python installation's site-packages directory.</p>
 </div>
 </div>
-<div class="section">
-<h3><a id="installing-the-development-version" name="installing-the-development-version">Installing the development version</a></h3>
-<div class="section">
-<h4><a id="if-you-want-to-play-around-with-the-code" name="if-you-want-to-play-around-with-the-code">If you want to play around with the code</a></h4>
+<div class="section" id="installing-the-development-version">
+<h3>Installing the development version</h3>
+<div class="section" id="if-you-want-to-play-around-with-the-code">
+<h4>If you want to play around with the code</h4>
 <ol class="arabic simple">
-<li>Install <a class="reference" href="http://selenic.com/mercurial/">Mercurial</a></li>
+<li>Install <a class="reference external" href="http://selenic.com/mercurial/">Mercurial</a></li>
 <li><tt class="docutils literal"><span class="pre">hg</span> <span class="pre">clone</span> <span class="pre">http://dev.pocoo.org/hg/pygments-main</span> <span class="pre">pygments</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">pygments</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">ln</span> <span class="pre">-s</span> <span class="pre">pygments</span> <span class="pre">/usr/lib/python2.X/site-packages</span></tt></li>
@@ -274,6 +276,6 @@ is run, the sources are updated from Subversion. -->
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:11.412221
+<!-- generated on: 2009-09-15 12:36:53.754543
      file id: installation -->
 </html>

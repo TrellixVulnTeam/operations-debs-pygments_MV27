@@ -5,9 +5,8 @@
 
     Lexers for web-related languages and markup.
 
-    :copyright: 2006-2008 by Georg Brandl, Armin Ronacher,
-                Tim Hatch <tim@timhatch.com>, Stou Sandalski.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 import re
@@ -24,7 +23,8 @@ from pygments.util import get_bool_opt, get_list_opt, looks_like_xml, \
 
 
 __all__ = ['HtmlLexer', 'XmlLexer', 'JavascriptLexer', 'CssLexer',
-           'PhpLexer', 'ActionScriptLexer', 'XsltLexer']
+           'PhpLexer', 'ActionScriptLexer', 'XsltLexer', 'ActionScript3Lexer',
+           'MxmlLexer']
 
 
 class JavascriptLexer(RegexLexer):
@@ -39,17 +39,37 @@ class JavascriptLexer(RegexLexer):
 
     flags = re.DOTALL
     tokens = {
-        'root': [
+        'commentsandwhitespace': [
             (r'\s+', Text),
             (r'<!--', Comment),
-            (r'//.*?\n', Comment),
-            (r'/\*.*?\*/', Comment),
-            (r'/(\\\\|\\/|[^/\n])*/[gim]*', String.Regex),
-            (r'[~\^\*!%&<>\|+=:;,/?\\-]+', Operator),
-            (r'[{}\[\]();.]+', Punctuation),
-            (r'(for|in|while|do|break|return|continue|if|else|throw|try|'
-             r'catch|var|with|const|label|function|new|typeof|'
-             r'instanceof|this)\b', Keyword),
+            (r'//.*?\n', Comment.Single),
+            (r'/\*.*?\*/', Comment.Multiline)
+        ],
+        'slashstartsregex': [
+            include('commentsandwhitespace'),
+            (r'/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/'
+             r'([gim]+\b|\B)', String.Regex, '#pop'),
+            (r'(?=/)', Text, ('#pop', 'badregex')),
+            (r'', Text, '#pop')
+        ],
+        'badregex': [
+            ('\n', Text, '#pop')
+        ],
+        'root': [
+            (r'^(?=\s|/|<!--)', Text, 'slashstartsregex'),
+            include('commentsandwhitespace'),
+            (r'\+\+|--|~|&&|\?|:|\|\||\\(?=\n)|'
+             r'(<<|>>>?|==?|!=?|[-<>+*%&\|\^/])=?', Operator, 'slashstartsregex'),
+            (r'[{(\[;,]', Punctuation, 'slashstartsregex'),
+            (r'[})\].]', Punctuation),
+            (r'(for|in|while|do|break|return|continue|switch|case|default|if|else|'
+             r'throw|try|catch|finally|new|delete|typeof|instanceof|void|'
+             r'this)\b', Keyword, 'slashstartsregex'),
+            (r'(var|with|function)\b', Keyword.Declaration, 'slashstartsregex'),
+            (r'(abstract|boolean|byte|char|class|const|debugger|double|enum|export|'
+             r'extends|final|float|goto|implements|import|int|interface|long|native|'
+             r'package|private|protected|public|short|static|super|synchronized|throws|'
+             r'transient|volatile)\b', Keyword.Reserved),
             (r'(true|false|null|NaN|Infinity|undefined)\b', Keyword.Constant),
             (r'(Array|Boolean|Date|Error|Function|Math|netscape|'
              r'Number|Object|Packages|RegExp|String|sun|decodeURI|'
@@ -83,8 +103,8 @@ class ActionScriptLexer(RegexLexer):
     tokens = {
         'root': [
             (r'\s+', Text),
-            (r'//.*?\n', Comment),
-            (r'/\*.*?\*/', Comment),
+            (r'//.*?\n', Comment.Single),
+            (r'/\*.*?\*/', Comment.Multiline),
             (r'/(\\\\|\\/|[^/\n])*/[gim]*', String.Regex),
             (r'[~\^\*!%&<>\|+=:;,/?\\-]+', Operator),
             (r'[{}\[\]();.]+', Punctuation),
@@ -93,7 +113,8 @@ class ActionScriptLexer(RegexLexer):
              r'switch)\b', Keyword),
             (r'(class|public|final|internal|native|override|private|protected|'
              r'static|import|extends|implements|interface|intrinsic|return|super|'
-             r'dynamic|function|const|get|namespace|package|set)\b', Keyword.Declaration),
+             r'dynamic|function|const|get|namespace|package|set)\b',
+             Keyword.Declaration),
             (r'(true|false|null|NaN|Infinity|-Infinity|undefined|Void)\b',
              Keyword.Constant),
             (r'(Accessibility|AccessibilityProperties|ActionScriptVersion|'
@@ -147,6 +168,89 @@ class ActionScriptLexer(RegexLexer):
             (r"'(\\\\|\\'|[^'])*'", String.Single),
         ]
     }
+
+    def analyse_text(text):
+        return 0.05
+
+
+class ActionScript3Lexer(RegexLexer):
+    """
+    For ActionScript 3 source code.
+
+    *New in Pygments 0.11.*
+    """
+
+    name = 'ActionScript 3'
+    aliases = ['as3', 'actionscript3']
+    filenames = ['*.as']
+    mimetypes = ['application/x-actionscript', 'text/x-actionscript',
+                 'text/actionscript']
+
+    identifier = r'[$a-zA-Z_][a-zA-Z0-9_]*'
+
+    flags = re.DOTALL | re.MULTILINE
+    tokens = {
+        'root': [
+            (r'\s+', Text),
+            (r'(function\s+)(' + identifier + r')(\s*)(\()',
+             bygroups(Keyword.Declaration, Name.Function, Text, Operator),
+             'funcparams'),
+            (r'(var|const)(\s+)(' + identifier + r')(\s*)(:)(\s*)(' + identifier + r')',
+             bygroups(Keyword.Declaration, Text, Name, Text, Punctuation, Text,
+                      Keyword.Type)),
+            (r'(import|package)(\s+)((?:' + identifier + r'|\.)+)(\s*)',
+             bygroups(Keyword, Text, Name.Namespace, Text)),
+            (r'(new)(\s+)(' + identifier + r')(\s*)(\()',
+             bygroups(Keyword, Text, Keyword.Type, Text, Operator)),
+            (r'//.*?\n', Comment.Single),
+            (r'/\*.*?\*/', Comment.Multiline),
+            (r'/(\\\\|\\/|[^\n])*/[gisx]*', String.Regex),
+            (r'(\.)(' + identifier + r')', bygroups(Operator, Name.Attribute)),
+            (r'(case|default|for|each|in|while|do|break|return|continue|if|else|'
+             r'throw|try|catch|with|new|typeof|arguments|instanceof|this|'
+             r'switch|import|include|as|is)\b',
+             Keyword),
+            (r'(class|public|final|internal|native|override|private|protected|'
+             r'static|import|extends|implements|interface|intrinsic|return|super|'
+             r'dynamic|function|const|get|namespace|package|set)\b',
+             Keyword.Declaration),
+            (r'(true|false|null|NaN|Infinity|-Infinity|undefined|void)\b',
+             Keyword.Constant),
+            (r'(decodeURI|decodeURIComponent|encodeURI|escape|eval|isFinite|isNaN|'
+             r'isXMLName|clearInterval|fscommand|getTimer|getURL|getVersion|'
+             r'isFinite|parseFloat|parseInt|setInterval|trace|updateAfterEvent|'
+             r'unescape)\b', Name.Function),
+            (identifier, Name),
+            (r'[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?', Number.Float),
+            (r'0x[0-9a-f]+', Number.Hex),
+            (r'[0-9]+', Number.Integer),
+            (r'"(\\\\|\\"|[^"])*"', String.Double),
+            (r"'(\\\\|\\'|[^'])*'", String.Single),
+            (r'[~\^\*!%&<>\|+=:;,/?\\{}\[\]();.-]+', Operator),
+        ],
+        'funcparams': [
+            (r'\s+', Text),
+            (r'(\s*)(\.\.\.)?(' + identifier + r')(\s*)(:)(\s*)(' +
+             identifier + r'|\*)(\s*)',
+             bygroups(Text, Punctuation, Name, Text, Operator, Text,
+                      Keyword.Type, Text), 'defval'),
+            (r'\)', Operator, 'type')
+        ],
+        'type': [
+            (r'(\s*)(:)(\s*)(' + identifier + r'|\*)',
+             bygroups(Text, Operator, Text, Keyword.Type), '#pop:2'),
+            (r'\s*', Text, '#pop:2')
+        ],
+        'defval': [
+            (r'(=)(\s*)([^(),]+)(\s*)(,?)',
+             bygroups(Operator, Text, using(this), Text, Operator), '#pop'),
+            (r',?', Operator, '#pop')
+        ]
+    }
+
+    def analyse_text(text):
+        if re.match(r'\w+\s*:\s*\w', text): return 0.3
+        return 0.1
 
 
 class CssLexer(RegexLexer):
@@ -391,10 +495,13 @@ class PhpLexer(RegexLexer):
             (r'\?>', Comment.Preproc, '#pop'),
             (r'<<<([a-zA-Z_][a-zA-Z0-9_]*)\n.*?\n\1\;?\n', String),
             (r'\s+', Text),
-            (r'#.*?\n', Comment),
-            (r'//.*?\n', Comment),
+            (r'#.*?\n', Comment.Single),
+            (r'//.*?\n', Comment.Single),
+            # put the empty comment here, it is otherwise seen as
+            # the start of a docstring
+            (r'/\*\*/', Comment.Multiline),
             (r'/\*\*.*?\*/', String.Doc),
-            (r'/\*.*?\*/', Comment),
+            (r'/\*.*?\*/', Comment.Multiline),
             (r'(->|::)(\s*)([a-zA-Z_][a-zA-Z0-9_]*)',
              bygroups(Operator, Text, Name.Attribute)),
             (r'[~!%^&*+=|:.<>/?@-]+', Operator),
@@ -415,7 +522,8 @@ class PhpLexer(RegexLexer):
              r'implements|public|private|protected|abstract|clone|try|'
              r'catch|throw|this)\b', Keyword),
             ('(true|false|null)\b', Keyword.Constant),
-            (r'\$[a-zA-Z_][a-zA-Z0-9_]*', Name.Variable),
+            (r'\$\{\$+[a-zA-Z_][a-zA-Z0-9_]*\}', Name.Variable),
+            (r'\$+[a-zA-Z_][a-zA-Z0-9_]*', Name.Variable),
             ('[a-zA-Z_][a-zA-Z0-9_]*', Name.Other),
             (r"[0-9](\.[0-9]*)?(eE[+-][0-9])?[flFLdD]?|"
              r"0[xX][0-9a-fA-F]+[Ll]?", Number),
@@ -481,9 +589,10 @@ class PhpLexer(RegexLexer):
 
     def analyse_text(text):
         rv = 0.0
-        for tag in '<?php', '?>':
-            if tag in text:
-                rv += 0.2
+        if re.search(r'<\?(?!xml)', text):
+            rv += 0.3
+        if '?>' in text:
+            rv += 0.1
         return rv
 
 
@@ -565,3 +674,50 @@ class XsltLexer(XmlLexer):
                 yield index, Keyword, value
             else:
                 yield index, token, value
+
+    def analyse_text(text):
+        if looks_like_xml(text) and '<xsl' in text:
+            return 0.8
+
+
+
+class MxmlLexer(RegexLexer):
+    """
+    For MXML markup.
+    Nested AS3 in <script> tags is highlighted by the appropriate lexer.
+    """
+    flags = re.MULTILINE | re.DOTALL
+    name = 'MXML'
+    aliases = ['mxml']
+    filenames = ['*.mxml']
+    mimetimes = ['text/xml', 'application/xml']
+
+    tokens = {
+            'root': [
+                ('[^<&]+', Text),
+                (r'&\S*?;', Name.Entity),
+                (r'(\<\!\[CDATA\[)(.*?)(\]\]\>)',
+                 bygroups(String, using(ActionScript3Lexer), String)),
+                ('<!--', Comment, 'comment'),
+                (r'<\?.*?\?>', Comment.Preproc),
+                ('<![^>]*>', Comment.Preproc),
+                (r'<\s*[a-zA-Z0-9:._-]+', Name.Tag, 'tag'),
+                (r'<\s*/\s*[a-zA-Z0-9:._-]+\s*>', Name.Tag),
+            ],
+            'comment': [
+                ('[^-]+', Comment),
+                ('-->', Comment, '#pop'),
+                ('-', Comment),
+            ],
+            'tag': [
+                (r'\s+', Text),
+                (r'[a-zA-Z0-9_.:-]+\s*=', Name.Attribute, 'attr'),
+                (r'/?\s*>', Name.Tag, '#pop'),
+            ],
+            'attr': [
+                ('\s+', Text),
+                ('".*?"', String, '#pop'),
+                ("'.*?'", String, '#pop'),
+                (r'[^\s>]+', String, '#pop'),
+            ],
+        }

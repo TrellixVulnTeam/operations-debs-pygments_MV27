@@ -3,7 +3,7 @@
     The Pygments reStructuredText directive
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    This fragment is a Docutils_ 0.4 directive that renders source code
+    This fragment is a Docutils_ 0.5 directive that renders source code
     (to HTML only, currently) via Pygments.
 
     To use it, adjust the options below and copy the code into a module
@@ -31,8 +31,8 @@
     .. _directive documentation:
        http://docutils.sourceforge.net/docs/howto/rst-directives.html
 
-    :copyright: 2007 by Georg Brandl.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 # Options
@@ -53,25 +53,31 @@ VARIANTS = {
 
 
 from docutils import nodes
-from docutils.parsers.rst import directives
+from docutils.parsers.rst import directives, Directive
 
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, TextLexer
 
-def pygments_directive(name, arguments, options, content, lineno,
-                       content_offset, block_text, state, state_machine):
-    try:
-        lexer = get_lexer_by_name(arguments[0])
-    except ValueError:
-        # no lexer found - use the text one instead of an exception
-        lexer = TextLexer()
-    # take an arbitrary option if more than one is given
-    formatter = options and VARIANTS[options.keys()[0]] or DEFAULT
-    parsed = highlight(u'\n'.join(content), lexer, formatter)
-    return [nodes.raw('', parsed, format='html')]
+class Pygments(Directive):
+    """ Source code syntax hightlighting.
+    """
+    required_arguments = 1
+    optional_arguments = 0
+    final_argument_whitespace = True
+    option_spec = dict([(key, directives.flag) for key in VARIANTS])
+    has_content = True
 
-pygments_directive.arguments = (1, 0, 1)
-pygments_directive.content = 1
-pygments_directive.options = dict([(key, directives.flag) for key in VARIANTS])
+    def run(self):
+        self.assert_has_content()
+        try:
+            lexer = get_lexer_by_name(self.arguments[0])
+        except ValueError:
+            # no lexer found - use the text one instead of an exception
+            lexer = TextLexer()
+        # take an arbitrary option if more than one is given
+        formatter = self.options and VARIANTS[self.options.keys()[0]] or DEFAULT
+        parsed = highlight(u'\n'.join(self.content), lexer, formatter)
+        return [nodes.raw('', parsed, format='html')]
 
-directives.register_directive('sourcecode', pygments_directive)
+directives.register_directive('sourcecode', Pygments)
+

@@ -3,14 +3,13 @@ Tue, 24 Oct 2006 17:54:36 +0200.
 
 It was downloaded from http://pygments.pocoo.org/download/
 
-Upstream Author: Georg Brandl <g.brandl@gmx.net>
+Upstream Author: Georg Brandl <georg@python.org>
 
-Copyright: 2006-2008 by Georg Brandl, Armin Ronacher, Lukas Meuser and others
-(see AUTHORS file)
+Copyright: 2006-2009 by the Pygments team, see AUTHORS
 
 License:
 
- Copyright (c) 2006 by the respective authors (see AUTHORS file).
+ Copyright (c) 2006-2009 by the respective authors (see AUTHORS file).
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -25,10 +24,6 @@ License:
        disclaimer in the documentation and/or other materials provided
        with the distribution.
  
-     * The names of the contributors may not be used to endorse or
-       promote products derived from this software without specific
-       prior written permission.
- 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -41,5 +36,12 @@ License:
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-The Debian packaging is (C) 2006-2008, Piotr Ożarowski <piotr@debian.org> and
-is licensed under the same licence as pygments.
+
+File with different copyright holders:
+
+ scripts/vim2pygments.py:
+	2006 by Armin Ronacher.
+
+The Debian packaging is © 2006-2009, Piotr Ożarowski <piotr@debian.org> and
+is licensed under the same licence as Pygments.
+
