@@ -1,3 +1,9 @@
+pygments (1.1.1+dfsg-2) unstable; urgency=low
+
+  * Add --prefix=/usr (Python >= 2.6 needs it)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Fri, 13 Nov 2009 23:04:50 +0100
+
 pygments (1.1.1+dfsg-1) unstable; urgency=low
 
   * New upstream release
