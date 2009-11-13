@@ -24,7 +24,7 @@ build-indep:
 install: build $(PYVERS:%=install-python%-stamp)
 install-python%-stamp:
 	python$* setup.py install --single-version-externally-managed \
-		--root debian/python-pygments
+		--root debian/python-pygments --prefix=/usr
 	touch $@
 
 binary-indep: build install
