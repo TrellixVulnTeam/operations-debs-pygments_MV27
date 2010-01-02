@@ -1,3 +1,10 @@
+pygments (1.2.1+dfsg-1) unstable; urgency=low
+
+  * New upstream release
+    - minimum required Python version bumped to 2.4
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sat, 02 Jan 2010 21:40:38 +0100
+
 pygments (1.1.1+dfsg-2) unstable; urgency=low
 
   * Add --prefix=/usr (Python >= 2.6 needs it)
