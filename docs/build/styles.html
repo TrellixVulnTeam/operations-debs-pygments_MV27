@@ -265,7 +265,7 @@ define some styles:</p>
 </pre></div>
 <p>That's it. There are just a few rules. When you define a style for <cite>Name</cite>
 the style automatically also affects <cite>Name.Function</cite> and so on. If you
-defined <tt class="docutils literal"><span class="pre">'bold'</span></tt> and you don't want boldface for a subtoken use <tt class="docutils literal"><span class="pre">'nobold'</span></tt>.</p>
+defined <tt class="docutils literal">'bold'</tt> and you don't want boldface for a subtoken use <tt class="docutils literal">'nobold'</tt>.</p>
 <p>(Philosophy: the styles aren't written in CSS syntax since this way
 they can be used for a variety of formatters.)</p>
 <p><cite>default_style</cite> is the style inherited by all token types.</p>
@@ -275,8 +275,8 @@ they can be used for a variety of formatters.)</p>
 <li>or drop it into the <cite>styles</cite> subpackage of your Pygments distribution one style
 class per style, where the file name is the style name and the class name is
 <cite>StylenameClass</cite>. For example, if your style should be called
-<tt class="docutils literal"><span class="pre">&quot;mondrian&quot;</span></tt>, name the class <cite>MondrianStyle</cite>, put it into the file
-<tt class="docutils literal"><span class="pre">mondrian.py</span></tt> and this file into the <tt class="docutils literal"><span class="pre">pygments.styles</span></tt> subpackage
+<tt class="docutils literal">&quot;mondrian&quot;</tt>, name the class <cite>MondrianStyle</cite>, put it into the file
+<tt class="docutils literal">mondrian.py</tt> and this file into the <tt class="docutils literal">pygments.styles</tt> subpackage
 directory.</li>
 </ul>
 </div>
@@ -284,32 +284,32 @@ directory.</li>
 <h3>Style Rules</h3>
 <p>Here a small overview of all allowed styles:</p>
 <dl class="docutils">
-<dt><tt class="docutils literal"><span class="pre">bold</span></tt></dt>
+<dt><tt class="docutils literal">bold</tt></dt>
 <dd>render text as bold</dd>
-<dt><tt class="docutils literal"><span class="pre">nobold</span></tt></dt>
+<dt><tt class="docutils literal">nobold</tt></dt>
 <dd>don't render text as bold (to prevent subtokens behing highlighted bold)</dd>
-<dt><tt class="docutils literal"><span class="pre">italic</span></tt></dt>
+<dt><tt class="docutils literal">italic</tt></dt>
 <dd>render text italic</dd>
-<dt><tt class="docutils literal"><span class="pre">noitalic</span></tt></dt>
+<dt><tt class="docutils literal">noitalic</tt></dt>
 <dd>don't render text as italic</dd>
-<dt><tt class="docutils literal"><span class="pre">underline</span></tt></dt>
+<dt><tt class="docutils literal">underline</tt></dt>
 <dd>render text underlined</dd>
-<dt><tt class="docutils literal"><span class="pre">nounderline</span></tt></dt>
+<dt><tt class="docutils literal">nounderline</tt></dt>
 <dd>don't render text underlined</dd>
-<dt><tt class="docutils literal"><span class="pre">bg:</span></tt></dt>
+<dt><tt class="docutils literal">bg:</tt></dt>
 <dd>transparent background</dd>
 <dt><tt class="docutils literal"><span class="pre">bg:#000000</span></tt></dt>
 <dd>background color (black)</dd>
-<dt><tt class="docutils literal"><span class="pre">border:</span></tt></dt>
+<dt><tt class="docutils literal">border:</tt></dt>
 <dd>no border</dd>
 <dt><tt class="docutils literal"><span class="pre">border:#ffffff</span></tt></dt>
 <dd>border color (white)</dd>
-<dt><tt class="docutils literal"><span class="pre">#ff0000</span></tt></dt>
+<dt><tt class="docutils literal">#ff0000</tt></dt>
 <dd>text color (red)</dd>
-<dt><tt class="docutils literal"><span class="pre">noinherit</span></tt></dt>
+<dt><tt class="docutils literal">noinherit</tt></dt>
 <dd>don't inherit styles from supertoken</dd>
 </dl>
-<p>Note that there may not be a space between <tt class="docutils literal"><span class="pre">bg:</span></tt> and the color value
+<p>Note that there may not be a space between <tt class="docutils literal">bg:</tt> and the color value
 since the style definition string is split at whitespace.
 Also, using named colors is not allowed since the supported color names
 vary for different formatters.</p>
@@ -336,6 +336,6 @@ a way to iterate over all styles:</p>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:58.982703
+<!-- generated on: 2010-01-02 15:15:52.399785
      file id: styles -->
 </html>

@@ -3,6 +3,54 @@ Pygments changelog
 
 Issue numbers refer to the tracker at http://dev.pocoo.org/projects/pygments/.
 
+Version 1.2.1
+-------------
+(bugfix release, released Jan 02, 2010)
+
+* Fix mishandling of an ellipsis in place of the frames in a Python
+  console traceback, resulting in clobbered output.
+
+
+Version 1.2
+-----------
+(codename Neujahr, released Jan 01, 2010)
+
+- Dropped Python 2.3 compatibility.
+
+- Lexers added:
+
+  * Asymptote
+  * Go
+  * Gherkin (Cucumber)
+  * CMake
+  * OOC
+
+- Added options for rendering LaTeX in source code comments in the
+  LaTeX formatter (#461).
+
+- Updated the Logtalk lexer.
+
+- Added `line_number_start` option to image formatter (#456).
+
+- Added `hl_lines` and `hl_color` options to image formatter (#457).
+
+- Fixed the HtmlFormatter's handling of noclasses=True to not output any
+  classes (#427).
+
+- Added the Monokai style (#453).
+
+- Fixed LLVM lexer identifier syntax and added new keywords (#442).
+
+- Fixed the PythonTracebackLexer to handle non-traceback data in header or
+  trailer, and support more partial tracebacks that start on line 2 (#437).
+
+- Fixed the CLexer to not highlight ternary statements as labels.
+
+- Fixed lexing of some Ruby quoting peculiarities (#460).
+
+- A few ASM lexer fixes (#450).
+
+
 Version 1.1.1
 -------------
 (bugfix release, released Sep 15, 2009)

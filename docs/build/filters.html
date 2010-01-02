@@ -242,6 +242,97 @@ iterable for all known filters.</p>
 <p>If you want to write your own filter, have a look at <a class="reference external" href="./filterdevelopment.html">Write your own filter</a>.</p>
 <div class="section" id="builtin-filters">
 <h3>Builtin Filters</h3>
+<p><cite>RaiseOnErrorTokenFilter</cite></p>
+<blockquote>
+<p>Raise an exception when the lexer generates an error token.</p>
+<p>Options accepted:</p>
+<dl class="docutils">
+<dt><cite>excclass</cite> <span class="classifier-delimiter">:</span> <span class="classifier">Exception class</span></dt>
+<dd>The exception class to raise.
+The default is <cite>pygments.filters.ErrorToken</cite>.</dd>
+</dl>
+<p><em>New in Pygments 0.8.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Name:</th><td class="field-body">raiseonerror</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>VisibleWhitespaceFilter</cite></p>
+<blockquote>
+<p>Convert tabs, newlines and/or spaces to visible characters.</p>
+<p>Options accepted:</p>
+<dl class="docutils">
+<dt><cite>spaces</cite> <span class="classifier-delimiter">:</span> <span class="classifier">string or bool</span></dt>
+<dd>If this is a one-character string, spaces will be replaces by this string.
+If it is another true value, spaces will be replaced by <tt class="docutils literal">·</tt> (unicode
+MIDDLE DOT).  If it is a false value, spaces will not be replaced.  The
+default is <tt class="docutils literal">False</tt>.</dd>
+<dt><cite>tabs</cite> <span class="classifier-delimiter">:</span> <span class="classifier">string or bool</span></dt>
+<dd>The same as for <cite>spaces</cite>, but the default replacement character is <tt class="docutils literal">»</tt>
+(unicode RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK).  The default value
+is <tt class="docutils literal">False</tt>.  Note: this will not work if the <cite>tabsize</cite> option for the
+lexer is nonzero, as tabs will already have been expanded then.</dd>
+<dt><cite>tabsize</cite> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>If tabs are to be replaced by this filter (see the <cite>tabs</cite> option), this
+is the total number of characters that a tab should be expanded to.
+The default is <tt class="docutils literal">8</tt>.</dd>
+<dt><cite>newlines</cite> <span class="classifier-delimiter">:</span> <span class="classifier">string or bool</span></dt>
+<dd>The same as for <cite>spaces</cite>, but the default replacement character is <tt class="docutils literal">¶</tt>
+(unicode PILCROW SIGN).  The default value is <tt class="docutils literal">False</tt>.</dd>
+<dt><cite>wstokentype</cite> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd>If true, give whitespace the special <cite>Whitespace</cite> token type.  This allows
+styling the visible whitespace differently (e.g. greyed out), but it can
+disrupt background colors.  The default is <tt class="docutils literal">True</tt>.</dd>
+</dl>
+<p><em>New in Pygments 0.8.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Name:</th><td class="field-body">whitespace</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>TokenMergeFilter</cite></p>
+<blockquote>
+<p>Merges consecutive tokens with the same token type in the output stream of a
+lexer.</p>
+<p><em>New in Pygments 1.2.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Name:</th><td class="field-body">tokenmerge</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>GobbleFilter</cite></p>
+<blockquote>
+<p>Gobbles source code lines (eats initial characters).</p>
+<p>This filter drops the first <tt class="docutils literal">n</tt> characters off every line of code.  This
+may be useful when the source code fed to the lexer is indented by a fixed
+amount of space that isn't desired in the output.</p>
+<p>Options accepted:</p>
+<dl class="docutils">
+<dt><cite>n</cite> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>The number of characters to gobble.</dd>
+</dl>
+<p><em>New in Pygments 1.2.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Name:</th><td class="field-body">gobble</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>NameHighlightFilter</cite></p>
 <blockquote>
 <p>Highlight a normal Name token with a different token type.</p>
@@ -280,32 +371,13 @@ used for highlighting the strings in <cite>names</cite>.  The default is
 <dl class="docutils">
 <dt><cite>codetags</cite> <span class="classifier-delimiter">:</span> <span class="classifier">list of strings</span></dt>
 <dd>A list of strings that are flagged as code tags.  The default is to
-highlight <tt class="docutils literal"><span class="pre">XXX</span></tt>, <tt class="docutils literal"><span class="pre">TODO</span></tt>, <tt class="docutils literal"><span class="pre">BUG</span></tt> and <tt class="docutils literal"><span class="pre">NOTE</span></tt>.</dd>
+highlight <tt class="docutils literal">XXX</tt>, <tt class="docutils literal">TODO</tt>, <tt class="docutils literal">BUG</tt> and <tt class="docutils literal">NOTE</tt>.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Name:</th><td class="field-body">codetagify</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-<p><cite>RaiseOnErrorTokenFilter</cite></p>
-<blockquote>
-<p>Raise an exception when the lexer generates an error token.</p>
-<p>Options accepted:</p>
-<dl class="docutils">
-<dt><cite>excclass</cite> <span class="classifier-delimiter">:</span> <span class="classifier">Exception class</span></dt>
-<dd>The exception class to raise.
-The default is <cite>pygments.filters.ErrorToken</cite>.</dd>
-</dl>
-<p><em>New in Pygments 0.8.</em></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Name:</th><td class="field-body">raiseonerror</td>
 </tr>
 </tbody>
 </table>
@@ -319,8 +391,8 @@ code to your styleguide.</p>
 <p>Options accepted:</p>
 <dl class="docutils">
 <dt><cite>case</cite> <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd>The casing to convert keywords to. Must be one of <tt class="docutils literal"><span class="pre">'lower'</span></tt>,
-<tt class="docutils literal"><span class="pre">'upper'</span></tt> or <tt class="docutils literal"><span class="pre">'capitalize'</span></tt>.  The default is <tt class="docutils literal"><span class="pre">'lower'</span></tt>.</dd>
+<dd>The casing to convert keywords to. Must be one of <tt class="docutils literal">'lower'</tt>,
+<tt class="docutils literal">'upper'</tt> or <tt class="docutils literal">'capitalize'</tt>.  The default is <tt class="docutils literal">'lower'</tt>.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -331,47 +403,10 @@ code to your styleguide.</p>
 </tbody>
 </table>
 </blockquote>
-<p><cite>VisibleWhitespaceFilter</cite></p>
-<blockquote>
-<p>Convert tabs, newlines and/or spaces to visible characters.</p>
-<p>Options accepted:</p>
-<dl class="docutils">
-<dt><cite>spaces</cite> <span class="classifier-delimiter">:</span> <span class="classifier">string or bool</span></dt>
-<dd>If this is a one-character string, spaces will be replaces by this string.
-If it is another true value, spaces will be replaced by <tt class="docutils literal"><span class="pre">·</span></tt> (unicode
-MIDDLE DOT).  If it is a false value, spaces will not be replaced.  The
-default is <tt class="docutils literal"><span class="pre">False</span></tt>.</dd>
-<dt><cite>tabs</cite> <span class="classifier-delimiter">:</span> <span class="classifier">string or bool</span></dt>
-<dd>The same as for <cite>spaces</cite>, but the default replacement character is <tt class="docutils literal"><span class="pre">»</span></tt>
-(unicode RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK).  The default value
-is <tt class="docutils literal"><span class="pre">False</span></tt>.  Note: this will not work if the <cite>tabsize</cite> option for the
-lexer is nonzero, as tabs will already have been expanded then.</dd>
-<dt><cite>tabsize</cite> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>If tabs are to be replaced by this filter (see the <cite>tabs</cite> option), this
-is the total number of characters that a tab should be expanded to.
-The default is <tt class="docutils literal"><span class="pre">8</span></tt>.</dd>
-<dt><cite>newlines</cite> <span class="classifier-delimiter">:</span> <span class="classifier">string or bool</span></dt>
-<dd>The same as for <cite>spaces</cite>, but the default replacement character is <tt class="docutils literal"><span class="pre">¶</span></tt>
-(unicode PILCROW SIGN).  The default value is <tt class="docutils literal"><span class="pre">False</span></tt>.</dd>
-<dt><cite>wstokentype</cite> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>If true, give whitespace the special <cite>Whitespace</cite> token type.  This allows
-styling the visible whitespace differently (e.g. greyed out), but it can
-disrupt background colors.  The default is <tt class="docutils literal"><span class="pre">True</span></tt>.</dd>
-</dl>
-<p><em>New in Pygments 0.8.</em></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Name:</th><td class="field-body">whitespace</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
 </div>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:52.182079
+<!-- generated on: 2010-01-02 15:15:48.454052
      file id: filters -->
 </html>

@@ -213,6 +213,10 @@ div.toc h2 {
         <h2>Contents</h2>
         <ul class="contents">
         
+          <li><a href="#version-1-2-1">Version 1.2.1</a></li>
+        
+          <li><a href="#version-1-2">Version 1.2</a></li>
+        
           <li><a href="#version-1-1-1">Version 1.1.1</a></li>
         
           <li><a href="#version-1-1">Version 1.1</a></li>
@@ -245,6 +249,43 @@ div.toc h2 {
       </div>
     
     <p>Issue numbers refer to the tracker at <a class="reference external" href="http://dev.pocoo.org/projects/pygments/">http://dev.pocoo.org/projects/pygments/</a>.</p>
+<div class="section" id="version-1-2-1">
+<h3>Version 1.2.1</h3>
+<p>(bugfix release, released Jan 02, 2010)</p>
+<ul class="simple">
+<li>Fix mishandling of an ellipsis in place of the frames in a Python
+console traceback, resulting in clobbered output.</li>
+</ul>
+</div>
+<div class="section" id="version-1-2">
+<h3>Version 1.2</h3>
+<p>(codename Neujahr, released Jan 01, 2010)</p>
+<ul class="simple">
+<li>Dropped Python 2.3 compatibility.</li>
+<li>Lexers added:<ul>
+<li>Asymptote</li>
+<li>Go</li>
+<li>Gherkin (Cucumber)</li>
+<li>CMake</li>
+<li>OOC</li>
+</ul>
+</li>
+<li>Added options for rendering LaTeX in source code comments in the
+LaTeX formatter (#461).</li>
+<li>Updated the Logtalk lexer.</li>
+<li>Added <cite>line_number_start</cite> option to image formatter (#456).</li>
+<li>Added <cite>hl_lines</cite> and <cite>hl_color</cite> options to image formatter (#457).</li>
+<li>Fixed the HtmlFormatter's handling of noclasses=True to not output any
+classes (#427).</li>
+<li>Added the Monokai style (#453).</li>
+<li>Fixed LLVM lexer identifier syntax and added new keywords (#442).</li>
+<li>Fixed the PythonTracebackLexer to handle non-traceback data in header or
+trailer, and support more partial tracebacks that start on line 2 (#437).</li>
+<li>Fixed the CLexer to not highlight ternary statements as labels.</li>
+<li>Fixed lexing of some Ruby quoting peculiarities (#460).</li>
+<li>A few ASM lexer fixes (#450).</li>
+</ul>
+</div>
 <div class="section" id="version-1-1-1">
 <h3>Version 1.1.1</h3>
 <p>(bugfix release, released Sep 15, 2009)</p>
@@ -309,16 +350,16 @@ and the AS3 lexer (#389).</li>
 <h3>Version 1.0</h3>
 <p>(codename Dreiundzwanzig, released Nov 23, 2008)</p>
 <ul>
-<li><p class="first">Don't use join(splitlines()) when converting newlines to <tt class="docutils literal"><span class="pre">\n</span></tt>,
+<li><p class="first">Don't use join(splitlines()) when converting newlines to <tt class="docutils literal">\n</tt>,
 because that doesn't keep all newlines at the end when the
-<tt class="docutils literal"><span class="pre">stripnl</span></tt> lexer option is False.</p>
+<tt class="docutils literal">stripnl</tt> lexer option is False.</p>
 </li>
 <li><p class="first">Add <tt class="docutils literal"><span class="pre">-N</span></tt> option to command-line interface to get a lexer name
 for a given filename.</p>
 </li>
 <li><p class="first">Add Tango style, written by Andre Roberge for the Crunchy project.</p>
 </li>
-<li><p class="first">Add Python3TracebackLexer and <tt class="docutils literal"><span class="pre">python3</span></tt> option to
+<li><p class="first">Add Python3TracebackLexer and <tt class="docutils literal">python3</tt> option to
 PythonConsoleLexer.</p>
 </li>
 <li><p class="first">Fix a few bugs in the Haskell lexer.</p>
@@ -391,7 +432,7 @@ whitespace.</li>
 <li>Vim lexer now highlights hex colors properly and knows a couple
 more keywords.</li>
 <li>Irc logs lexer now handles xchat's default time format (#340) and
-correctly highlights lines ending in <tt class="docutils literal"><span class="pre">&gt;</span></tt>.</li>
+correctly highlights lines ending in <tt class="docutils literal">&gt;</tt>.</li>
 <li>Support more delimiters for perl regular expressions (#258).</li>
 <li>ObjectiveC lexer now supports 2.0 features.</li>
 </ul>
@@ -400,18 +441,18 @@ correctly highlights lines ending in <tt class="docutils literal"><span class="p
 <li>Updated markdown processor to Markdown 1.7.</li>
 <li>Support roman/sans/mono style defs and use them in the LaTeX
 formatter.</li>
-<li>The RawTokenFormatter is no longer registered to <tt class="docutils literal"><span class="pre">*.raw</span></tt> and it's
+<li>The RawTokenFormatter is no longer registered to <tt class="docutils literal">*.raw</tt> and it's
 documented that tokenization with this lexer may raise exceptions.</li>
-<li>New option <tt class="docutils literal"><span class="pre">hl_lines</span></tt> to HTML formatter, to highlight certain
+<li>New option <tt class="docutils literal">hl_lines</tt> to HTML formatter, to highlight certain
 lines.</li>
-<li>New option <tt class="docutils literal"><span class="pre">prestyles</span></tt> to HTML formatter.</li>
+<li>New option <tt class="docutils literal">prestyles</tt> to HTML formatter.</li>
 <li>New option <em>-g</em> to pygmentize, to allow lexer guessing based on
 filetext (can be slowish, so file extensions are still checked
 first).</li>
-<li><tt class="docutils literal"><span class="pre">guess_lexer()</span></tt> now makes its decision much faster due to a cache
+<li><tt class="docutils literal">guess_lexer()</tt> now makes its decision much faster due to a cache
 of whether data is xml-like (a check which is used in several
-versions of <tt class="docutils literal"><span class="pre">analyse_text()</span></tt>.  Several lexers also have more
-accurate <tt class="docutils literal"><span class="pre">analyse_text()</span></tt> now.</li>
+versions of <tt class="docutils literal">analyse_text()</tt>.  Several lexers also have more
+accurate <tt class="docutils literal">analyse_text()</tt> now.</li>
 </ul>
 </div>
 <div class="section" id="version-0-10">
@@ -437,7 +478,7 @@ accurate <tt class="docutils literal"><span class="pre">analyse_text()</span></t
 <li>In the LatexFormatter, the <em>commandprefix</em> option is now by default
 'PY' instead of 'C', since the latter resulted in several collisions
 with other packages.  Also, the special meaning of the <em>arg</em>
-argument to <tt class="docutils literal"><span class="pre">get_style_defs()</span></tt> was removed.</li>
+argument to <tt class="docutils literal">get_style_defs()</tt> was removed.</li>
 <li>Added ImageFormatter, to format code as PNG, JPG, GIF or BMP.
 (Needs the Python Imaging Library.)</li>
 <li>Support doc comments in the PHP lexer.</li>
@@ -489,7 +530,7 @@ don't give an encoding option.</li>
 give options whose values contain commas or equals signs.</li>
 <li>Added 256-color terminal formatter.</li>
 <li>Added an experimental SVG formatter.</li>
-<li>Added the <tt class="docutils literal"><span class="pre">lineanchors</span></tt> option to the HTML formatter, thanks to
+<li>Added the <tt class="docutils literal">lineanchors</tt> option to the HTML formatter, thanks to
 Ian Charnas for the idea.</li>
 <li>Gave the line numbers table a CSS class in the HTML formatter.</li>
 <li>Added a Vim 7-like style.</li>
@@ -520,7 +561,7 @@ Ian Charnas for the idea.</li>
 </ul>
 </li>
 <li>The HTML formatter now has a second line-numbers mode in which it
-will just integrate the numbers in the same <tt class="docutils literal"><span class="pre">&lt;pre&gt;</span></tt> tag as the
+will just integrate the numbers in the same <tt class="docutils literal">&lt;pre&gt;</tt> tag as the
 code.</li>
 <li>The <cite>CSharpLexer</cite> now is Unicode-aware, which means that it has an
 option that can be set so that it correctly lexes Unicode
@@ -628,7 +669,7 @@ argument to generate CSS with multiple prefixes.</li>
 <li>Support for guessing input encoding added.</li>
 <li>Encoding support added: all processing is now done with Unicode
 strings, input and output are converted from and optionally to byte
-strings (see the <tt class="docutils literal"><span class="pre">encoding</span></tt> option of lexers and formatters).</li>
+strings (see the <tt class="docutils literal">encoding</tt> option of lexers and formatters).</li>
 <li>Some improvements in the C(++) lexers handling comments and line
 continuations.</li>
 </ul>
@@ -637,7 +678,7 @@ continuations.</li>
 <h3>Version 0.5.1</h3>
 <p>(released Oct 30, 2006)</p>
 <ul class="simple">
-<li>Fixed traceback in <tt class="docutils literal"><span class="pre">pygmentize</span> <span class="pre">-L</span></tt> (thanks to Piotr Ozarowski).</li>
+<li>Fixed traceback in <tt class="docutils literal">pygmentize <span class="pre">-L</span></tt> (thanks to Piotr Ozarowski).</li>
 </ul>
 </div>
 <div class="section" id="version-0-5">
@@ -650,6 +691,6 @@ continuations.</li>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:50.966655
+<!-- generated on: 2010-01-02 15:15:47.950321
      file id: changelog -->
 </html>
