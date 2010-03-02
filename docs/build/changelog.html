@@ -213,6 +213,8 @@ div.toc h2 {
         <h2>Contents</h2>
         <ul class="contents">
         
+          <li><a href="#version-1-3">Version 1.3</a></li>
+        
           <li><a href="#version-1-2-2">Version 1.2.2</a></li>
         
           <li><a href="#version-1-2-1">Version 1.2.1</a></li>
@@ -251,6 +253,36 @@ div.toc h2 {
       </div>
     
     <p>Issue numbers refer to the tracker at <a class="reference external" href="http://dev.pocoo.org/projects/pygments/">http://dev.pocoo.org/projects/pygments/</a>.</p>
+<div class="section" id="version-1-3">
+<h3>Version 1.3</h3>
+<p>(codename Schneeglöckchen, released Mar 01, 2010)</p>
+<ul class="simple">
+<li>Added the <tt class="docutils literal">ensurenl</tt> lexer option, which can be used to suppress the
+automatic addition of a newline to the lexer input.</li>
+<li>Lexers added:<ul>
+<li>Ada</li>
+<li>Coldfusion</li>
+<li>Modula-2</li>
+<li>haXe</li>
+<li>R console</li>
+<li>Objective-J</li>
+<li>Haml and Sass</li>
+<li>CoffeeScript</li>
+</ul>
+</li>
+<li>Enhanced reStructuredText highlighting.</li>
+<li>Added support for PHP 5.3 namespaces in the PHP lexer.</li>
+<li>Added a bash completion script for <cite>pygmentize</cite>, to the external/
+directory (#466).</li>
+<li>Fixed a bug in <cite>do_insertions()</cite> used for multi-lexer languages.</li>
+<li>Fixed a Ruby regex highlighting bug (#476).</li>
+<li>Fixed regex highlighting bugs in Perl lexer (#258).</li>
+<li>Add small enhancements to the C lexer (#467) and Bash lexer (#469).</li>
+<li>Small fixes for the Tcl, Debian control file, Nginx config,
+Smalltalk, Objective-C, Clojure, Lua lexers.</li>
+<li>Gherkin lexer: Fixed single apostrophe bug and added new i18n keywords.</li>
+</ul>
+</div>
 <div class="section" id="version-1-2-2">
 <h3>Version 1.2.2</h3>
 <p>(bugfix release, released Jan 02, 2010)</p>
@@ -278,7 +310,10 @@ console traceback, resulting in clobbered output.</li>
 <li>Go</li>
 <li>Gherkin (Cucumber)</li>
 <li>CMake</li>
-<li>OOC</li>
+<li>Ooc</li>
+<li>Coldfusion</li>
+<li>haXe</li>
+<li>R console</li>
 </ul>
 </li>
 <li>Added options for rendering LaTeX in source code comments in the
@@ -702,6 +737,6 @@ continuations.</li>
 
   </div>
 </body>
-<!-- generated on: 2010-01-02 22:27:11.743625
+<!-- generated on: 2010-03-01 21:18:21.373497
      file id: changelog -->
 </html>
