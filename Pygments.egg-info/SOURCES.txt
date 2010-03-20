@@ -5,6 +5,7 @@ MANIFEST.in
 Makefile
 TODO
 ez_setup.py
+pygmentize
 setup.cfg
 setup.py
 Pygments.egg-info/PKG-INFO

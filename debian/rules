@@ -41,6 +41,8 @@ binary-indep: build install
 	dh_installdocs -i
 	dh_installman -i
 	dh_install -i debian/pygmentize /usr/bin/
+	# add jwilk's hack for one PKG-INFO file (until I will figure out why it changes)
+	find debian/ -name PKG-INFO | tail -n +2 | xargs -r -n1 cp -vf $(shell find debian/ -name PKG-INFO | head -n 1)
 	dh_pysupport -i
 	dh_compress -i -X.py
 	dh_fixperms -i
