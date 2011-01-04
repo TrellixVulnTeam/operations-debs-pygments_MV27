@@ -223,6 +223,8 @@ div.toc h2 {
         
           <li><a href="#lexers-for-functional-languages">Lexers for functional languages</a></li>
         
+          <li><a href="#lexers-for-hardware-descriptor-languages">Lexers for hardware descriptor languages</a></li>
+        
           <li><a href="#lexers-for-math-languages">Lexers for math languages</a></li>
         
           <li><a href="#lexers-for-other-languages">Lexers for other languages</a></li>
@@ -251,6 +253,10 @@ div.toc h2 {
 <dt><cite>stripall</cite></dt>
 <dd>Strip all leading and trailing whitespace from the input (default:
 <tt class="docutils literal">False</tt>).</dd>
+<dt><cite>ensurenl</cite></dt>
+<dd>Make sure that the input ends with a newline (default: <tt class="docutils literal">True</tt>).  This
+is required for some lexers that consume input linewise.
+<em>New in Pygments 1.3.</em></dd>
 <dt><cite>tabsize</cite></dt>
 <dd>If given and greater than 0, expand tabs in the input (default: <tt class="docutils literal">0</tt>).</dd>
 <dt><cite>encoding</cite></dt>
@@ -286,6 +292,23 @@ guess the encoding of the input.</p>
 </tbody>
 </table>
 </blockquote>
+<p><cite>FactorLexer</cite></p>
+<blockquote>
+<p>Lexer for the <a class="reference external" href="http://factorcode.org">Factor</a> language.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">factor</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.factor</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-factor</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>IoLexer</cite></p>
 <blockquote>
 <p>For <a class="reference external" href="http://iolanguage.com/">Io</a> (a small, prototype-based
@@ -300,6 +323,24 @@ programming language) source.</p>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.io</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-iosrc</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>IokeLexer</cite></p>
+<blockquote>
+<p>For <a class="reference external" href="http://ioke.org/">Ioke</a> (a strongly typed, dynamic,
+prototype based programming language) source.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">ioke, ik</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ik</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-iokesrc</td>
 </tr>
 </tbody>
 </table>
@@ -329,7 +370,7 @@ should not be highlighted. By default all modules are highlighted.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Short names:</th><td class="field-body">lua</td>
 </tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.lua</td>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.lua, *.wlua</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-lua, application/x-lua</td>
 </tr>
@@ -411,8 +452,8 @@ language) source.</p>
 <span class="go">foo</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span>
 <span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">&lt;module&gt;</span>
-<span class="nc">ZeroDivisionError</span>: <span class="n-Identifier">integer division or modulo by zero</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ZeroDivisionError</span>: <span class="n">integer division or modulo by zero</span>
 </pre></div>
 <p>Additional options:</p>
 <dl class="docutils">
@@ -495,9 +536,9 @@ language) source.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Short names:</th><td class="field-body">rb, ruby</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">rb, ruby, duby</td>
 </tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.rb, *.rbw, Rakefile, *.rake, *.gemspec, *.rbx</td>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.rb, *.rbw, Rakefile, *.rake, *.gemspec, *.rbx, *.duby</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-ruby, application/x-ruby</td>
 </tr>
@@ -656,6 +697,23 @@ language) source.</p>
 </tbody>
 </table>
 </blockquote>
+<p><cite>BlitzMaxLexer</cite></p>
+<blockquote>
+<p>For <a class="reference external" href="http://blitzbasic.com">BlitzMax</a> source code.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">blitzmax, bmax</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.bmx</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-bmx</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>CLexer</cite></p>
 <blockquote>
 <p>For C source code with preprocessor directives.</p>
@@ -762,7 +820,7 @@ Default is to consider all of them builtin.</dd>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Short names:</th><td class="field-body">dylan</td>
 </tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.dylan</td>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.dylan, *.dyl</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-dylan</td>
 </tr>
@@ -1203,6 +1261,26 @@ at <a class="reference external" href="http://paste.lisp.org/">http://paste.lisp
 </table>
 </blockquote>
 </div>
+<div class="section" id="lexers-for-hardware-descriptor-languages">
+<h3>Lexers for hardware descriptor languages</h3>
+<p><cite>VerilogLexer</cite></p>
+<blockquote>
+<p>For verilog source code with preprocessor directives.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">v</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.v, *.sv</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-verilog</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</div>
 <div class="section" id="lexers-for-math-languages">
 <h3>Lexers for math languages</h3>
 <p><cite>MatlabLexer</cite></p>
@@ -1364,6 +1442,23 @@ Contributed by Andreas Amann &lt;<a class="reference external" href="mailto:aama
 </tbody>
 </table>
 </blockquote>
+<p><cite>AutohotkeyLexer</cite></p>
+<blockquote>
+<p>For <a class="reference external" href="http://www.autohotkey.com/">autohotkey</a> source code.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">ahk</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ahk, *.ahkl</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-autohotkey</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>BashLexer</cite></p>
 <blockquote>
 <p>Lexer for (ba|k|)sh shell scripts.</p>
@@ -1452,7 +1547,7 @@ language.</p>
 </blockquote>
 <p><cite>GherkinLexer</cite></p>
 <blockquote>
-<p>For <cite>Gherkin &lt;http://cukes.info/&gt;</cite> syntax.</p>
+<p>For <cite>Gherkin &lt;http://github.com/aslakhellesoy/gherkin/&gt;</cite> syntax.</p>
 <p><em>New in Pygments 1.2.</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1480,6 +1575,41 @@ language.</p>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.plot, *.plt</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-gnuplot</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>GoodDataCLLexer</cite></p>
+<blockquote>
+<p>Lexer for <a class="reference external" href="http://github.com/gooddata/GoodData-CL/raw/master/cli/src/main/resources/com/gooddata/processor/COMMANDS.txt">GoodData-CL</a>
+script files.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">gooddata-cl</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.gdc</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-gooddata-cl</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>HybrisLexer</cite></p>
+<blockquote>
+<p>For <a class="reference external" href="http://www.hybris-lang.org">Hybris</a> source code.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">hybris, hy</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.hy, *.hyb</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-hybris, application/x-hybris</td>
 </tr>
 </tbody>
 </table>
@@ -1515,6 +1645,24 @@ language).</p>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.moo</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-moocode</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>MaqlLexer</cite></p>
+<blockquote>
+<p>Lexer for <a class="reference external" href="https://secure.gooddata.com/docs/html/advanced.metric.tutorial.html">GoodData MAQL</a>
+scripts.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">maql</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.maql</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-gooddata-maql, application/x-gooddata-maql</td>
 </tr>
 </tbody>
 </table>
@@ -1568,6 +1716,26 @@ language).</p>
 </tbody>
 </table>
 </blockquote>
+<p><cite>PostScriptLexer</cite></p>
+<blockquote>
+<p>Lexer for PostScript files.</p>
+<p>The PostScript Language Reference published by Adobe at
+&lt;<a class="reference external" href="http://partners.adobe.com/public/developer/en/ps/PLRM.pdf">http://partners.adobe.com/public/developer/en/ps/PLRM.pdf</a>&gt;
+is the authority for this.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">postscript</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ps, *.eps</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/postscript</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>PovrayLexer</cite></p>
 <blockquote>
 <p>For <a class="reference external" href="http://www.povray.org/">Persistence of Vision Raytracer</a> files.</p>
@@ -1581,6 +1749,24 @@ language).</p>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.pov, *.inc</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-povray</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>ProtoBufLexer</cite></p>
+<blockquote>
+<p>Lexer for <a class="reference external" href="http://code.google.com/p/protobuf/">Protocol Buffer</a>
+definition files.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">protobuf</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.proto</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">None</td>
 </tr>
 </tbody>
 </table>
@@ -2604,6 +2790,24 @@ with the <cite>XmlLexer</cite>.</p>
 </tbody>
 </table>
 </blockquote>
+<p><cite>MasonLexer</cite></p>
+<blockquote>
+<p>Generic <a class="reference external" href="http://www.masonhq.com/">mason templates</a> lexer. Stolen from Myghty lexer. Code that isn't
+Mason markup is HTML.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">mason</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.m, *.mhtml, *.mc, *.mi, autohandler, dhandler</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/x-mason</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>MyghtyCssLexer</cite></p>
 <blockquote>
 <p>Subclass of the <cite>MyghtyLexer</cite> that highlights unlexer data
@@ -2726,6 +2930,75 @@ data is left untouched by the lexer.</p>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.tpl</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/x-smarty</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>SspLexer</cite></p>
+<blockquote>
+<p>Lexer for Scalate Server Pages.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">ssp</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ssp</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/x-ssp</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>VelocityHtmlLexer</cite></p>
+<blockquote>
+<p>Subclass of the <cite>VelocityLexer</cite> that highlights unlexer data
+with the <cite>HtmlLexer</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html+velocity</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/html+velocity</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>VelocityLexer</cite></p>
+<blockquote>
+<p>Generic <a class="reference external" href="http://velocity.apache.org/">Velocity</a> template lexer.</p>
+<p>Just highlights velocity directives and variable references, other
+data is left untouched by the lexer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">velocity</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.vm, *.fhtml</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>VelocityXmlLexer</cite></p>
+<blockquote>
+<p>Subclass of the <cite>VelocityLexer</cite> that highlights unlexer data
+with the <cite>XmlLexer</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xml+velocity</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/xml+velocity</td>
 </tr>
 </tbody>
 </table>
@@ -2862,7 +3135,7 @@ format.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Short names:</th><td class="field-body">cmake</td>
 </tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.cmake</td>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.cmake, CMakeLists.txt</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-cmake</td>
 </tr>
@@ -2965,7 +3238,7 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Short names:</th><td class="field-body">ini, cfg</td>
 </tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ini, *.cfg, *.properties</td>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ini, *.cfg</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-ini</td>
 </tr>
@@ -3053,6 +3326,23 @@ the same file even).</p>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-nginx-conf</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>PropertiesLexer</cite></p>
+<blockquote>
+<p>Lexer for configuration files in Java's properties format.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">properties</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.properties</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-java-properties</td>
 </tr>
 </tbody>
 </table>
@@ -3205,7 +3495,7 @@ language.</p>
 </blockquote>
 <p><cite>CoffeeScriptLexer</cite></p>
 <blockquote>
-<p>For <a class="reference external" href="http://jashkenas.github.com/coffee-script/">CoffeeScript</a> source code.</p>
+<p>For <a class="reference external" href="http://coffeescript.org">CoffeeScript</a> source code.</p>
 <p><em>New in Pygments 1.3.</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3232,6 +3522,25 @@ language.</p>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.css</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/css</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>DuelLexer</cite></p>
+<blockquote>
+<p>Lexer for Duel Views Engine (formerly JBST) markup with JavaScript code blocks.
+See <a class="reference external" href="http://duelengine.org/">http://duelengine.org/</a>.
+See <a class="reference external" href="http://jsonml.org/jbst/">http://jsonml.org/jbst/</a>.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">duel, Duel Engine, Duel View, JBST, jbst, JsonML+BST</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.duel, *.jbst</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-duel, text/x-jbst</td>
 </tr>
 </tbody>
 </table>
@@ -3286,6 +3595,25 @@ by the appropriate lexer.</p>
 </tbody>
 </table>
 </blockquote>
+<p><cite>JadeLexer</cite></p>
+<blockquote>
+<p>For Jade markup.
+Jade is a variant of Scaml, see:
+<a class="reference external" href="http://scalate.fusesource.org/documentation/scaml-reference.html">http://scalate.fusesource.org/documentation/scaml-reference.html</a></p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">jade, JADE</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.jade</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-jade</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>JavascriptLexer</cite></p>
 <blockquote>
 <p>For JavaScript source code.</p>
@@ -3297,7 +3625,7 @@ by the appropriate lexer.</p>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.js</td>
 </tr>
-<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/x-javascript, text/x-javascript, text/javascript</td>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/javascript, application/x-javascript, text/x-javascript, text/javascript</td>
 </tr>
 </tbody>
 </table>
@@ -3394,6 +3722,57 @@ the php documentation.</p>
 </tbody>
 </table>
 </blockquote>
+<p><cite>ScamlLexer</cite></p>
+<blockquote>
+<p>For <a class="reference external" href="http://scalate.fusesource.org/">Scaml markup</a>.  Scaml is Haml for Scala.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">scaml, SCAML</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.scaml</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-scaml</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>ScssLexer</cite></p>
+<blockquote>
+<p>For SCSS stylesheets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">scss</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.scss</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-scss</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>XQueryLexer</cite></p>
+<blockquote>
+<p>An XQuery lexer, parsing a stream and outputting the tokens needed to
+highlight xquery code.</p>
+<p><em>New in Pygments 1.4.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xquery, xqy</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.xqy, *.xquery</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/xquery, application/xquery</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>XmlLexer</cite></p>
 <blockquote>
 <p>Generic lexer for XML (eXtensible Markup Language).</p>
@@ -3449,6 +3828,6 @@ in the form <tt class="docutils literal">(name, aliases, filetypes, mimetypes)</
 
   </div>
 </body>
-<!-- generated on: 2010-03-01 21:18:17.323492
+<!-- generated on: 2011-01-03 18:05:47.043159
      file id: lexers -->
 </html>

@@ -653,12 +653,12 @@ suitable <cite>image_format</cite> option to the <cite>ImageFormatter</cite>.)</
 standard packages.</p>
 <p>Without the <cite>full</cite> option, code is formatted as one <tt class="docutils literal">Verbatim</tt>
 environment, like this:</p>
-<div class="syntax"><pre><span class="k">\begin</span><span class="nb">{</span>Verbatim<span class="nb">}</span>[commandchars=@<span class="sb">\[</span><span class="s">\]</span>]
-@PY[k][def ]@PY[n+nf][foo](@PY[n][bar]):
-    @PY[k][pass]
+<div class="syntax"><pre><span class="k">\begin</span><span class="nb">{</span>Verbatim<span class="nb">}</span>[commandchars=<span class="k">\\</span><span class="nb">{</span><span class="k">\}</span>]
+<span class="k">\PY</span><span class="nb">{</span>k<span class="nb">}{</span>def <span class="nb">}</span><span class="k">\PY</span><span class="nb">{</span>n+nf<span class="nb">}{</span>foo<span class="nb">}</span>(<span class="k">\PY</span><span class="nb">{</span>n<span class="nb">}{</span>bar<span class="nb">}</span>):
+    <span class="k">\PY</span><span class="nb">{</span>k<span class="nb">}{</span>pass<span class="nb">}</span>
 <span class="k">\end</span><span class="nb">{</span>Verbatim<span class="nb">}</span>
 </pre></div>
-<p>The special command used here (<tt class="docutils literal">&#64;PY</tt>) and all the other macros it needs
+<p>The special command used here (<tt class="docutils literal">\PY</tt>) and all the other macros it needs
 are output by the <cite>get_style_defs</cite> method.</p>
 <p>With the <cite>full</cite> option, a complete LaTeX document is output, including
 the command definitions in the preamble.</p>
@@ -903,6 +903,6 @@ no support for common styles.</p>
 
   </div>
 </body>
-<!-- generated on: 2010-03-01 21:18:22.349606
+<!-- generated on: 2011-01-03 18:05:48.500791
      file id: formatters -->
 </html>
