@@ -4,10 +4,10 @@ use UTF-8 by default
 upstream knows about this patch (will not apply it as not all distributions are
 using UTF-8 by defauly, like Debian does)
 
-Index: pygments-1.1/pygments/cmdline.py
+Index: Pygments-1.4/pygments/cmdline.py
 ===================================================================
---- pygments-1.1.orig/pygments/cmdline.py
-+++ pygments-1.1/pygments/cmdline.py
+--- Pygments-1.4.orig/pygments/cmdline.py
++++ Pygments-1.4/pygments/cmdline.py
 @@ -394,20 +394,20 @@ def main(args=sys.argv):
          else:
              code = sys.stdin.read()
@@ -33,11 +33,11 @@ Index: pygments-1.1/pygments/cmdline.py
  
      # ... and do it!
      try:
-Index: pygments-1.1/pygments/formatters/latex.py
+Index: Pygments-1.4/pygments/formatters/latex.py
 ===================================================================
---- pygments-1.1.orig/pygments/formatters/latex.py
-+++ pygments-1.1/pygments/formatters/latex.py
-@@ -299,6 +299,6 @@ class LatexFormatter(Formatter):
+--- Pygments-1.4.orig/pygments/formatters/latex.py
++++ Pygments-1.4/pygments/formatters/latex.py
+@@ -358,6 +358,6 @@ class LatexFormatter(Formatter):
                  dict(docclass  = self.docclass,
                       preamble  = self.preamble,
                       title     = self.title,
@@ -45,11 +45,11 @@ Index: pygments-1.1/pygments/formatters/latex.py
 +                     encoding  = self.encoding or 'utf-8',
                       styledefs = self.get_style_defs(),
                       code      = outfile.getvalue()))
-Index: pygments-1.1/pygments/lexer.py
+Index: Pygments-1.4/pygments/lexer.py
 ===================================================================
---- pygments-1.1.orig/pygments/lexer.py
-+++ pygments-1.1/pygments/lexer.py
-@@ -56,7 +56,7 @@ class Lexer(object):
+--- Pygments-1.4.orig/pygments/lexer.py
++++ Pygments-1.4/pygments/lexer.py
+@@ -55,7 +55,7 @@ class Lexer(object):
      ``encoding``
          If given, must be an encoding name. This encoding will be used to
          convert the input string to Unicode, if it is not already a Unicode
@@ -59,8 +59,8 @@ Index: pygments-1.1/pygments/lexer.py
          ``'chardet'`` to use the chardet library, if it is installed.
      """
 @@ -83,7 +83,7 @@ class Lexer(object):
-         self.stripnl = get_bool_opt(options, 'stripnl', True)
          self.stripall = get_bool_opt(options, 'stripall', False)
+         self.ensurenl = get_bool_opt(options, 'ensurenl', True)
          self.tabsize = get_int_opt(options, 'tabsize', 0)
 -        self.encoding = options.get('encoding', 'latin1')
 +        self.encoding = options.get('encoding', 'utf-8')
@@ -76,11 +76,11 @@ Index: pygments-1.1/pygments/lexer.py
              elif self.encoding == 'chardet':
                  try:
                      import chardet
-Index: pygments-1.1/pygments/lexers/__init__.py
+Index: Pygments-1.4/pygments/lexers/__init__.py
 ===================================================================
---- pygments-1.1.orig/pygments/lexers/__init__.py
-+++ pygments-1.1/pygments/lexers/__init__.py
-@@ -105,7 +105,7 @@ def get_lexer_for_filename(_fn, code=Non
+--- Pygments-1.4.orig/pygments/lexers/__init__.py
++++ Pygments-1.4/pygments/lexers/__init__.py
+@@ -101,7 +101,7 @@ def get_lexer_for_filename(_fn, code=Non
  
      if sys.version_info > (3,) and isinstance(code, bytes):
          # decode it, since all analyse_text functions expect unicode
@@ -89,10 +89,10 @@ Index: pygments-1.1/pygments/lexers/__init__.py
  
      def get_rating(cls):
          # The class _always_ defines analyse_text because it's included in
-Index: pygments-1.1/pygments/formatters/other.py
+Index: Pygments-1.4/pygments/formatters/other.py
 ===================================================================
---- pygments-1.1.orig/pygments/formatters/other.py
-+++ pygments-1.1/pygments/formatters/other.py
+--- Pygments-1.4.orig/pygments/formatters/other.py
++++ Pygments-1.4/pygments/formatters/other.py
 @@ -64,7 +64,7 @@ class RawTokenFormatter(Formatter):
          if self.encoding:
              raise OptionError('the raw formatter does not support the '

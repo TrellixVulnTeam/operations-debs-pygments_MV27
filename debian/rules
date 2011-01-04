@@ -2,18 +2,17 @@
 
 #export DH_VERBOSE=1
 
-PYVERS ?= $(shell pyversions -vr)
+PYVERS ?= $(shell pyversions -vr) $(shell py3versions -vr)
+pkgdir = $(CURDIR)/debian/python$(if $(patsubst 3.%,,$(1)),,3)-pygments
 
-include /usr/share/quilt/quilt.make
-
-clean: unpatch
+clean:
 	dh_testdir
 	dh_testroot
 	rm -rf build Pygments.egg-info
 	find . -name "*\.py[co]" -delete
 	dh_clean build-indep install-stamp $(PYVERS:%=install-python%-stamp)
 
-build: patch build-indep
+build: build-indep
 
 build-indep:
 	dh_testdir
@@ -30,7 +29,7 @@ install-stamp:
 
 install-python%-stamp:
 	python$* setup.py install --single-version-externally-managed \
-		--root debian/python-pygments --prefix=/usr
+		--root $(call pkgdir,$*) --install-layout=deb
 	touch $@
 
 binary-indep: build install
@@ -40,11 +39,11 @@ binary-indep: build install
 	dh_installexamples -i
 	dh_installdocs -i
 	dh_installman -i
-	dh_install -i debian/pygmentize /usr/bin/
-	# add jwilk's hack for one PKG-INFO file (until I will figure out why it changes)
-	find debian/ -name PKG-INFO | tail -n +2 | xargs -r -n1 cp -vf $(shell find debian/ -name PKG-INFO | head -n 1)
-	dh_pysupport -i
-	dh_compress -i -X.py
+	dh_install -i -p python-pygments debian/pygmentize /usr/bin/
+	rm -rf debian/python3-pygments/usr/bin/
+	dh_python2 -i
+	dh_python3 -i
+	dh_compress -i -X.py -X.inv
 	dh_fixperms -i
 	dh_installdeb -i
 	dh_gencontrol -i
