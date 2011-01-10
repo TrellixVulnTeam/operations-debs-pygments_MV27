@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Piotr Ożarowski <piotr@debian.org>
 Uploaders: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
 Build-Depends: debhelper (>= 5), quilt (>=0.40)
-Build-Depends-Indep: python-all (>= 2.6.6-3), python3-all, python3-setuptools,
+Build-Depends-Indep: python-all (>= 2.6.6-4), python3-all, python3-setuptools,
  python-setuptools (>= 0.6b3), python-docutils, python-jinja2
 Standards-Version: 3.9.1
 Homepage: http://pygments.org/

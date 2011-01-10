@@ -1,3 +1,9 @@
+pygments (1.4+dfsg-1+exp1) experimental; urgency=low
+
+  * Add 2.7 symlinks (python-all minimum version bumped to 2.6.6-4)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Mon, 10 Jan 2011 21:15:45 +0100
+
 pygments (1.4+dfsg-1) unstable; urgency=low
 
   * New upstream release
