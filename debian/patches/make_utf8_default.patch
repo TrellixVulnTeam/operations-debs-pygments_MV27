@@ -67,15 +67,6 @@ Index: Pygments-1.4/pygments/lexer.py
          # self.encoding = options.get('inencoding', None) or self.encoding
          self.filters = []
          for filter_ in get_list_opt(options, 'filters', ()):
-@@ -134,7 +134,7 @@ class Lexer(object):
-                     if text.startswith(u'\ufeff'):
-                         text = text[len(u'\ufeff'):]
-                 except UnicodeDecodeError:
--                    text = text.decode('latin1')
-+                    text = text.decode('utf-8')
-             elif self.encoding == 'chardet':
-                 try:
-                     import chardet
 Index: Pygments-1.4/pygments/lexers/__init__.py
 ===================================================================
 --- Pygments-1.4.orig/pygments/lexers/__init__.py
