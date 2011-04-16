@@ -1,8 +1,8 @@
-pygments (1.4+dfsg-1+exp1) experimental; urgency=low
+pygments (1.4+dfsg-2) unstable; urgency=low
 
-  * Add 2.7 symlinks (python-all minimum version bumped to 2.6.6-4)
+  * Rebuild to add Python 2.7 and drop Python 2.5 support
 
- -- Piotr Ożarowski <piotr@debian.org>  Mon, 10 Jan 2011 21:15:45 +0100
+ -- Piotr Ożarowski <piotr@debian.org>  Sat, 16 Apr 2011 13:00:20 +0200
 
 pygments (1.4+dfsg-1) unstable; urgency=low
 
