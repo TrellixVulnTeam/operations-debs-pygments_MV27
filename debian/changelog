@@ -1,9 +1,12 @@
-pygments (1.4+dfsg-2) UNRELEASED; urgency=low
+pygments (1.5+dfsg-1) unstable; urgency=low
 
+  * New upstream release
   * make_utf8_default patch: do not change the encoding guessing part in
-    pygments/lexer.py 
+    pygments/lexer.py; updated to new upstream version
+  * debian/pygmentize no longer needed, upstream now ships the script in the
+    tarball (and it returns correct exit codes, closes: 628881)
 
- -- Piotr Ożarowski <piotr@debian.org>  Wed, 23 Feb 2011 21:30:53 +0100
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 11 Mar 2012 18:22:42 +0100
 
 pygments (1.4+dfsg-1) unstable; urgency=low
 
