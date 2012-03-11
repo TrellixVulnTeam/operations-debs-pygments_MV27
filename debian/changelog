@@ -1,8 +1,12 @@
-pygments (1.4+dfsg-2) unstable; urgency=low
+pygments (1.5+dfsg-1) unstable; urgency=low
 
-  * Rebuild to add Python 2.7 and drop Python 2.5 support
+  * New upstream release
+  * make_utf8_default patch: do not change the encoding guessing part in
+    pygments/lexer.py; updated to new upstream version
+  * debian/pygmentize no longer needed, upstream now ships the script in the
+    tarball (and it returns correct exit codes, closes: 628881)
 
- -- Piotr Ożarowski <piotr@debian.org>  Sat, 16 Apr 2011 13:00:20 +0200
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 11 Mar 2012 18:22:42 +0100
 
 pygments (1.4+dfsg-1) unstable; urgency=low
 

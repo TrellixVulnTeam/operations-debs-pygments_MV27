@@ -8,7 +8,7 @@
     the text where Error tokens are being generated, along
     with some context.
 
-    :copyright: Copyright 2006-2010 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2012 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -24,6 +24,7 @@ except ImportError:
 from pygments.lexer import RegexLexer
 from pygments.lexers import get_lexer_for_filename, get_lexer_by_name
 from pygments.token import Error, Text, _TokenType
+from pygments.cmdline import _parse_options
 
 
 class DebuggingRegexLexer(RegexLexer):
@@ -83,16 +84,16 @@ class DebuggingRegexLexer(RegexLexer):
                     break
 
 
-def main(fn, lexer=None):
+def main(fn, lexer=None, options={}):
     if lexer is not None:
         lx = get_lexer_by_name(lexer)
     else:
         try:
-            lx = get_lexer_for_filename(os.path.basename(fn))
+            lx = get_lexer_for_filename(os.path.basename(fn), **options)
         except ValueError:
             try:
                 name, rest = fn.split('_', 1)
-                lx = get_lexer_by_name(name)
+                lx = get_lexer_by_name(name, **options)
             except ValueError:
                 raise AssertionError('no lexer found for file %r' % fn)
     debug_lexer = False
@@ -100,10 +101,12 @@ def main(fn, lexer=None):
     if lx.__class__.__bases__ == (RegexLexer,):
         lx.__class__.__bases__ = (DebuggingRegexLexer,)
         debug_lexer = True
+    elif lx.__class__.__bases__ == (DebuggingRegexLexer,):
+        # already debugged before
+        debug_lexer = True
     lno = 1
     text = file(fn, 'U').read()
     text = text.strip('\n') + '\n'
-    text = text.decode('latin1')
     tokens = []
     states = []
 
@@ -120,10 +123,10 @@ def main(fn, lexer=None):
             print 'Error parsing', fn, 'on line', lno
             print 'Previous tokens' + (debug_lexer and ' and states' or '') + ':'
             if showall:
-                for tok, state in zip(tokens, states):
+                for tok, state in map(None, tokens, states):
                     show_token(tok, state)
             else:
-                for i in range(len(tokens) - num, len(tokens)):
+                for i in range(max(len(tokens) - num, 0), len(tokens)):
                     show_token(tokens[i], states[i])
             print 'Error token:'
             l = len(repr(val))
@@ -140,7 +143,7 @@ def main(fn, lexer=None):
             else:
                 states.append(None)
     if showall:
-        for tok, state in zip(tokens, states):
+        for tok, state in map(None, tokens, states):
             show_token(tok, state)
     return 0
 
@@ -148,10 +151,11 @@ def main(fn, lexer=None):
 num = 10
 showall = False
 lexer = None
+options = {}
 
 if __name__ == '__main__':
     import getopt
-    opts, args = getopt.getopt(sys.argv[1:], 'n:l:a')
+    opts, args = getopt.getopt(sys.argv[1:], 'n:l:aO:')
     for opt, val in opts:
         if opt == '-n':
             num = int(val)
@@ -159,7 +163,9 @@ if __name__ == '__main__':
             showall = True
         elif opt == '-l':
             lexer = val
+        elif opt == '-O':
+            options = _parse_options([val])
     ret = 0
     for f in args:
-        ret += main(f, lexer)
+        ret += main(f, lexer, options)
     sys.exit(bool(ret))
