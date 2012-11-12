@@ -11,6 +11,7 @@ Homepage: http://pygments.org/
 Vcs-Svn: svn://svn.debian.org/python-modules/packages/pygments/trunk/
 Vcs-Browser: http://svn.debian.org/viewsvn/python-modules/packages/pygments/trunk/
 X-Python-Version: >= 2.4
+XS-Testsuite: autopkgtest
 
 Package: python-pygments
 Architecture: all
