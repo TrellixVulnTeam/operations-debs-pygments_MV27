@@ -1,0 +1,17 @@
+Author: Ken Wu <ken.wu@ruckuswireless.com>
+Description: Fixed regular expressions for assignment in BaseMakefileLexer.
+Origin: upstream; https://bitbucket.org/birkenfeld/pygments-main/changeset/c2c8279ef670
+
+diff -r bed423abed70 -r b79e4674bc30 pygments/lexers/text.py
+--- a/pygments/lexers/text.py	Tue Aug 14 00:40:51 2012 +0900
++++ b/pygments/lexers/text.py	Thu Aug 16 15:57:51 2012 +0800
+@@ -187,7 +187,7 @@
+              bygroups(Keyword, Text), 'export'),
+             (r'export\s+', Keyword),
+             # assignment
+-            (r'([a-zA-Z0-9_${}.-]+)(\s*)([!?:+]?=)([ \t]*)((?:.*\\\n|.*\n)+)',
++            (r'([a-zA-Z0-9_${}.-]+)(\s*)([!?:+]?=)([ \t]*)((?:.*\\\n)+|.*\n)',
+              bygroups(Name.Variable, Text, Operator, Text, using(BashLexer))),
+             # strings
+             (r'(?s)"(\\\\|\\.|[^"\\])*"', String.Double),
+

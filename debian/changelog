@@ -6,6 +6,8 @@ pygments (1.5+dfsg-2) UNRELEASED; urgency=low
   * Add an empty build-arch target in debian/rules.
   * Bump Standards-Version to 3.9.4, no changes needed.
   * Drop Breaks: {python:Breaks}, it is obsolete.
+  * debian/patches/fix_makefile_re.patch: cherry-picked upstream commit
+    that fixes Makefile highlighting.
 
  -- Dmitry Shachnev <mitya57@gmail.com>  Mon, 12 Nov 2012 13:30:20 +0400
 
