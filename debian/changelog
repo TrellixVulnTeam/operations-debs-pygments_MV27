@@ -3,6 +3,7 @@ pygments (1.5+dfsg-2) UNRELEASED; urgency=low
   * Team upload.
   * Add DEP-8 tests (closes: #693028).
   * Remove unneeded build-dependency on quilt.
+  * Add an empty build-arch target in debian/rules.
 
  -- Dmitry Shachnev <mitya57@gmail.com>  Mon, 12 Nov 2012 13:30:20 +0400
 
