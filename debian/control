@@ -16,7 +16,6 @@ XS-Testsuite: autopkgtest
 Package: python-pygments
 Architecture: all
 Depends: ${python:Depends}, ${misc:Depends}
-Breaks: ${python:Breaks}
 Recommends: python-chardet, python-pkg-resources
 Suggests: ttf-bitstream-vera
 Description: syntax highlighting package written in Python
