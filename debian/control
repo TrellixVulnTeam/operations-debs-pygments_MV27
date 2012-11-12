@@ -6,7 +6,7 @@ Uploaders: Debian Python Modules Team <python-modules-team@lists.alioth.debian.o
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: python-all (>= 2.6.6-3), python3-all, python3-setuptools,
  python-setuptools (>= 0.6b3), python-docutils, python-jinja2
-Standards-Version: 3.9.1
+Standards-Version: 3.9.4
 Homepage: http://pygments.org/
 Vcs-Svn: svn://svn.debian.org/python-modules/packages/pygments/trunk/
 Vcs-Browser: http://svn.debian.org/viewsvn/python-modules/packages/pygments/trunk/
