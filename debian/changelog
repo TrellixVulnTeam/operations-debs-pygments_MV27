@@ -1,6 +1,6 @@
-pygments (1.5+dfsg-2) UNRELEASED; urgency=low
+pygments (1.5+dfsg-2) unstable; urgency=low
 
-  * Team upload.
+  [ Dmitry Shachnev ]
   * Add DEP-8 tests (closes: #693028).
   * Remove unneeded build-dependency on quilt.
   * Bump Standards-Version to 3.9.4.
@@ -9,7 +9,7 @@ pygments (1.5+dfsg-2) UNRELEASED; urgency=low
   * debian/patches/fix_makefile_re.patch: cherry-picked upstream commit
     that fixes Makefile highlighting.
 
- -- Dmitry Shachnev <mitya57@gmail.com>  Mon, 12 Nov 2012 19:58:33 +0400
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 06 Jan 2013 14:38:26 +0100
 
 pygments (1.5+dfsg-1) unstable; urgency=low
 
