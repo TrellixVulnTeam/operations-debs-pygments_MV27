@@ -1,3 +1,16 @@
+pygments (1.5+dfsg-2) unstable; urgency=low
+
+  [ Dmitry Shachnev ]
+  * Add DEP-8 tests (closes: #693028).
+  * Remove unneeded build-dependency on quilt.
+  * Bump Standards-Version to 3.9.4.
+    + Add empty build-arch target to debian/rules.
+  * Drop Breaks: {python:Breaks}, it is obsolete.
+  * debian/patches/fix_makefile_re.patch: cherry-picked upstream commit
+    that fixes Makefile highlighting.
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 06 Jan 2013 14:38:26 +0100
+
 pygments (1.5+dfsg-1) unstable; urgency=low
 
   * New upstream release
