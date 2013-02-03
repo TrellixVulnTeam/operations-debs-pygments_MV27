@@ -150,12 +150,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #303030 } /* Generic.Heading */
+.syntax .gh { color: #333333 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #606060 } /* Generic.Subheading */
+.syntax .gu { color: #666666 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -363,6 +363,11 @@ lines highlighted (as of Pygments 0.11).</p>
 <p>With the <cite>full</cite> option, a complete HTML 4 document is output, including
 the style definitions inside a <tt class="docutils literal">&lt;style&gt;</tt> tag, or in a separate file if
 the <cite>cssfile</cite> option is given.</p>
+<p>When <cite>tagsfile</cite> is set to the path of a ctags index file, it is used to
+generate hyperlinks from names to their definition.  You must enable
+<cite>anchorlines</cite> and run ctags with the <cite>-n</cite> option for this to work.  The
+<cite>python-ctags</cite> module from PyPI must be installed to use this feature;
+otherwise a <cite>RuntimeError</cite> will be raised.</p>
 <p>The <cite>get_style_defs(arg='')</cite> method of a <cite>HtmlFormatter</cite> returns a string
 containing CSS rules for the CSS classes used by the formatter. The
 argument <cite>arg</cite> can be used to specify additional CSS selectors that
@@ -474,9 +479,23 @@ e.g. set it to <tt class="docutils literal">&quot;&lt;br&gt;&quot;</tt> to get H
 <dd>If set to a nonempty string, e.g. <tt class="docutils literal">foo</tt>, the formatter will wrap each
 output line in an anchor tag with a <tt class="docutils literal">name</tt> of <tt class="docutils literal"><span class="pre">foo-linenumber</span></tt>.
 This allows easy linking to certain lines. <em>New in Pygments 0.9.</em></dd>
+<dt><cite>linespans</cite></dt>
+<dd>If set to a nonempty string, e.g. <tt class="docutils literal">foo</tt>, the formatter will wrap each
+output line in a span tag with an <tt class="docutils literal">id</tt> of <tt class="docutils literal"><span class="pre">foo-linenumber</span></tt>.
+This allows easy access to lines via javascript. <em>New in Pygments 1.6.</em></dd>
 <dt><cite>anchorlinenos</cite></dt>
 <dd>If set to <cite>True</cite>, will wrap line numbers in &lt;a&gt; tags. Used in
 combination with <cite>linenos</cite> and <cite>lineanchors</cite>.</dd>
+<dt><cite>tagsfile</cite></dt>
+<dd>If set to the path of a ctags file, wrap names in anchor tags that
+link to their definitions. <cite>lineanchors</cite> should be used, and the
+tags file should specify line numbers (see the <cite>-n</cite> option to ctags).
+<em>New in Pygments 1.6.</em></dd>
+<dt><cite>tagurlformat</cite></dt>
+<dd>A string formatting pattern used to generate links to ctags definitions.
+Avaliabe variable are <cite>%(path)s</cite>, <cite>%(fname)s</cite> and <cite>%(fext)s</cite>.
+Defaults to an empty string, resulting in just <cite>#prefix-number</cite> links.
+<em>New in Pygments 1.6.</em></dd>
 </dl>
 <p><strong>Subclassing the HTML formatter</strong></p>
 <p><em>New in Pygments 0.7.</em></p>
@@ -903,6 +922,6 @@ no support for common styles.</p>
 
   </div>
 </body>
-<!-- generated on: 2012-03-10 22:10:13.666823
+<!-- generated on: 2013-01-09 17:48:42.651509
      file id: formatters -->
 </html>
