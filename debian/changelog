@@ -1,3 +1,11 @@
+pygments (1.6+dfsg-1) experimental; urgency=low
+
+  * New upstream release
+  * fix_makefile_re.patch removed, no longer needed
+  * debian/watch file updated to handle rc versions correctly
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 03 Feb 2013 22:32:34 +0100
+
 pygments (1.5+dfsg-2) unstable; urgency=low
 
   [ Dmitry Shachnev ]

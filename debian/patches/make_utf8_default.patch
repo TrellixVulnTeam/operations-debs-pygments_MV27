@@ -4,11 +4,11 @@ use UTF-8 by default
 upstream knows about this patch (will not apply it as not all distributions are
 using UTF-8 by defauly, like Debian does)
 
-Index: pygments-1.5/pygments/formatters/latex.py
+Index: pygments-1.6+dfsg/pygments/formatters/latex.py
 ===================================================================
---- pygments-1.5.orig/pygments/formatters/latex.py
-+++ pygments-1.5/pygments/formatters/latex.py
-@@ -367,6 +367,6 @@ class LatexFormatter(Formatter):
+--- pygments-1.6+dfsg.orig/pygments/formatters/latex.py
++++ pygments-1.6+dfsg/pygments/formatters/latex.py
+@@ -373,6 +373,6 @@ class LatexFormatter(Formatter):
                  dict(docclass  = self.docclass,
                       preamble  = self.preamble,
                       title     = self.title,
@@ -16,10 +16,10 @@ Index: pygments-1.5/pygments/formatters/latex.py
 +                     encoding  = self.encoding or 'utf-8',
                       styledefs = self.get_style_defs(),
                       code      = outfile.getvalue()))
-Index: pygments-1.5/pygments/lexer.py
+Index: pygments-1.6+dfsg/pygments/lexer.py
 ===================================================================
---- pygments-1.5.orig/pygments/lexer.py
-+++ pygments-1.5/pygments/lexer.py
+--- pygments-1.6+dfsg.orig/pygments/lexer.py
++++ pygments-1.6+dfsg/pygments/lexer.py
 @@ -61,7 +61,7 @@ class Lexer(object):
      ``encoding``
          If given, must be an encoding name. This encoding will be used to
@@ -29,7 +29,7 @@ Index: pygments-1.5/pygments/lexer.py
          Can also be ``'guess'`` to use a simple UTF-8 / Latin1 detection, or
          ``'chardet'`` to use the chardet library, if it is installed.
      """
-@@ -89,7 +89,7 @@ class Lexer(object):
+@@ -92,7 +92,7 @@ class Lexer(object):
          self.stripall = get_bool_opt(options, 'stripall', False)
          self.ensurenl = get_bool_opt(options, 'ensurenl', True)
          self.tabsize = get_int_opt(options, 'tabsize', 0)
@@ -38,10 +38,10 @@ Index: pygments-1.5/pygments/lexer.py
          # self.encoding = options.get('inencoding', None) or self.encoding
          self.filters = []
          for filter_ in get_list_opt(options, 'filters', ()):
-Index: pygments-1.5/pygments/lexers/__init__.py
+Index: pygments-1.6+dfsg/pygments/lexers/__init__.py
 ===================================================================
---- pygments-1.5.orig/pygments/lexers/__init__.py
-+++ pygments-1.5/pygments/lexers/__init__.py
+--- pygments-1.6+dfsg.orig/pygments/lexers/__init__.py
++++ pygments-1.6+dfsg/pygments/lexers/__init__.py
 @@ -101,7 +101,7 @@ def get_lexer_for_filename(_fn, code=Non
  
      if sys.version_info > (3,) and isinstance(code, bytes):
@@ -51,10 +51,10 @@ Index: pygments-1.5/pygments/lexers/__init__.py
  
      def get_rating(info):
          cls, filename = info
-Index: pygments-1.5/pygments/formatters/other.py
+Index: pygments-1.6+dfsg/pygments/formatters/other.py
 ===================================================================
---- pygments-1.5.orig/pygments/formatters/other.py
-+++ pygments-1.5/pygments/formatters/other.py
+--- pygments-1.6+dfsg.orig/pygments/formatters/other.py
++++ pygments-1.6+dfsg/pygments/formatters/other.py
 @@ -64,7 +64,7 @@ class RawTokenFormatter(Formatter):
          if self.encoding:
              raise OptionError('the raw formatter does not support the '
@@ -64,11 +64,11 @@ Index: pygments-1.5/pygments/formatters/other.py
          self.compress = get_choice_opt(options, 'compress',
                                         ['', 'none', 'gz', 'bz2'], '')
          self.error_color = options.get('error_color', None)
-Index: pygments-1.5/pygments/cmdline.py
+Index: pygments-1.6+dfsg/pygments/cmdline.py
 ===================================================================
---- pygments-1.5.orig/pygments/cmdline.py
-+++ pygments-1.5/pygments/cmdline.py
-@@ -394,20 +394,20 @@ def main(args=sys.argv):
+--- pygments-1.6+dfsg.orig/pygments/cmdline.py
++++ pygments-1.6+dfsg/pygments/cmdline.py
+@@ -402,20 +402,20 @@ def main(args=sys.argv):
          else:
              code = sys.stdin.read()
  
