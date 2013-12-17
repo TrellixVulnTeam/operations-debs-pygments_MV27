@@ -1,3 +1,0 @@
-#! /usr/bin/python
-import pygments.cmdline
-pygments.cmdline.main()

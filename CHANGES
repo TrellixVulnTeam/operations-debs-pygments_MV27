@@ -1,7 +1,351 @@
 Pygments changelog
 ==================
 
-Issue numbers refer to the tracker at http://dev.pocoo.org/projects/pygments/.
+Issue numbers refer to the tracker at
+<http://bitbucket.org/birkenfeld/pygments-main/issues>,
+pull request numbers to the requests at
+<http://bitbucket.org/birkenfeld/pygments-main/pull-requests/merged>.
+
+Version 1.6
+-----------
+(released Feb 3, 2013)
+
+- Lexers added:
+
+  * Dylan console (PR#149)
+  * Logos (PR#150)
+  * Shell sessions (PR#158)
+
+- Fix guessed lexers not receiving lexer options (#838).
+
+- Fix unquoted HTML attribute lexing in Opa (#841).
+
+- Fixes to the Dart lexer (PR#160).
+
+
+Version 1.6rc1
+--------------
+(released Jan 9, 2013)
+
+- Lexers added:
+
+  * AspectJ (PR#90)
+  * AutoIt (PR#122)
+  * BUGS-like languages (PR#89)
+  * Ceylon (PR#86)
+  * Croc (new name for MiniD)
+  * CUDA (PR#75)
+  * Dg (PR#116)
+  * IDL (PR#115)
+  * Jags (PR#89)
+  * Julia (PR#61)
+  * Kconfig (#711)
+  * Lasso (PR#95, PR#113)
+  * LiveScript (PR#84)
+  * Monkey (PR#117)
+  * Mscgen (PR#80)
+  * NSIS scripts (PR#136)
+  * OpenCOBOL (PR#72)
+  * QML (PR#123)
+  * Puppet (PR#133)
+  * Racket (PR#94)
+  * Rdoc (PR#99)
+  * Robot Framework (PR#137)
+  * RPM spec files (PR#124)
+  * Rust (PR#67)
+  * Smali (Dalvik assembly)
+  * SourcePawn (PR#39)
+  * Stan (PR#89)
+  * Treetop (PR#125)
+  * TypeScript (PR#114)
+  * VGL (PR#12)
+  * Visual FoxPro (#762)
+  * Windows Registry (#819)
+  * Xtend (PR#68)
+
+- The HTML formatter now supports linking to tags using CTags files, when the
+  python-ctags package is installed (PR#87).
+
+- The HTML formatter now has a "linespans" option that wraps every line in a
+  <span> tag with a specific id (PR#82).
+
+- When deriving a lexer from another lexer with token definitions, definitions
+  for states not in the child lexer are now inherited.  If you override a state
+  in the child lexer, an "inherit" keyword has been added to insert the base
+  state at that position (PR#141).
+
+- The C family lexers now inherit token definitions from a common base class,
+  removing code duplication (PR#141).
+
+- Use "colorama" on Windows for console color output (PR#142).
+
+- Fix Template Haskell highlighting (PR#63).
+
+- Fix some S/R lexer errors (PR#91).
+
+- Fix a bug in the Prolog lexer with names that start with 'is' (#810).
+
+- Rewrite Dylan lexer, add Dylan LID lexer (PR#147).
+
+- Add a Java quickstart document (PR#146).
+
+- Add a "external/autopygmentize" file that can be used as .lessfilter (#802).
+
+
+Version 1.5
+-----------
+(codename Zeitdilatation, released Mar 10, 2012)
+
+- Lexers added:
+
+  * Awk (#630)
+  * Fancy (#633)
+  * PyPy Log
+  * eC
+  * Nimrod
+  * Nemerle (#667)
+  * F# (#353)
+  * Groovy (#501)
+  * PostgreSQL (#660)
+  * DTD
+  * Gosu (#634)
+  * Octave (PR#22)
+  * Standard ML (PR#14)
+  * CFengine3 (#601)
+  * Opa (PR#37)
+  * HTTP sessions (PR#42)
+  * JSON (PR#31)
+  * SNOBOL (PR#30)
+  * MoonScript (PR#43)
+  * ECL (PR#29)
+  * Urbiscript (PR#17)
+  * OpenEdge ABL (PR#27)
+  * SystemVerilog (PR#35)
+  * Coq (#734)
+  * PowerShell (#654)
+  * Dart (#715)
+  * Fantom (PR#36)
+  * Bro (PR#5)
+  * NewLISP (PR#26)
+  * VHDL (PR#45)
+  * Scilab (#740)
+  * Elixir (PR#57)
+  * Tea (PR#56)
+  * Kotlin (PR#58)
+
+- Fix Python 3 terminal highlighting with pygmentize (#691).
+
+- In the LaTeX formatter, escape special &, < and > chars (#648).
+
+- In the LaTeX formatter, fix display problems for styles with token
+  background colors (#670).
+
+- Enhancements to the Squid conf lexer (#664).
+
+- Several fixes to the reStructuredText lexer (#636).
+
+- Recognize methods in the ObjC lexer (#638).
+
+- Fix Lua "class" highlighting: it does not have classes (#665).
+
+- Fix degenerate regex in Scala lexer (#671) and highlighting bugs (#713, 708).
+
+- Fix number pattern order in Ocaml lexer (#647).
+
+- Fix generic type highlighting in ActionScript 3 (#666).
+
+- Fixes to the Clojure lexer (PR#9).
+
+- Fix degenerate regex in Nemerle lexer (#706).
+
+- Fix infinite looping in CoffeeScript lexer (#729).
+
+- Fix crashes and analysis with ObjectiveC lexer (#693, #696).
+
+- Add some Fortran 2003 keywords.
+
+- Fix Boo string regexes (#679).
+
+- Add "rrt" style (#727).
+
+- Fix infinite looping in Darcs Patch lexer.
+
+- Lots of misc fixes to character-eating bugs and ordering problems in many
+  different lexers.
+
+
+Version 1.4
+-----------
+(codename Unschärfe, released Jan 03, 2011)
+
+- Lexers added:
+
+  * Factor (#520)
+  * PostScript (#486)
+  * Verilog (#491)
+  * BlitzMax Basic (#478)
+  * Ioke (#465)
+  * Java properties, split out of the INI lexer (#445)
+  * Scss (#509)
+  * Duel/JBST
+  * XQuery (#617)
+  * Mason (#615)
+  * GoodData (#609)
+  * SSP (#473)
+  * Autohotkey (#417)
+  * Google Protocol Buffers
+  * Hybris (#506)
+
+- Do not fail in analyse_text methods (#618).
+
+- Performance improvements in the HTML formatter (#523).
+
+- With the ``noclasses`` option in the HTML formatter, some styles
+  present in the stylesheet were not added as inline styles.
+
+- Four fixes to the Lua lexer (#480, #481, #482, #497).
+
+- More context-sensitive Gherkin lexer with support for more i18n translations.
+
+- Support new OO keywords in Matlab lexer (#521).
+
+- Small fix in the CoffeeScript lexer (#519).
+
+- A bugfix for backslashes in ocaml strings (#499).
+
+- Fix unicode/raw docstrings in the Python lexer (#489).
+
+- Allow PIL to work without PIL.pth (#502).
+
+- Allow seconds as a unit in CSS (#496).
+
+- Support ``application/javascript`` as a JavaScript mime type (#504).
+
+- Support `Offload <http://offload.codeplay.com>`_ C++ Extensions as
+  keywords in the C++ lexer (#484).
+
+- Escape more characters in LaTeX output (#505).
+
+- Update Haml/Sass lexers to version 3 (#509).
+
+- Small PHP lexer string escaping fix (#515).
+
+- Support comments before preprocessor directives, and unsigned/
+  long long literals in C/C++ (#613, #616).
+
+- Support line continuations in the INI lexer (#494).
+
+- Fix lexing of Dylan string and char literals (#628).
+
+- Fix class/procedure name highlighting in VB.NET lexer (#624).
+
+
+Version 1.3.1
+-------------
+(bugfix release, released Mar 05, 2010)
+
+- The ``pygmentize`` script was missing from the distribution.
+
+
+Version 1.3
+-----------
+(codename Schneeglöckchen, released Mar 01, 2010)
+
+- Added the ``ensurenl`` lexer option, which can be used to suppress the
+  automatic addition of a newline to the lexer input.
+
+- Lexers added:
+
+  * Ada
+  * Coldfusion
+  * Modula-2
+  * haXe
+  * R console
+  * Objective-J
+  * Haml and Sass
+  * CoffeeScript
+
+- Enhanced reStructuredText highlighting.
+
+- Added support for PHP 5.3 namespaces in the PHP lexer.
+
+- Added a bash completion script for `pygmentize`, to the external/
+  directory (#466).
+
+- Fixed a bug in `do_insertions()` used for multi-lexer languages.
+
+- Fixed a Ruby regex highlighting bug (#476).
+
+- Fixed regex highlighting bugs in Perl lexer (#258).
+
+- Add small enhancements to the C lexer (#467) and Bash lexer (#469).
+
+- Small fixes for the Tcl, Debian control file, Nginx config,
+  Smalltalk, Objective-C, Clojure, Lua lexers.
+
+- Gherkin lexer: Fixed single apostrophe bug and added new i18n keywords.
+
+
+Version 1.2.2
+-------------
+(bugfix release, released Jan 02, 2010)
+
+* Removed a backwards incompatibility in the LaTeX formatter that caused
+  Sphinx to produce invalid commands when writing LaTeX output (#463).
+
+* Fixed a forever-backtracking regex in the BashLexer (#462).
+
+
+Version 1.2.1
+-------------
+(bugfix release, released Jan 02, 2010)
+
+* Fixed mishandling of an ellipsis in place of the frames in a Python
+  console traceback, resulting in clobbered output.
+
+
+Version 1.2
+-----------
+(codename Neujahr, released Jan 01, 2010)
+
+- Dropped Python 2.3 compatibility.
+
+- Lexers added:
+
+  * Asymptote
+  * Go
+  * Gherkin (Cucumber)
+  * CMake
+  * Ooc
+  * Coldfusion
+  * haXe
+  * R console
+
+- Added options for rendering LaTeX in source code comments in the
+  LaTeX formatter (#461).
+
+- Updated the Logtalk lexer.
+
+- Added `line_number_start` option to image formatter (#456).
+
+- Added `hl_lines` and `hl_color` options to image formatter (#457).
+
+- Fixed the HtmlFormatter's handling of noclasses=True to not output any
+  classes (#427).
+
+- Added the Monokai style (#453).
+
+- Fixed LLVM lexer identifier syntax and added new keywords (#442).
+
+- Fixed the PythonTracebackLexer to handle non-traceback data in header or
+  trailer, and support more partial tracebacks that start on line 2 (#437).
+
+- Fixed the CLexer to not highlight ternary statements as labels.
+
+- Fixed lexing of some Ruby quoting peculiarities (#460).
+
+- A few ASM lexer fixes (#450).
+
 
 Version 1.1.1
 -------------
@@ -90,17 +434,17 @@ Version 1.0
   because that doesn't keep all newlines at the end when the
   ``stripnl`` lexer option is False.
 
-- Add ``-N`` option to command-line interface to get a lexer name
+- Added ``-N`` option to command-line interface to get a lexer name
   for a given filename.
 
-- Add Tango style, written by Andre Roberge for the Crunchy project.
+- Added Tango style, written by Andre Roberge for the Crunchy project.
 
-- Add Python3TracebackLexer and ``python3`` option to 
+- Added Python3TracebackLexer and ``python3`` option to
   PythonConsoleLexer.
 
-- Fix a few bugs in the Haskell lexer.
+- Fixed a few bugs in the Haskell lexer.
 
-- Fix PythonTracebackLexer to be able to recognize SyntaxError and
+- Fixed PythonTracebackLexer to be able to recognize SyntaxError and
   KeyboardInterrupt (#360).
 
 - Provide one formatter class per image format, so that surprises like::
@@ -118,7 +462,7 @@ Version 1.0
 
 - Unified Diff lexer supports the "udiff" alias now.
 
-- Fix a few issues in Scala lexer (#367).
+- Fixed a few issues in Scala lexer (#367).
 
 - RubyConsoleLexer now supports simple prompt mode (#363).
 
@@ -136,7 +480,7 @@ Version 0.11.1
 --------------
 (released Aug 24, 2008)
 
-- Fix a Jython compatibility issue in pygments.unistring (#358).
+- Fixed a Jython compatibility issue in pygments.unistring (#358).
 
 
 Version 0.11
@@ -433,7 +777,7 @@ Version 0.7
 
 - Added token stream filters, and a pygmentize option to use them.
 
-- Changed behavior of `in` Operator for tokens. 
+- Changed behavior of `in` Operator for tokens.
 
 - Added mimetypes for all lexers.
 

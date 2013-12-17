@@ -150,12 +150,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #303030 } /* Generic.Heading */
+.syntax .gh { color: #333333 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #606060 } /* Generic.Subheading */
+.syntax .gu { color: #666666 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -237,7 +237,7 @@ and return an iterable of tokens. Currently, this only calls
 <dt>def <cite>format(tokens, formatter, outfile=None):</cite></dt>
 <dd>Format a token stream (iterable of tokens) <cite>tokens</cite> with the
 <cite>formatter</cite> (must be a <cite>Formatter</cite> instance). The result is
-written to <cite>outfile</cite>, or if that is <tt class="docutils literal"><span class="pre">None</span></tt>, returned as a
+written to <cite>outfile</cite>, or if that is <tt class="docutils literal">None</tt>, returned as a
 string.</dd>
 <dt>def <cite>highlight(code, lexer, formatter, outfile=None):</cite></dt>
 <dd>This is the most high-level highlighting function.
@@ -339,23 +339,23 @@ available to help with that, see <a class="reference internal" href="#option-pro
 <dt>def <cite>get_tokens(self, text):</cite></dt>
 <dd><p class="first">This method is the basic interface of a lexer. It is called by
 the <cite>highlight()</cite> function. It must process the text and return an
-iterable of <tt class="docutils literal"><span class="pre">(tokentype,</span> <span class="pre">value)</span></tt> pairs from <cite>text</cite>.</p>
+iterable of <tt class="docutils literal">(tokentype, value)</tt> pairs from <cite>text</cite>.</p>
 <p class="last">Normally, you don't need to override this method. The default
 implementation processes the <cite>stripnl</cite>, <cite>stripall</cite> and <cite>tabsize</cite>
 options and then yields all tokens from <cite>get_tokens_unprocessed()</cite>,
-with the <tt class="docutils literal"><span class="pre">index</span></tt> dropped.</p>
+with the <tt class="docutils literal">index</tt> dropped.</p>
 </dd>
 <dt>def <cite>get_tokens_unprocessed(self, text):</cite></dt>
 <dd><p class="first">This method should process the text and return an iterable of
-<tt class="docutils literal"><span class="pre">(index,</span> <span class="pre">tokentype,</span> <span class="pre">value)</span></tt> tuples where <tt class="docutils literal"><span class="pre">index</span></tt> is the starting
+<tt class="docutils literal">(index, tokentype, value)</tt> tuples where <tt class="docutils literal">index</tt> is the starting
 position of the token within the input text.</p>
 <p class="last">This method must be overridden by subclasses.</p>
 </dd>
 <dt>def <cite>analyse_text(text):</cite></dt>
 <dd>A static method which is called for lexer guessing. It should analyse
-the text and return a float in the range from <tt class="docutils literal"><span class="pre">0.0</span></tt> to <tt class="docutils literal"><span class="pre">1.0</span></tt>.
-If it returns <tt class="docutils literal"><span class="pre">0.0</span></tt>, the lexer will not be selected as the most
-probable one, if it returns <tt class="docutils literal"><span class="pre">1.0</span></tt>, it will be selected immediately.</dd>
+the text and return a float in the range from <tt class="docutils literal">0.0</tt> to <tt class="docutils literal">1.0</tt>.
+If it returns <tt class="docutils literal">0.0</tt>, the lexer will not be selected as the most
+probable one, if it returns <tt class="docutils literal">1.0</tt>, it will be selected immediately.</dd>
 </dl>
 <p>For a list of known tokens have a look at the <a class="reference external" href="./tokens.html">Tokens</a> page.</p>
 <p>A lexer also can have the following attributes (in fact, they are mandatory
@@ -435,9 +435,9 @@ the type or value of the argument is not correct.</dd>
 <dd><p class="first">Interpret the key <cite>optname</cite> from the dictionary <cite>options</cite>
 as a boolean and return it. Return <cite>default</cite> if <cite>optname</cite>
 is not in <cite>options</cite>.</p>
-<p class="last">The valid string values for <tt class="docutils literal"><span class="pre">True</span></tt> are <tt class="docutils literal"><span class="pre">1</span></tt>, <tt class="docutils literal"><span class="pre">yes</span></tt>,
-<tt class="docutils literal"><span class="pre">true</span></tt> and <tt class="docutils literal"><span class="pre">on</span></tt>, the ones for <tt class="docutils literal"><span class="pre">False</span></tt> are <tt class="docutils literal"><span class="pre">0</span></tt>,
-<tt class="docutils literal"><span class="pre">no</span></tt>, <tt class="docutils literal"><span class="pre">false</span></tt> and <tt class="docutils literal"><span class="pre">off</span></tt> (matched case-insensitively).</p>
+<p class="last">The valid string values for <tt class="docutils literal">True</tt> are <tt class="docutils literal">1</tt>, <tt class="docutils literal">yes</tt>,
+<tt class="docutils literal">true</tt> and <tt class="docutils literal">on</tt>, the ones for <tt class="docutils literal">False</tt> are <tt class="docutils literal">0</tt>,
+<tt class="docutils literal">no</tt>, <tt class="docutils literal">false</tt> and <tt class="docutils literal">off</tt> (matched case-insensitively).</p>
 </dd>
 <dt>def <cite>get_int_opt(options, optname, default=None):</cite></dt>
 <dd>As <cite>get_bool_opt</cite>, but interpret the value as an integer.</dd>
@@ -453,6 +453,6 @@ or a tuple, it is returned as a list.</dd>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:50.249548
+<!-- generated on: 2013-02-03 10:39:02.580045
      file id: api -->
 </html>

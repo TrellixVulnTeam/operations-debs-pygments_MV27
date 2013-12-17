@@ -150,12 +150,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #303030 } /* Generic.Heading */
+.syntax .gh { color: #333333 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #606060 } /* Generic.Subheading */
+.syntax .gu { color: #666666 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -293,8 +293,8 @@ arguments either to the class or to the lookup method:</p>
 </pre></div>
 <p>This makes the lexer strip all leading and trailing whitespace from the input
 (<cite>stripall</cite> option), lets the formatter output line numbers (<cite>linenos</cite> option),
-and sets the wrapping <tt class="docutils literal"><span class="pre">&lt;div&gt;</span></tt>'s class to <tt class="docutils literal"><span class="pre">source</span></tt> (instead of
-<tt class="docutils literal"><span class="pre">highlight</span></tt>).</p>
+and sets the wrapping <tt class="docutils literal">&lt;div&gt;</tt>'s class to <tt class="docutils literal">source</tt> (instead of
+<tt class="docutils literal">highlight</tt>).</p>
 <p>Important options include:</p>
 <dl class="docutils">
 <dt><cite>encoding</cite> <span class="classifier-delimiter">:</span> <span class="classifier">for lexers and formatters</span></dt>
@@ -332,7 +332,7 @@ for this purpose.</p>
 <div class="section" id="guessing-lexers">
 <h3>Guessing lexers</h3>
 <p>If you don't know the content of the file, or you want to highlight a file
-whose extension is ambiguous, such as <tt class="docutils literal"><span class="pre">.html</span></tt> (which could contain plain HTML
+whose extension is ambiguous, such as <tt class="docutils literal">.html</tt> (which could contain plain HTML
 or some template tags), use these functions:</p>
 <div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygments.lexers</span> <span class="kn">import</span> <span class="n">guess_lexer</span><span class="p">,</span> <span class="n">guess_lexer_for_filename</span>
 
@@ -379,12 +379,12 @@ it can be created with:</p>
 <pre class="literal-block">
 $ pygmentize -S default -f html &gt; style.css
 </pre>
-<p>where <tt class="docutils literal"><span class="pre">default</span></tt> is the style name.</p>
+<p>where <tt class="docutils literal">default</tt> is the style name.</p>
 <p>More options and tricks and be found in the <a class="reference external" href="./cmdline.html">command line reference</a>.</p>
 </div>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:58.748097
+<!-- generated on: 2013-01-09 17:48:43.152015
      file id: quickstart -->
 </html>

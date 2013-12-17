@@ -4,8 +4,8 @@
 Installation
 ============
 
-Pygments requires at least Python 2.3 to work correctly. Just to clarify:
-there *won't* ever be support for Python versions below 2.3. However, there
+Pygments requires at least Python 2.4 to work correctly. Just to clarify:
+there *won't* ever be support for Python versions below 2.4. However, there
 are no other dependencies.
 
 
@@ -44,7 +44,7 @@ If you want to play around with the code
 ----------------------------------------
 
 1.  Install `Mercurial`_
-2.  ``hg clone http://dev.pocoo.org/hg/pygments-main pygments``
+2.  ``hg clone http://bitbucket.org/birkenfeld/pygments-main pygments``
 3.  ``cd pygments``
 4.  ``ln -s pygments /usr/lib/python2.X/site-packages``
 5.  ``ln -s pygmentize /usr/local/bin``

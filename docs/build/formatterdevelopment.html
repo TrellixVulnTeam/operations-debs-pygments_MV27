@@ -150,12 +150,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #303030 } /* Generic.Heading */
+.syntax .gh { color: #333333 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #606060 } /* Generic.Subheading */
+.syntax .gu { color: #666666 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -244,7 +244,7 @@ sends the value of a token to the output stream:</p>
             <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 </pre></div>
 <p>As you can see, the <cite>format()</cite> method is passed two parameters: <cite>tokensource</cite>
-and <cite>outfile</cite>. The first is an iterable of <tt class="docutils literal"><span class="pre">(token_type,</span> <span class="pre">value)</span></tt> tuples,
+and <cite>outfile</cite>. The first is an iterable of <tt class="docutils literal">(token_type, value)</tt> tuples,
 the latter a file like object with a <cite>write()</cite> method.</p>
 <p>Because the formatter is that basic it doesn't overwrite the <cite>get_style_defs()</cite>
 method.</p>
@@ -253,23 +253,23 @@ method.</p>
 <h3>Styles</h3>
 <p>Styles aren't instantiated but their metaclass provides some class functions
 so that you can access the style definitions easily.</p>
-<p>Styles are iterable and yield tuples in the form <tt class="docutils literal"><span class="pre">(ttype,</span> <span class="pre">d)</span></tt> where <cite>ttype</cite>
+<p>Styles are iterable and yield tuples in the form <tt class="docutils literal">(ttype, d)</tt> where <cite>ttype</cite>
 is a token and <cite>d</cite> is a dict with the following keys:</p>
 <dl class="docutils">
-<dt><tt class="docutils literal"><span class="pre">'color'</span></tt></dt>
-<dd>Hexadecimal color value (eg: <tt class="docutils literal"><span class="pre">'ff0000'</span></tt> for red) or <cite>None</cite> if not
+<dt><tt class="docutils literal">'color'</tt></dt>
+<dd>Hexadecimal color value (eg: <tt class="docutils literal">'ff0000'</tt> for red) or <cite>None</cite> if not
 defined.</dd>
-<dt><tt class="docutils literal"><span class="pre">'bold'</span></tt></dt>
+<dt><tt class="docutils literal">'bold'</tt></dt>
 <dd><cite>True</cite> if the value should be bold</dd>
-<dt><tt class="docutils literal"><span class="pre">'italic'</span></tt></dt>
+<dt><tt class="docutils literal">'italic'</tt></dt>
 <dd><cite>True</cite> if the value should be italic</dd>
-<dt><tt class="docutils literal"><span class="pre">'underline'</span></tt></dt>
+<dt><tt class="docutils literal">'underline'</tt></dt>
 <dd><cite>True</cite> if the value should be underlined</dd>
-<dt><tt class="docutils literal"><span class="pre">'bgcolor'</span></tt></dt>
-<dd>Hexadecimal color value for the background (eg: <tt class="docutils literal"><span class="pre">'eeeeeee'</span></tt> for light
+<dt><tt class="docutils literal">'bgcolor'</tt></dt>
+<dd>Hexadecimal color value for the background (eg: <tt class="docutils literal">'eeeeeee'</tt> for light
 gray) or <cite>None</cite> if not defined.</dd>
-<dt><tt class="docutils literal"><span class="pre">'border'</span></tt></dt>
-<dd>Hexadecimal color value for the border (eg: <tt class="docutils literal"><span class="pre">'0000aa'</span></tt> for a dark
+<dt><tt class="docutils literal">'border'</tt></dt>
+<dd>Hexadecimal color value for the border (eg: <tt class="docutils literal">'0000aa'</tt> for a dark
 blue) or <cite>None</cite> for no border.</dd>
 </dl>
 <p>Additional keys might appear in the future, formatters should ignore all keys
@@ -278,7 +278,7 @@ they don't support.</p>
 <div class="section" id="html-3-2-formatter">
 <h3>HTML 3.2 Formatter</h3>
 <p>For an more complex example, let's implement a HTML 3.2 Formatter. We don't
-use CSS but inline markup (<tt class="docutils literal"><span class="pre">&lt;u&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;font&gt;</span></tt>, etc). Because this isn't good
+use CSS but inline markup (<tt class="docutils literal">&lt;u&gt;</tt>, <tt class="docutils literal">&lt;font&gt;</tt>, etc). Because this isn't good
 style this formatter isn't in the standard library ;-)</p>
 <div class="syntax"><pre><span class="kn">from</span> <span class="nn">pygments.formatter</span> <span class="kn">import</span> <span class="n">Formatter</span>
 
@@ -364,11 +364,11 @@ purpose the <cite>get_style_defs()</cite> method exists:</p>
 output inline markup but reference either macros or css classes. Because
 the definitions of those are not part of the output, the <cite>get_style_defs()</cite>
 method exists. It is passed one parameter (if it's used and how it's used
-is up to the formatter) and has to return a string or <tt class="docutils literal"><span class="pre">None</span></tt>.</p>
+is up to the formatter) and has to return a string or <tt class="docutils literal">None</tt>.</p>
 </div>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:52.412801
+<!-- generated on: 2013-01-09 17:48:42.995351
      file id: formatterdevelopment -->
 </html>

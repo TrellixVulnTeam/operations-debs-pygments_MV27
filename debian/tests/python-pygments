@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -eu
+
+cp -r tests "$ADTTMP"
+cat debian/patches/disable_example_files_test.patch | (cd "$ADTTMP/tests" && patch -p2)
+cd "$ADTTMP/tests"
+
+for python in $(pyversions -i); do
+	PYTHONWARNINGS=d $python ./run.py 2>&1
+done

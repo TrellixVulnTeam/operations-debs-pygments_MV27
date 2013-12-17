@@ -1,0 +1,5 @@
+Tests: python-pygments
+Depends: python-pygments, python-nose
+
+Tests: python3-pygments
+Depends: python3-pygments, python3-nose

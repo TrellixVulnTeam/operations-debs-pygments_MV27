@@ -150,12 +150,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #303030 } /* Generic.Heading */
+.syntax .gh { color: #333333 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #606060 } /* Generic.Subheading */
+.syntax .gu { color: #666666 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -214,9 +214,9 @@ div.toc h2 {
 can be used to get Pygments highlighting in Moin wiki pages.</p>
 <p>To use it, copy the file <cite>external/moin-parser.py</cite> from the Pygments
 distribution to the <cite>data/plugin/parser</cite> subdirectory of your Moin instance.
-Edit the options at the top of the file (currently <tt class="docutils literal"><span class="pre">ATTACHMENTS</span></tt> and
-<tt class="docutils literal"><span class="pre">INLINESTYLES</span></tt>) and rename the file to the name that the parser directive
-should have. For example, if you name the file <tt class="docutils literal"><span class="pre">code.py</span></tt>, you can get a
+Edit the options at the top of the file (currently <tt class="docutils literal">ATTACHMENTS</tt> and
+<tt class="docutils literal">INLINESTYLES</tt>) and rename the file to the name that the parser directive
+should have. For example, if you name the file <tt class="docutils literal">code.py</tt>, you can get a
 highlighted Python code sample with this Wiki markup:</p>
 <pre class="literal-block">
 {{{
@@ -224,8 +224,8 @@ highlighted Python code sample with this Wiki markup:</p>
 [...]
 }}}
 </pre>
-<p>where <tt class="docutils literal"><span class="pre">python</span></tt> is the Pygments name of the lexer to use.</p>
-<p>Additionally, if you set the <tt class="docutils literal"><span class="pre">ATTACHMENTS</span></tt> option to True, Pygments will also
+<p>where <tt class="docutils literal">python</tt> is the Pygments name of the lexer to use.</p>
+<p>Additionally, if you set the <tt class="docutils literal">ATTACHMENTS</tt> option to True, Pygments will also
 be called for all attachments for whose filenames there is no other parser
 registered.</p>
 <p>You are responsible for including CSS rules that will map the Pygments CSS
@@ -236,10 +236,10 @@ into the <cite>htdocs</cite> directory of your Moin instance and then include it
 stylesheets = [('screen', '/htdocs/pygments.css')]
 </pre>
 <p>If you do not want to do that and are willing to accept larger HTML output, you
-can set the <tt class="docutils literal"><span class="pre">INLINESTYLES</span></tt> option to True.</p>
+can set the <tt class="docutils literal">INLINESTYLES</tt> option to True.</p>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:58.579361
+<!-- generated on: 2013-01-09 17:48:43.122842
      file id: moinmoin -->
 </html>

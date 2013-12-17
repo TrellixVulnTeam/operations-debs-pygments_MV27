@@ -150,12 +150,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #303030 } /* Generic.Heading */
+.syntax .gh { color: #333333 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #606060 } /* Generic.Subheading */
+.syntax .gu { color: #666666 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -221,8 +221,8 @@ div.toc h2 {
       </div>
     
     <!-- -*- mode: rst -*- -->
-<p>Pygments requires at least Python 2.3 to work correctly. Just to clarify:
-there <em>won't</em> ever be support for Python versions below 2.3. However, there
+<p>Pygments requires at least Python 2.4 to work correctly. Just to clarify:
+there <em>won't</em> ever be support for Python versions below 2.4. However, there
 are no other dependencies.</p>
 <div class="section" id="installing-a-released-version">
 <h3>Installing a released version</h3>
@@ -240,7 +240,7 @@ directory.</p>
 <ol class="arabic simple">
 <li>Download the most recent tarball from the <a class="reference external" href="http://pygments.org/download/">download page</a></li>
 <li>Unpack the tarball</li>
-<li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt></li>
+<li><tt class="docutils literal">sudo python setup.py install</tt></li>
 </ol>
 <p>Note that the last command will automatically download and install
 <a class="reference external" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a> if you don't already have it installed. This requires a working
@@ -254,12 +254,12 @@ internet connection.</p>
 <h4>If you want to play around with the code</h4>
 <ol class="arabic simple">
 <li>Install <a class="reference external" href="http://selenic.com/mercurial/">Mercurial</a></li>
-<li><tt class="docutils literal"><span class="pre">hg</span> <span class="pre">clone</span> <span class="pre">http://dev.pocoo.org/hg/pygments-main</span> <span class="pre">pygments</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">pygments</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">ln</span> <span class="pre">-s</span> <span class="pre">pygments</span> <span class="pre">/usr/lib/python2.X/site-packages</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">ln</span> <span class="pre">-s</span> <span class="pre">pygmentize</span> <span class="pre">/usr/local/bin</span></tt></li>
+<li><tt class="docutils literal">hg clone <span class="pre">http://bitbucket.org/birkenfeld/pygments-main</span> pygments</tt></li>
+<li><tt class="docutils literal">cd pygments</tt></li>
+<li><tt class="docutils literal">ln <span class="pre">-s</span> pygments <span class="pre">/usr/lib/python2.X/site-packages</span></tt></li>
+<li><tt class="docutils literal">ln <span class="pre">-s</span> pygmentize /usr/local/bin</tt></li>
 </ol>
-<p>As an alternative to steps 4 and 5 you can also do <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></tt>
+<p>As an alternative to steps 4 and 5 you can also do <tt class="docutils literal">python setup.py develop</tt>
 which will install the package via setuptools in development mode.</p>
 <!-- If you just want the latest features and use them
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -276,6 +276,6 @@ is run, the sources are updated from Subversion. -->
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:53.754543
+<!-- generated on: 2013-01-09 17:48:43.375552
      file id: installation -->
 </html>
