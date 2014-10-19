@@ -8,7 +8,7 @@ pkgdir = $(CURDIR)/debian/python$(if $(patsubst 3.%,,$(1)),,3)-pygments
 clean:
 	dh_testdir
 	dh_testroot
-	rm -rf build Pygments.egg-info
+	rm -rf build Pygments.egg-info doc/_build
 	find . -name "*\.py[co]" -delete
 	dh_clean build-indep install-stamp $(PYVERS:%=install-python%-stamp)
 
@@ -19,7 +19,7 @@ build-arch:
 build-indep:
 	dh_testdir
 	dh_installdirs
-	PYTHONPATH='.' python docs/generate.py html debian/python-pygments/usr/share/doc/python-pygments/
+	PYTHONPATH=$(CURDIR):$(CURDIR)/doc make -C doc html
 	touch $@
 
 install: build install-stamp $(PYVERS:%=install-python%-stamp)
@@ -40,9 +40,11 @@ binary-indep: build install
 	dh_installchangelogs -i CHANGES
 	dh_installexamples -i
 	dh_installdocs -i
+	dh_link -i
 	dh_installman -i
 	dh_install -i -p python-pygments pygmentize /usr/bin/
 	rm -rf debian/python3-pygments/usr/bin/
+	dh_sphinxdoc -i -p python-pygments-doc
 	dh_python2 -i
 	dh_python3 -i
 	dh_compress -i -X.py -X.inv
@@ -50,7 +52,7 @@ binary-indep: build install
 	dh_installdeb -i
 	dh_gencontrol -i
 	dh_md5sums -i
-	dh_builddeb -i -- -Z bzip2
+	dh_builddeb -i
 
 binary-arch:
 
@@ -60,8 +62,8 @@ get-orig-source:
 	VER=$(shell dpkg-parsechangelog | sed -rne 's,^Version: ([^+]+).*,\1,p');\
 	uscan --force-download --rename --download-version=$$VER --destdir=.;\
 	tar -zx --exclude=tests/examplefiles --exclude=test/test_examplefiles.py -f pygments_$$VER.orig.tar.gz;\
-	tar	-zcf ./pygments_$$VER+dfsg.orig.tar.gz Pygments-$$VER;\
+	tar	-zcf ./pygments_$$VER+dfsg.orig.tar.gz Pygments-*;\
 	rm -f ./pygments_$$VER.orig.tar.gz;\
-	rm -rf Pygments-$$VER
+	rm -rf Pygments-*
 
 .PHONY: build clean binary-indep binary-arch binary install

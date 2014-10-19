@@ -1,3 +1,23 @@
+pygments (2.0~rc1.a2bc2bd+dfsg-1) unstable; urgency=medium
+
+  [ Jakub Wilk ]
+  * Use canonical URIs for Vcs-* fields.
+
+  [ Dmitry Shachnev ]
+  * Make autopkgtests depend on patch (to fix test failure on CI)
+    and python[3]-all (to run tests for all supported Python versions).
+    Closes: #740166.
+
+  [ Piotr Ożarowski ]
+  * New upstream release
+    - Bump X-Python-Version to 2.6
+  * Documentation moved to new binary package: python-pygments-doc
+  * Add dh-python and python-sphinx to Build-Depends
+  * Switch debhelper compat level to 9
+  * Standards-Version bumped to 3.9.6 (no changes needed)
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 19 Oct 2014 23:00:26 +0200
+
 pygments (1.6+dfsg-1) experimental; urgency=low
 
   * New upstream release
