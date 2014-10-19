@@ -4,11 +4,11 @@ use UTF-8 by default
 upstream knows about this patch (will not apply it as not all distributions are
 using UTF-8 by default, like Debian does)
 
-Index: pygments-1.6+dfsg/pygments/formatters/latex.py
+Index: Pygments-2.0rc1/pygments/formatters/latex.py
 ===================================================================
---- pygments-1.6+dfsg.orig/pygments/formatters/latex.py
-+++ pygments-1.6+dfsg/pygments/formatters/latex.py
-@@ -373,6 +373,6 @@ class LatexFormatter(Formatter):
+--- Pygments-2.0rc1.orig/pygments/formatters/latex.py
++++ Pygments-2.0rc1/pygments/formatters/latex.py
+@@ -417,7 +417,7 @@ class LatexFormatter(Formatter):
                  dict(docclass  = self.docclass,
                       preamble  = self.preamble,
                       title     = self.title,
@@ -16,33 +16,34 @@ Index: pygments-1.6+dfsg/pygments/formatters/latex.py
 +                     encoding  = self.encoding or 'utf-8',
                       styledefs = self.get_style_defs(),
                       code      = outfile.getvalue()))
-Index: pygments-1.6+dfsg/pygments/lexer.py
+ 
+Index: Pygments-2.0rc1/pygments/lexer.py
 ===================================================================
---- pygments-1.6+dfsg.orig/pygments/lexer.py
-+++ pygments-1.6+dfsg/pygments/lexer.py
-@@ -61,7 +61,7 @@ class Lexer(object):
+--- Pygments-2.0rc1.orig/pygments/lexer.py
++++ Pygments-2.0rc1/pygments/lexer.py
+@@ -71,7 +71,7 @@ class Lexer(object):
      ``encoding``
          If given, must be an encoding name. This encoding will be used to
          convert the input string to Unicode, if it is not already a Unicode
 -        string (default: ``'latin1'``).
 +        string (default: ``'utf-8'``).
-         Can also be ``'guess'`` to use a simple UTF-8 / Latin1 detection, or
-         ``'chardet'`` to use the chardet library, if it is installed.
-     """
-@@ -92,7 +92,7 @@ class Lexer(object):
+         Can also be ``'guess'`` to use a simple UTF-8 / Locale / Latin1
+         detection, or ``'chardet'`` to use the chardet library, if it is
+         installed.
+@@ -103,7 +103,7 @@ class Lexer(object):
          self.stripall = get_bool_opt(options, 'stripall', False)
          self.ensurenl = get_bool_opt(options, 'ensurenl', True)
          self.tabsize = get_int_opt(options, 'tabsize', 0)
 -        self.encoding = options.get('encoding', 'latin1')
 +        self.encoding = options.get('encoding', 'utf-8')
-         # self.encoding = options.get('inencoding', None) or self.encoding
+         self.encoding = options.get('inencoding') or self.encoding
          self.filters = []
          for filter_ in get_list_opt(options, 'filters', ()):
-Index: pygments-1.6+dfsg/pygments/lexers/__init__.py
+Index: Pygments-2.0rc1/pygments/lexers/__init__.py
 ===================================================================
---- pygments-1.6+dfsg.orig/pygments/lexers/__init__.py
-+++ pygments-1.6+dfsg/pygments/lexers/__init__.py
-@@ -101,7 +101,7 @@ def get_lexer_for_filename(_fn, code=Non
+--- Pygments-2.0rc1.orig/pygments/lexers/__init__.py
++++ Pygments-2.0rc1/pygments/lexers/__init__.py
+@@ -116,7 +116,7 @@ def find_lexer_class_for_filename(_fn, c
  
      if sys.version_info > (3,) and isinstance(code, bytes):
          # decode it, since all analyse_text functions expect unicode
@@ -51,45 +52,68 @@ Index: pygments-1.6+dfsg/pygments/lexers/__init__.py
  
      def get_rating(info):
          cls, filename = info
-Index: pygments-1.6+dfsg/pygments/formatters/other.py
+Index: Pygments-2.0rc1/pygments/formatters/other.py
 ===================================================================
---- pygments-1.6+dfsg.orig/pygments/formatters/other.py
-+++ pygments-1.6+dfsg/pygments/formatters/other.py
+--- Pygments-2.0rc1.orig/pygments/formatters/other.py
++++ Pygments-2.0rc1/pygments/formatters/other.py
 @@ -64,7 +64,7 @@ class RawTokenFormatter(Formatter):
-         if self.encoding:
-             raise OptionError('the raw formatter does not support the '
-                               'encoding option')
+         Formatter.__init__(self, **options)
+         # We ignore self.encoding if it is set, since it gets set for lexer
+         # and formatter if given with -Oencoding on the command line.
 -        self.encoding = 'ascii'  # let pygments.format() do the right thing
 +        self.encoding = 'utf-8'  # let pygments.format() do the right thing
          self.compress = get_choice_opt(options, 'compress',
                                         ['', 'none', 'gz', 'bz2'], '')
          self.error_color = options.get('error_color', None)
-Index: pygments-1.6+dfsg/pygments/cmdline.py
+Index: Pygments-2.0rc1/doc/docs/cmdline.rst
 ===================================================================
---- pygments-1.6+dfsg.orig/pygments/cmdline.py
-+++ pygments-1.6+dfsg/pygments/cmdline.py
-@@ -402,20 +402,20 @@ def main(args=sys.argv):
-         else:
-             code = sys.stdin.read()
+--- Pygments-2.0rc1.orig/doc/docs/cmdline.rst
++++ Pygments-2.0rc1/doc/docs/cmdline.rst
+@@ -137,7 +137,7 @@ Pygments tries to be smart regarding enc
+   as the output encoding.
  
--    # No encoding given? Use latin1 if output file given,
-+    # No encoding given? Use utf-8 if output file given,
-     # stdin/stdout encoding otherwise.
-     # (This is a compromise, I'm not too happy with it...)
-     if 'encoding' not in parsed_opts and 'outencoding' not in parsed_opts:
-         if outfn:
-             # encoding pass-through
--            fmter.encoding = 'latin1'
-+            fmter.encoding = 'utf-8'
-         else:
-             if sys.version_info < (3,):
-                 # use terminal encoding; Python 3's terminals already do that
-                 lexer.encoding = getattr(sys.stdin, 'encoding',
--                                         None) or 'ascii'
-+                                         None) or 'utf-8'
-                 fmter.encoding = getattr(sys.stdout, 'encoding',
--                                         None) or 'ascii'
-+                                         None) or 'utf-8'
-     elif not outfn and sys.version_info > (3,):
-         # output to terminal with encoding -> use .buffer
-         outfile = sys.stdout.buffer
+ * If you don't give an encoding and have given an output file, the default
+-  encoding for lexer and formatter is ``latin1`` (which will pass through
++  encoding for lexer and formatter is ``utf-8`` (which will pass through
+   all non-ASCII characters).
+ 
+ * If you don't give an encoding and haven't given an output file (that means
+Index: Pygments-2.0rc1/doc/docs/lexers.rst
+===================================================================
+--- Pygments-2.0rc1.orig/doc/docs/lexers.rst
++++ Pygments-2.0rc1/doc/docs/lexers.rst
+@@ -27,7 +27,7 @@ Currently, **all lexers** support these
+ `encoding`
+     If given, must be an encoding name (such as ``"utf-8"``). This encoding
+     will be used to convert the input string to Unicode (if it is not already
+-    a Unicode string). The default is ``"latin1"``.
++    a Unicode string). The default is ``"utf-8"``.
+ 
+     If this option is set to ``"guess"``, a simple UTF-8 vs. Latin-1
+     detection is used, if it is set to ``"chardet"``, the
+Index: Pygments-2.0rc1/doc/docs/unicode.rst
+===================================================================
+--- Pygments-2.0rc1.orig/doc/docs/unicode.rst
++++ Pygments-2.0rc1/doc/docs/unicode.rst
+@@ -6,7 +6,7 @@ Since Pygments 0.6, all lexers use unico
+ you might encounter the occasional :exc:`UnicodeDecodeError` if you pass strings
+ with the wrong encoding.
+ 
+-Per default all lexers have their input encoding set to `latin1`.
++Per default all lexers have their input encoding set to `utf-8`.
+ If you pass a lexer a string object (not unicode), it tries to decode the data
+ using this encoding.
+ You can override the encoding using the `encoding` lexer option. If you have the
+Index: Pygments-2.0rc1/pygments/formatters/img.py
+===================================================================
+--- Pygments-2.0rc1.orig/pygments/formatters/img.py
++++ Pygments-2.0rc1/pygments/formatters/img.py
+@@ -295,7 +295,7 @@ class ImageFormatter(Formatter):
+             raise PilNotAvailable(
+                 'Python Imaging Library is required for this formatter')
+         Formatter.__init__(self, **options)
+-        self.encoding = 'latin1'  # let pygments.format() do the right thing
++        self.encoding = 'utf-8'  # let pygments.format() do the right thing
+         # Read the style
+         self.styles = dict(self.style)
+         if self.style.background_color is None:
