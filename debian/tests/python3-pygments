@@ -3,9 +3,8 @@
 set -eu
 
 cp -r tests "$ADTTMP"
-cat debian/patches/disable_example_files_test.patch | (cd "$ADTTMP/tests" && patch -p2)
 cd "$ADTTMP/tests"
 
 for python in $(py3versions -i); do
-	PYTHONWARNINGS=d $python ./run.py 2>&1
+	PYTHONWARNINGS=d $python ./run.py --verbose 2>&1
 done
