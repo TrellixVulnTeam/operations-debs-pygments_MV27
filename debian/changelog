@@ -1,3 +1,20 @@
+pygments (2.0.1+dfsg-1) unstable; urgency=medium
+
+  [ Dmitry Shachnev ]
+  * Drop disable_example_files_test.patch, no longer needed.
+  * Enable verbose tests output.
+
+  [ Piotr Ożarowski ]
+  * New upstream release
+    - pygmentize no longer fails when writing UTF-8 to output files
+      (closes: 771724)
+  * Drop doc/_build from the tarball (mostly due to missing JS sources; these
+    files are regenerated anyway)
+  * Remove .pyc files from upstream tarball
+  * make_utf8_default patch removed, no longer needed
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 09 Nov 2014 23:03:38 +0100
+
 pygments (2.0~rc1.a2bc2bd+dfsg-1) unstable; urgency=medium
 
   [ Jakub Wilk ]

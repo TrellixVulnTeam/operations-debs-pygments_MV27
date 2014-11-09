@@ -17,30 +17,22 @@ commands_kw = (
     'break',
     'case',
     'catch',
-    'clc',
-    'clear',
     'continue',
     'do',
     'else',
     'elseif',
     'end',
     'endfunction',
-    'exit',
     'for',
     'function',
     'help',
     'if',
     'pause',
-    'pwd',
     'quit',
-    'resume',
-    'return',
     'select',
     'then',
     'try',
-    'what',
     'while',
-    'who',
 )
 
 functions_kw = (
@@ -637,7 +629,6 @@ functions_kw = (
     'htmlRead',
     'htmlReadStr',
     'htmlWrite',
-    'iconvert',
     'iconvert',
     'ieee',
     'ilib_verbose',
@@ -1935,7 +1926,6 @@ macros_kw = (
     'analpf',
     'analyze',
     'aplat',
-    'apropos',
     'arhnk',
     'arl2',
     'arma2p',
@@ -2288,7 +2278,6 @@ macros_kw = (
     'harmean',
     'haveacompiler',
     'head_comments',
-    'help',
     'help_from_sci',
     'help_skeleton',
     'hermit',
@@ -3064,7 +3053,7 @@ variables_kw = (
 
 if __name__ == '__main__':
     import subprocess
-    from pygments.util import format_lines
+    from pygments.util import format_lines, duplicates_removed
 
     mapping = {'variables': 'builtin'}
 
@@ -3077,11 +3066,18 @@ mputl(strcat(completion("", "%s"), "||"), fd);
 mclose(fd)\n''' % var_type)
         if '||' not in output[1]:
             raise Exception(output[0])
-        return output[1].strip().split('||')
+        # Invalid DISPLAY causes this to be output:
+        text = output[1].strip()
+        if text.startswith('Error: unable to open display \n'):
+            text = text[len('Error: unable to open display \n'):]
+        return text.split('||')
 
     new_data = {}
+    seen = set()  # only keep first type for a given word
     for t in ('functions', 'commands', 'macros', 'variables'):
-        new_data[t] = extract_completion(t)
+        new_data[t] = duplicates_removed(extract_completion(t), seen)
+        seen.update(set(new_data[t]))
+
 
     with open(__file__) as f:
         content = f.read()

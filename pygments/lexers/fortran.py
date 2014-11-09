@@ -28,7 +28,7 @@ class FortranLexer(RegexLexer):
     aliases = ['fortran']
     filenames = ['*.f', '*.f90', '*.F', '*.F90']
     mimetypes = ['text/x-fortran']
-    flags = re.IGNORECASE
+    flags = re.IGNORECASE | re.MULTILINE
 
     # Data Types: INTEGER, REAL, COMPLEX, LOGICAL, CHARACTER and DOUBLE PRECISION
     # Operators: **, *, +, -, /, <, >, <=, >=, ==, /=
@@ -39,10 +39,11 @@ class FortranLexer(RegexLexer):
 
     tokens = {
         'root': [
+            (r'^#.*\n', Comment.Preproc),
             (r'!.*\n', Comment),
             include('strings'),
             include('core'),
-            (r'[a-z]\w*', Name.Variable),
+            (r'[a-z][\w$]*', Name),
             include('nums'),
             (r'[\s]+', Text),
         ],
@@ -86,7 +87,7 @@ class FortranLexer(RegexLexer):
 
             (r'(::)', Keyword.Declaration),
 
-            (r'[()\[\],:&%;]', Punctuation),
+            (r'[()\[\],:&%;.]', Punctuation),
             # Intrinsics
             (words((
                 'Abort', 'Abs', 'Access', 'AChar', 'ACos', 'ACosH', 'AdjustL',
@@ -98,14 +99,14 @@ class FortranLexer(RegexLexer):
                 'BLT', 'Bit_Size', 'BTest', 'CAbs', 'CCos', 'Ceiling', 'CExp',
                 'Char', 'ChDir', 'ChMod', 'CLog', 'Cmplx', 'Command_Argument_Count',
                 'Complex', 'Conjg', 'Cos', 'CosH', 'Count', 'CPU_Time', 'CShift',
-                'CSin', 'CSqRt', 'CTime', 'C_Funloc', 'C_Loc', 'C_Associated',
+                'CSin', 'CSqRt', 'CTime', 'C_Loc', 'C_Associated',
                 'C_Null_Ptr', 'C_Null_Funptr', 'C_F_Pointer', 'C_F_ProcPointer',
                 'C_Null_Char', 'C_Alert', 'C_Backspace', 'C_Form_Feed', 'C_FunLoc',
-                'C_Loc', 'C_Sizeof', 'C_New_Line', 'C_Carriage_Return',
+                'C_Sizeof', 'C_New_Line', 'C_Carriage_Return',
                 'C_Horizontal_Tab', 'C_Vertical_Tab', 'DAbs', 'DACos', 'DASin',
                 'DATan', 'Date_and_Time', 'DbesJ', 'DbesJN', 'DbesY',
                 'DbesYN', 'Dble', 'DCos', 'DCosH', 'DDiM', 'DErF',
-                'DErFC', 'DExp', 'Digits', 'DiM', 'DInt', 'DLog', 'DLog', 'DMax',
+                'DErFC', 'DExp', 'Digits', 'DiM', 'DInt', 'DLog', 'DMax',
                 'DMin', 'DMod', 'DNInt', 'Dot_Product', 'DProd', 'DSign', 'DSinH',
                 'DShiftL', 'DShiftR', 'DSin', 'DSqRt', 'DTanH', 'DTan', 'DTime',
                 'EOShift', 'Epsilon', 'ErF', 'ErFC', 'ErFC_Scaled', 'ETime',
