@@ -213,6 +213,8 @@ div.toc h2 {
         <h2>Contents</h2>
         <ul class="contents">
         
+          <li><a href="#version-1-2-2">Version 1.2.2</a></li>
+        
           <li><a href="#version-1-2-1">Version 1.2.1</a></li>
         
           <li><a href="#version-1-2">Version 1.2</a></li>
@@ -249,11 +251,20 @@ div.toc h2 {
       </div>
     
     <p>Issue numbers refer to the tracker at <a class="reference external" href="http://dev.pocoo.org/projects/pygments/">http://dev.pocoo.org/projects/pygments/</a>.</p>
+<div class="section" id="version-1-2-2">
+<h3>Version 1.2.2</h3>
+<p>(bugfix release, released Jan 02, 2010)</p>
+<ul class="simple">
+<li>Removed a backwards incompatibility in the LaTeX formatter that caused
+Sphinx to produce invalid commands when writing LaTeX output (#463).</li>
+<li>Fixed a forever-backtracking regex in the BashLexer (#462).</li>
+</ul>
+</div>
 <div class="section" id="version-1-2-1">
 <h3>Version 1.2.1</h3>
 <p>(bugfix release, released Jan 02, 2010)</p>
 <ul class="simple">
-<li>Fix mishandling of an ellipsis in place of the frames in a Python
+<li>Fixed mishandling of an ellipsis in place of the frames in a Python
 console traceback, resulting in clobbered output.</li>
 </ul>
 </div>
@@ -354,17 +365,17 @@ and the AS3 lexer (#389).</li>
 because that doesn't keep all newlines at the end when the
 <tt class="docutils literal">stripnl</tt> lexer option is False.</p>
 </li>
-<li><p class="first">Add <tt class="docutils literal"><span class="pre">-N</span></tt> option to command-line interface to get a lexer name
+<li><p class="first">Added <tt class="docutils literal"><span class="pre">-N</span></tt> option to command-line interface to get a lexer name
 for a given filename.</p>
 </li>
-<li><p class="first">Add Tango style, written by Andre Roberge for the Crunchy project.</p>
+<li><p class="first">Added Tango style, written by Andre Roberge for the Crunchy project.</p>
 </li>
-<li><p class="first">Add Python3TracebackLexer and <tt class="docutils literal">python3</tt> option to
+<li><p class="first">Added Python3TracebackLexer and <tt class="docutils literal">python3</tt> option to
 PythonConsoleLexer.</p>
 </li>
-<li><p class="first">Fix a few bugs in the Haskell lexer.</p>
+<li><p class="first">Fixed a few bugs in the Haskell lexer.</p>
 </li>
-<li><p class="first">Fix PythonTracebackLexer to be able to recognize SyntaxError and
+<li><p class="first">Fixed PythonTracebackLexer to be able to recognize SyntaxError and
 KeyboardInterrupt (#360).</p>
 </li>
 <li><p class="first">Provide one formatter class per image format, so that surprises like:</p>
@@ -382,7 +393,7 @@ strings (#371).</p>
 </li>
 <li><p class="first">Unified Diff lexer supports the &quot;udiff&quot; alias now.</p>
 </li>
-<li><p class="first">Fix a few issues in Scala lexer (#367).</p>
+<li><p class="first">Fixed a few issues in Scala lexer (#367).</p>
 </li>
 <li><p class="first">RubyConsoleLexer now supports simple prompt mode (#363).</p>
 </li>
@@ -401,7 +412,7 @@ variables (#370).</p>
 <h3>Version 0.11.1</h3>
 <p>(released Aug 24, 2008)</p>
 <ul class="simple">
-<li>Fix a Jython compatibility issue in pygments.unistring (#358).</li>
+<li>Fixed a Jython compatibility issue in pygments.unistring (#358).</li>
 </ul>
 </div>
 <div class="section" id="version-0-11">
@@ -691,6 +702,6 @@ continuations.</li>
 
   </div>
 </body>
-<!-- generated on: 2010-01-02 15:15:47.950321
+<!-- generated on: 2010-01-02 22:27:11.743625
      file id: changelog -->
 </html>
