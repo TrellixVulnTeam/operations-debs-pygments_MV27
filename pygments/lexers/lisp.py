@@ -92,7 +92,7 @@ class SchemeLexer(RegexLexer):
     # valid names for identifiers
     # well, names can only not consist fully of numbers
     # but this should be good enough for now
-    valid_name = r'[a-zA-Z0-9!$%&*+,/:<=>?@^_~|-]+'
+    valid_name = r'[\w!$%&*+,/:<=>?@^~|-]+'
 
     tokens = {
         'root': [
@@ -292,28 +292,28 @@ class CommonLispLexer(RegexLexer):
             (r'#\'', Name.Function),
 
             # binary rational
-            (r'#[bB][+-]?[01]+(/[01]+)?', Number.Bin),
+            (r'#b[+-]?[01]+(/[01]+)?', Number.Bin),
 
             # octal rational
-            (r'#[oO][+-]?[0-7]+(/[0-7]+)?', Number.Oct),
+            (r'#o[+-]?[0-7]+(/[0-7]+)?', Number.Oct),
 
             # hex rational
-            (r'#[xX][+-]?[0-9a-f]+(/[0-9a-f]+)?', Number.Hex),
+            (r'#x[+-]?[0-9a-f]+(/[0-9a-f]+)?', Number.Hex),
 
             # radix rational
-            (r'#\d+[rR][+-]?[0-9a-z]+(/[0-9a-z]+)?', Number),
+            (r'#\d+r[+-]?[0-9a-z]+(/[0-9a-z]+)?', Number),
 
             # complex
-            (r'(#[cC])(\()', bygroups(Number, Punctuation), 'body'),
+            (r'(#c)(\()', bygroups(Number, Punctuation), 'body'),
 
             # array
-            (r'(#\d+[aA])(\()', bygroups(Literal.Other, Punctuation), 'body'),
+            (r'(#\d+a)(\()', bygroups(Literal.Other, Punctuation), 'body'),
 
             # structure
-            (r'(#[sS])(\()', bygroups(Literal.Other, Punctuation), 'body'),
+            (r'(#s)(\()', bygroups(Literal.Other, Punctuation), 'body'),
 
             # path
-            (r'#[pP]?"(\\.|[^"])*"', Literal.Other),
+            (r'#p?"(\\.|[^"])*"', Literal.Other),
 
             # reference
             (r'#\d+=', Operator),
@@ -1369,17 +1369,17 @@ class NewLispLexer(RegexLexer):
         '<', '<<', '<=', '=', '>', '>=', '>>', '|', '~', '$', '$0', '$1', '$10',
         '$11', '$12', '$13', '$14', '$15', '$2', '$3', '$4', '$5', '$6', '$7',
         '$8', '$9', '$args', '$idx', '$it', '$main-args', 'abort', 'abs',
-        'acos', 'acosh', 'add', 'address', 'amb', 'and',  'and', 'append-file',
+        'acos', 'acosh', 'add', 'address', 'amb', 'and',  'append-file',
         'append', 'apply', 'args', 'array-list', 'array?', 'array', 'asin',
         'asinh', 'assoc', 'atan', 'atan2', 'atanh', 'atom?', 'base64-dec',
-        'base64-enc', 'bayes-query', 'bayes-train', 'begin', 'begin', 'begin',
-        'beta', 'betai', 'bind', 'binomial', 'bits', 'callback', 'case', 'case',
+        'base64-enc', 'bayes-query', 'bayes-train', 'begin',
+        'beta', 'betai', 'bind', 'binomial', 'bits', 'callback',
         'case', 'catch', 'ceil', 'change-dir', 'char', 'chop', 'Class', 'clean',
         'close', 'command-event', 'cond', 'cons', 'constant',
         'context?', 'context', 'copy-file', 'copy', 'cos', 'cosh', 'count',
         'cpymem', 'crc32', 'crit-chi2', 'crit-z', 'current-line', 'curry',
         'date-list', 'date-parse', 'date-value', 'date', 'debug', 'dec',
-        'def-new', 'default', 'define-macro', 'define-macro', 'define',
+        'def-new', 'default', 'define-macro', 'define',
         'delete-file', 'delete-url', 'delete', 'destroy', 'det', 'device',
         'difference', 'directory?', 'directory', 'div', 'do-until', 'do-while',
         'doargs',  'dolist',  'dostring', 'dotimes',  'dotree', 'dump', 'dup',
@@ -1421,7 +1421,7 @@ class NewLispLexer(RegexLexer):
         'trace-highlight', 'trace', 'transpose', 'Tree', 'trim', 'true?',
         'true', 'unicode', 'unify', 'unique', 'unless', 'unpack', 'until',
         'upper-case', 'utf8', 'utf8len', 'uuid', 'wait-pid', 'when', 'while',
-        'write', 'write-char', 'write-file', 'write-line', 'write',
+        'write', 'write-char', 'write-file', 'write-line',
         'xfer-event', 'xml-error', 'xml-parse', 'xml-type-tags', 'zero?',
     )
 

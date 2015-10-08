@@ -117,11 +117,12 @@ class CSharpLexer(RegexLexer):
                 (cs_ident, Name),
             ],
             'class': [
-                (cs_ident, Name.Class, '#pop')
+                (cs_ident, Name.Class, '#pop'),
+                default('#pop'),
             ],
             'namespace': [
                 (r'(?=\()', Text, '#pop'),  # using (resource)
-                ('(' + cs_ident + r'|\.)+', Name.Namespace, '#pop')
+                ('(' + cs_ident + r'|\.)+', Name.Namespace, '#pop'),
             ]
         }
 
@@ -338,7 +339,7 @@ class BooLexer(RegexLexer):
             (r"'(\\\\|\\'|[^']*?)'", String.Single),
             (r'[a-zA-Z_]\w*', Name),
             (r'(\d+\.\d*|\d*\.\d+)([fF][+-]?[0-9]+)?', Number.Float),
-            (r'[0-9][0-9\.]*(ms?|d|h|s)', Number),
+            (r'[0-9][0-9.]*(ms?|d|h|s)', Number),
             (r'0\d+', Number.Oct),
             (r'0x[a-fA-F0-9]+', Number.Hex),
             (r'\d+L', Number.Integer.Long),
@@ -374,6 +375,10 @@ class VbNetLexer(RegexLexer):
     filenames = ['*.vb', '*.bas']
     mimetypes = ['text/x-vbnet', 'text/x-vba']  # (?)
 
+    uni_name = '[_' + uni.combine('Lu', 'Ll', 'Lt', 'Lm', 'Nl') + ']' + \
+               '[' + uni.combine('Lu', 'Ll', 'Lt', 'Lm', 'Nl', 'Nd', 'Pc',
+                                 'Cf', 'Mn', 'Mc') + ']*'
+
     flags = re.MULTILINE | re.IGNORECASE
     tokens = {
         'root': [
@@ -382,11 +387,11 @@ class VbNetLexer(RegexLexer):
             (r'\n', Text),
             (r'rem\b.*?\n', Comment),
             (r"'.*?\n", Comment),
-            (r'#If\s.*?\sThen|#ElseIf\s.*?\sThen|#End\s+If|#Const|'
+            (r'#If\s.*?\sThen|#ElseIf\s.*?\sThen|#Else|#End\s+If|#Const|'
              r'#ExternalSource.*?\n|#End\s+ExternalSource|'
              r'#Region.*?\n|#End\s+Region|#ExternalChecksum',
              Comment.Preproc),
-            (r'[\(\){}!#,.:]', Punctuation),
+            (r'[(){}!#,.:]', Punctuation),
             (r'Option\s+(Strict|Explicit|Compare)\s+'
              r'(On|Off|Binary|Text)', Keyword.Declaration),
             (r'(?<!\.)(AddHandler|Alias|'
@@ -425,13 +430,13 @@ class VbNetLexer(RegexLexer):
              r'<=|>=|<>|[-&*/\\^+=<>\[\]]',
              Operator),
             ('"', String, 'string'),
-            ('[a-z_]\w*[%&@!#$]?', Name),
+            (r'_\n', Text),  # Line continuation  (must be before Name)
+            (uni_name + '[%&@!#$]?', Name),
             ('#.*?#', Literal.Date),
-            (r'(\d+\.\d*|\d*\.\d+)([fF][+-]?[0-9]+)?', Number.Float),
+            (r'(\d+\.\d*|\d*\.\d+)(F[+-]?[0-9]+)?', Number.Float),
             (r'\d+([SILDFR]|US|UI|UL)?', Number.Integer),
             (r'&H[0-9a-f]+([SILDFR]|US|UI|UL)?', Number.Integer),
             (r'&O[0-7]+([SILDFR]|US|UI|UL)?', Number.Integer),
-            (r'_\n', Text),  # Line continuation
         ],
         'string': [
             (r'""', String),
@@ -439,17 +444,19 @@ class VbNetLexer(RegexLexer):
             (r'[^"]+', String),
         ],
         'dim': [
-            (r'[a-z_]\w*', Name.Variable, '#pop'),
+            (uni_name, Name.Variable, '#pop'),
             default('#pop'),  # any other syntax
         ],
         'funcname': [
-            (r'[a-z_]\w*', Name.Function, '#pop'),
+            (uni_name, Name.Function, '#pop'),
         ],
         'classname': [
-            (r'[a-z_]\w*', Name.Class, '#pop'),
+            (uni_name, Name.Class, '#pop'),
         ],
         'namespace': [
-            (r'[a-z_][\w.]*', Name.Namespace, '#pop'),
+            (uni_name, Name.Namespace),
+            (r'\.', Name.Namespace),
+            default('#pop'),
         ],
         'end': [
             (r'\s+', Text),
@@ -460,8 +467,7 @@ class VbNetLexer(RegexLexer):
     }
 
     def analyse_text(text):
-        if re.search(r'^\s*(#If|Module|Namespace)', text,
-                     re.IGNORECASE | re.MULTILINE):
+        if re.search(r'^\s*(#If|Module|Namespace)', text, re.MULTILINE):
             return 0.5
 
 
@@ -589,7 +595,7 @@ class FSharpLexer(RegexLexer):
 
     tokens = {
         'escape-sequence': [
-            (r'\\[\\\"\'ntbrafv]', String.Escape),
+            (r'\\[\\"\'ntbrafv]', String.Escape),
             (r'\\[0-9]{3}', String.Escape),
             (r'\\u[0-9a-fA-F]{4}', String.Escape),
             (r'\\U[0-9a-fA-F]{8}', String.Escape),

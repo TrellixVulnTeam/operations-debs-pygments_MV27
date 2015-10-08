@@ -71,10 +71,9 @@ class Lexer(object):
     ``encoding``
         If given, must be an encoding name. This encoding will be used to
         convert the input string to Unicode, if it is not already a Unicode
-        string (default: ``'latin1'``).
-        Can also be ``'guess'`` to use a simple UTF-8 / Locale / Latin1
-        detection, or ``'chardet'`` to use the chardet library, if it is
-        installed.
+        string (default: ``'guess'``, which uses a simple UTF-8 / Locale /
+        Latin1 detection.  Can also be ``'chardet'`` to use the chardet
+        library, if it is installed.
     ``inencoding``
         Overrides the ``encoding`` if given.
     """
@@ -103,7 +102,7 @@ class Lexer(object):
         self.stripall = get_bool_opt(options, 'stripall', False)
         self.ensurenl = get_bool_opt(options, 'ensurenl', True)
         self.tabsize = get_int_opt(options, 'tabsize', 0)
-        self.encoding = options.get('encoding', 'latin1')
+        self.encoding = options.get('encoding', 'guess')
         self.encoding = options.get('inencoding') or self.encoding
         self.filters = []
         for filter_ in get_list_opt(options, 'filters', ()):
@@ -485,7 +484,9 @@ class RegexLexerMeta(LexerMeta):
                                                  str(tdef)))
                 continue
             if isinstance(tdef, _inherit):
-                # processed already
+                # should be processed already, but may not in the case of:
+                # 1. the state has no counterpart in any parent
+                # 2. the state includes more than one 'inherit'
                 continue
             if isinstance(tdef, default):
                 new_state = cls._process_new_state(tdef.state, unprocessed, processed)
@@ -533,12 +534,16 @@ class RegexLexerMeta(LexerMeta):
         """
         tokens = {}
         inheritable = {}
-        for c in itertools.chain((cls,), cls.__mro__):
+        for c in cls.__mro__:
             toks = c.__dict__.get('tokens', {})
 
             for state, items in iteritems(toks):
                 curitems = tokens.get(state)
                 if curitems is None:
+                    # N.b. because this is assigned by reference, sufficiently
+                    # deep hierarchies are processed incrementally (e.g. for
+                    # A(B), B(C), C(RegexLexer), B will be premodified so X(B)
+                    # will not see any inherits in B).
                     tokens[state] = items
                     try:
                         inherit_ndx = items.index(inherit)
@@ -554,6 +559,8 @@ class RegexLexerMeta(LexerMeta):
                 # Replace the "inherit" value with the items
                 curitems[inherit_ndx:inherit_ndx+1] = items
                 try:
+                    # N.b. this is the index in items (that is, the superclass
+                    # copy), so offset required when storing below.
                     new_inh_ndx = items.index(inherit)
                 except ValueError:
                     pass
