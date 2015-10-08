@@ -12,7 +12,7 @@
                 Kumar Appaiah <akumar@ee.iitm.ac.in>,
                 Varun Hiremath <varunhiremath@gmail.com>,
                 Jeremy Thurgood,
-                Max Battcher,
+                Max Battcher <me@worldmaker.net>,
                 Kirill Simonov <xi@resolvent.net>.
     :license: BSD, see LICENSE for more details.
 """
@@ -126,7 +126,7 @@ class MakefileLexer(Lexer):
 
     name = 'Makefile'
     aliases = ['make', 'makefile', 'mf', 'bsdmake']
-    filenames = ['*.mak', 'Makefile', 'makefile', 'Makefile.*']
+    filenames = ['*.mak', 'Makefile', 'makefile', 'Makefile.*', 'GNUmakefile']
     mimetypes = ['text/x-makefile']
 
     r_special = re.compile(r'^(?:'
@@ -208,7 +208,7 @@ class DiffLexer(RegexLexer):
     """
 
     name = 'Diff'
-    aliases = ['diff']
+    aliases = ['diff', 'udiff']
     filenames = ['*.diff', '*.patch']
     mimetypes = ['text/x-diff', 'text/x-patch']
 
@@ -233,6 +233,8 @@ class DiffLexer(RegexLexer):
         if text[:4] == '--- ':
             return 0.9
 
+DPATCH_KEYWORDS = ['hunk', 'addfile', 'adddir', 'rmfile', 'rmdir', 'move',
+    'replace']
 
 class DarcsPatchLexer(RegexLexer):
     """
@@ -250,25 +252,38 @@ class DarcsPatchLexer(RegexLexer):
         'root': [
             (r'<', Operator),
             (r'>', Operator),
-            (r'{', Operator, 'patch'),
-            (r'(\[)((?:TAG )?)(.*)(\n)(.*)(\*\*)(\d+)(\s?)',
-             bygroups(Operator, Keyword, Name, Text, Name, Operator,
-                      Literal.Date, Text), 'comment'),
+            (r'{', Operator),
+            (r'}', Operator),
+            (r'(\[)((?:TAG )?)(.*)(\n)(.*)(\*\*)(\d+)(\s?)(\])', bygroups(Operator, Keyword, Name, Text,
+                Name, Operator, Literal.Date, Text, Operator)),
+            (r'(\[)((?:TAG )?)(.*)(\n)(.*)(\*\*)(\d+)(\s?)', bygroups(Operator, Keyword, Name, Text,
+                Name, Operator, Literal.Date, Text), 'comment'),
             (r'New patches:', Generic.Heading),
             (r'Context:', Generic.Heading),
             (r'Patch bundle hash:', Generic.Heading),
-            (r'\s+|\w+', Text),
+            (r'(\s*)(%s)(.*\n)' % '|'.join(DPATCH_KEYWORDS),
+                bygroups(Text, Keyword, Text)),
+            (r'\+', Generic.Inserted, "insert"),
+            (r'-', Generic.Deleted, "delete"),
+            (r'.*\n', Text),
         ],
         'comment': [
-            (r' .*\n', Comment),
+            (r'[^\]].*\n', Comment),
             (r'\]', Operator, "#pop"),
         ],
-        'patch': [
-            (r'}', Operator, "#pop"),
-            (r'(\w+)(.*\n)', bygroups(Keyword, Text)),
-            (r'\+.*\n', Generic.Inserted),
-            (r'-.*\n', Generic.Deleted),
-            (r'.*\n', Text),
+        'specialText': [ # darcs add [_CODE_] special operators for clarity
+            (r'\n', Text, "#pop"), # line-based
+            (r'\[_[^_]*_]', Operator),
+        ],
+        'insert': [
+            include('specialText'),
+            (r'\[', Generic.Inserted),
+            (r'[^\n\[]*', Generic.Inserted),
+        ],
+        'delete': [
+            include('specialText'),
+            (r'\[', Generic.Deleted),
+            (r'[^\n\[]*', Generic.Deleted),
         ],
     }
 
@@ -569,7 +584,7 @@ class RstLexer(RegexLexer):
     name = 'reStructuredText'
     aliases = ['rst', 'rest', 'restructuredtext']
     filenames = ['*.rst', '*.rest']
-    mimetypes = ["text/x-rst"]
+    mimetypes = ["text/x-rst", "text/prs.fallenstein.rst"]
     flags = re.MULTILINE
 
     def _handle_sourcecode(self, match):
@@ -1467,10 +1482,10 @@ class NginxConfLexer(RegexLexer):
         'base': [
             (r'#.*\n', Comment.Single),
             (r'on|off', Name.Constant),
-            (r'\$[^\s;#]+', Name.Variable),
+            (r'\$[^\s;#()]+', Name.Variable),
             (r'([a-z0-9.-]+)(:)([0-9]+)',
              bygroups(Name, Punctuation, Number.Integer)),
-            (r'[a-z-]+/[a-z-]+', Name), # mimetype
+            (r'[a-z-]+/[a-z-+]+', String), # mimetype
             #(r'[a-zA-Z._-]+', Keyword),
             (r'[0-9]+[km]?\b', Number.Integer),
             (r'(~)(\s*)([^\s{]+)', bygroups(Punctuation, Text, String.Regex)),
