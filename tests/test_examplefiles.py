@@ -3,7 +3,7 @@
     Pygments tests with example files
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: Copyright 2006-2010 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2012 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -60,10 +60,13 @@ def check_lexer(lx, absfn, outfn):
     tokens = []
     for type, val in lx.get_tokens(text):
         ntext.append(val)
-        assert type != Error, 'lexer %s generated error token for %s' % \
-                (lx, absfn)
+        assert type != Error, \
+            'lexer %s generated error token for %s: %r at position %d' % \
+            (lx, absfn, val, len(u''.join(ntext)))
         tokens.append((type, val))
     if u''.join(ntext) != text:
+        print '\n'.join(difflib.unified_diff(u''.join(ntext).splitlines(),
+                                             text.splitlines()))
         raise AssertionError('round trip failed for ' + absfn)
 
     # check output against previous run if enabled
