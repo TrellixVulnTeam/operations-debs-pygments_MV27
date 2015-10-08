@@ -6,7 +6,7 @@
     Base formatter class.
 
     :copyright: 2006 by Georg Brandl, Armin Ronacher.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from pygments.util import get_bool_opt
@@ -38,12 +38,23 @@ class Formatter(object):
     ``title``
         If ``full`` is true, the title that should be used to
         caption the document (default: '').
+    ``encoding``
+        If given, must be an encoding name. This will be used to
+        convert the Unicode token strings to byte strings in the
+        output. If it is "" or None, Unicode strings will be written
+        to the output file, which most file-like objects do not
+        support (default: None).
     """
+
+    #: If True, this formatter outputs Unicode strings when no encoding
+    #: option is given.
+    unicodeoutput = True
 
     def __init__(self, **options):
         self.style = _lookup_style(options.get('style', 'default'))
         self.full  = get_bool_opt(options, 'full', False)
         self.title = options.get('title', '')
+        self.encoding = options.get('encoding', None) or None
         self.options = options
 
     def get_style_defs(self, arg=''):
@@ -51,7 +62,8 @@ class Formatter(object):
         Return the style definitions for the current style as a string.
 
         ``arg`` is an additional argument whose meaning depends on the
-        formatter used.
+        formatter used. Note that ``arg`` can also be a list or tuple
+        for some formatters like the html formatter.
         """
         return ''
 

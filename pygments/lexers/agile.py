@@ -3,10 +3,11 @@
     pygments.lexers.agile
     ~~~~~~~~~~~~~~~~~~~~~
 
-    Lexers for agile languages: Python, Ruby, Perl.
+    Lexers for agile languages: Python, Ruby, Perl, Scheme.
 
-    :copyright: 2006 by Georg Brandl, Armin Ronacher, Lukas Meuser.
-    :license: GNU LGPL, see LICENSE for more details.
+    :copyright: 2006 by Georg Brandl, Armin Ronacher,
+                Lukas Meuser, Marek Kubica.
+    :license: BSD, see LICENSE for more details.
 """
 
 import re
@@ -18,12 +19,13 @@ except NameError:
 from pygments.lexer import Lexer, RegexLexer, ExtendedRegexLexer, \
      LexerContext, include, combined, do_insertions, bygroups
 from pygments.token import Error, Text, \
-     Comment, Operator, Keyword, Name, String, Number, Generic
+     Comment, Operator, Keyword, Name, String, Number, Generic, Punctuation
 from pygments.util import get_bool_opt, get_list_opt, shebang_matches
 
 
 __all__ = ['PythonLexer', 'PythonConsoleLexer', 'RubyLexer',
-           'RubyConsoleLexer', 'PerlLexer', 'LuaLexer']
+           'RubyConsoleLexer', 'PerlLexer', 'LuaLexer',
+           'SchemeLexer']
 
 line_re  = re.compile('.*?\n')
 
@@ -37,18 +39,18 @@ class PythonLexer(RegexLexer):
     tokens = {
         'root': [
             (r'\n', Text),
-            (r'^\s*"""(.|\n)*?"""', String.Doc),
-            (r"^\s*'''(.|\n)*?'''", String.Doc),
+            (r'^(\s*)("""(?:.|\n)*?""")', bygroups(Text, String.Doc)),
+            (r"^(\s*)('''(?:.|\n)*?''')", bygroups(Text, String.Doc)),
             (r'[^\S\n]+', Text),
             (r'#.*$', Comment),
-            (r'[]{}:(),.;[]', Text),
+            (r'[]{}:(),;[]', Punctuation),
             (r'\\\n', Text),
             (r'\\', Text),
             (r'(in|is|and|or|not)\b', Operator.Word),
-            (r'!=|==|<<|>>|[-+/*%=<>&^|]', Operator),
+            (r'!=|==|<<|>>|[-+/*%=<>&^|.]', Operator),
             (r'(assert|break|continue|del|elif|else|except|exec|'
              r'finally|for|global|if|lambda|pass|print|raise|'
-             r'return|try|while|yield)\b', Keyword),
+             r'return|try|while|yield|as|with)\b', Keyword),
             (r'(def)(\s+)', bygroups(Keyword, Text), 'funcname'),
             (r'(class)(\s+)', bygroups(Keyword, Text), 'classname'),
             (r'(from)(\s+)', bygroups(Keyword, Text), 'fromimport'),
@@ -118,7 +120,7 @@ class PythonLexer(RegexLexer):
              '[hlL]?[diouxXeEfFgGcrs%]', String.Interpol),
             (r'[^\\\'"%\n]+', String),
             # quotes, percents and backslashes must be parsed one at a time
-            ('[\'"\\\\]', String),
+            (r'[\'"\\]', String),
             # unhandled string formatting sign
             (r'%', String)
             # newlines are an error (use "nl" state)
@@ -335,17 +337,12 @@ class RubyLexer(ExtendedRegexLexer):
             (r'(%[QWx](.))(.*?)(\2)', intp_string_callback),
             # special forms of fancy strings after operators or
             # in method calls with braces
-            # we need to regexes here for " " and "\t" because of bygroups()
-            (r'(?<=[-+/*%=<>&!^|~,(])(\s*)(% .*? )',
-             bygroups(Text, String.Other)),
-            (r'(?<=[-+/*%=<>&!^|~,(])(\s*)(%\t.*?\t)',
-             bygroups(Text, String.Other)),
+            (r'(?<=[-+/*%=<>&!^|~,(])(\s*)(%([\t ]).*?\3)',
+             bygroups(Text, String.Other, None)),
             # and because of fixed with lookbehinds the whole thing a
             # second time for line startings...
-            (r'^(\s*)(% .*? )',
-             bygroups(Text, String.Other)),
-            (r'^(\s*)(%\t.*?\t)',
-             bygroups(Text, String.Other)),
+            (r'^(\s*)(%([\t ]).*?\3)',
+             bygroups(Text, String.Other, None)),
             # all regular fancy strings
             (r'(%([^a-zA-Z0-9\s]))(.*?)(\2)', intp_string_callback),
         ]
@@ -446,7 +443,8 @@ class RubyLexer(ExtendedRegexLexer):
             include('strings'),
             # chars
             (r'\?(\\[MC]-)*' # modifiers
-             r'(\\([\\abefnrstv#"\']|x[a-fA-F0-9]{1,2}|[0-7]{1,3})|\S)',
+             r'(\\([\\abefnrstv#"\']|x[a-fA-F0-9]{1,2}|[0-7]{1,3})|\S)'
+             r'(?!\w)',
              String.Char),
             (r'[A-Z][a-zA-Z0-9_]+', Name.Constant),
             # this is needed because ruby attributes can look
@@ -459,10 +457,10 @@ class RubyLexer(ExtendedRegexLexer):
             (r'def(?=[*%&^`~+-/\[<>=])', Keyword, 'funcname'),
             (r'(class)(\s+)', bygroups(Keyword, Text), 'classname'),
             (r'[a-zA-Z_][\w_]*[\!\?]?', Name),
-            (r'(\[\]|\*\*|<<|>>|>=|<=|<=>|=~|={3}|'
+            (r'(\[\]|\*\*|<<?|>>?|>=|<=|<=>|=~|={3}|'
              r'!~|&&?|\|\||\.{1,3})', Operator),
             (r'[-+/*%=<>&!^|~]=?', Operator),
-            (r'[\[\](){}:;,<>/?\\]', Text),
+            (r'[\[\](){};,/?:\\]', Punctuation),
             (r'\s+', Text)
         ],
         'funcname': [
@@ -601,7 +599,7 @@ class PerlLexer(RegexLexer):
              r'sysseek|system|syswrite|tell|telldir|tie|tied|time|times|tr|'
              r'truncate|uc|ucfirst|umask|undef|unlink|unpack|unshift|untie|'
              r'utime|values|vec|wait|waitpid|wantarray|warn|write'
-             r'|y)\b', Name.Builtin),
+             r')\b', Name.Builtin),
             (r'((__(DATA|DIE|WARN)__)|(STD(IN|OUT|ERR)))\b', Name.Builtin.Pseudo),
             (r'<<([a-zA-Z_][a-zA-Z0-9_]*)\n.*?\n\1\n', String),
             (r'__END__', Comment.Preproc, 'end-part'),
@@ -625,13 +623,14 @@ class PerlLexer(RegexLexer):
             (r'(\[\]|\*\*|::|<<|>>|>=|<=|<=>|={3}|!=|=~|'
              r'!~|&&?|\|\||\.{1,3})', Operator),
             (r'[-+/*%=<>&^|!\\~]=?', Operator),
-            (r'[\(\)\[\]:;,<>/\?\{\}]', Text),
+            (r'[\(\)\[\]:;,<>/\?\{\}]', Punctuation), # yes, there's no shortage
+                                                      # of punctuation in Perl!
             (r'(?=\w)', Name, 'name'),
         ],
         'varname': [
             (r'\s+', Text),
-            (r'\{', Text, '#pop'), # hash syntax?
-            (r'\)|,', Text, '#pop'), # argument specifier
+            (r'\{', Punctuation, '#pop'), # hash syntax?
+            (r'\)|,', Punctuation, '#pop'), # argument specifier
             (r'[a-zA-Z0-9_]+::', Name.Namespace),
             (r'[a-zA-Z0-9_:]+', Name.Variable, '#pop'),
         ],
@@ -648,8 +647,8 @@ class PerlLexer(RegexLexer):
             (r'[a-zA-Z_][\w_]*[\!\?]?', Name.Function),
             (r'\s+', Text),
             # argument declaration
-            (r'\([$@%]*\)\s*', Text),
-            (r'.*?{', Text, '#pop'),
+            (r'(\([$@%]*\))(\s*)', bygroups(Punctuation, Text)),
+            (r'.*?{', Punctuation, '#pop'),
         ],
         'cb-string': [
             (r'\\[\{\}\\]', String.Other),
@@ -705,7 +704,7 @@ class LuaLexer(RegexLexer):
 
             (r'\n', Text),
             (r'[^\S\n]', Text),
-            (r'[\[\]\{\}\(\)\.,:;]', Text),
+            (r'[\[\]\{\}\(\)\.,:;]', Punctuation),
 
             (r'(==|~=|<=|>=|\.\.|\.\.\.|[=+\-*/%^<>#])', Operator),
             (r'(and|or|not)\b', Operator.Word),
@@ -729,7 +728,7 @@ class LuaLexer(RegexLexer):
         'funcname': [
             ('[A-Za-z_][A-Za-z0-9_]*', Name.Function, '#pop'),
             # inline function
-            ('\(', Text, '#pop'),
+            ('\(', Punctuation, '#pop'),
         ],
 
         'classname': [
@@ -780,7 +779,133 @@ class LuaLexer(RegexLexer):
                 elif '.' in value:
                     a, b = value.split('.')
                     yield index, Name, a
-                    yield index + len(a), Text, '.'
+                    yield index + len(a), Punctuation, u'.'
                     yield index + len(a) + 1, Name, b
                     continue
             yield index, token, value
+
+
+class SchemeLexer(RegexLexer):
+    """
+    A Scheme lexer, parsing a stream and outputting the tokens
+    needed to highlight scheme code.
+    This lexer could be most probably easily subclassed to parse
+    other LISP-Dialects like Common Lisp, Emacs Lisp or AutoLisp.
+
+    This parser is checked with pastes from the LISP pastebin
+    at http://paste.lisp.org/ to cover as much syntax as possible.
+
+    It should support the full Scheme syntax as defined in R5RS.
+    """
+    name = 'Scheme'
+    aliases = ['scheme']
+    filenames = ['*.scm']
+    mimetypes = ['text/x-scheme', 'application/x-scheme']
+
+    # list of known keywords and builtins taken form vim 6.4 scheme.vim
+    # syntax file.
+    keywords = [
+        'lambda', 'define', 'if', 'else', 'cond', 'and', 'or', 'case', 'let',
+        'let*', 'letrec', 'begin', 'do', 'delay', 'set!', '=>', 'quote',
+        'quasiquote', 'unquote', 'unquote-splicing', 'define-syntax',
+        'let-syntax', 'letrec-syntax', 'syntax-rules'
+    ]
+    builtins = [
+        '*', '+', '-', '/', '<', '<=', '=', '>', '>=', 'abs', 'acos', 'angle',
+        'append', 'apply', 'asin', 'assoc', 'assq', 'assv', 'atan',
+        'boolean?', 'caaaar', 'caaadr', 'caaar', 'caadar', 'caaddr', 'caadr',
+        'caar', 'cadaar', 'cadadr', 'cadar', 'caddar', 'cadddr', 'caddr',
+        'cadr', 'call-with-current-continuation', 'call-with-input-file',
+        'call-with-output-file', 'call-with-values', 'call/cc', 'car',
+        'cdaaar', 'cdaadr', 'cdaar', 'cdadar', 'cdaddr', 'cdadr', 'cdar',
+        'cddaar', 'cddadr', 'cddar', 'cdddar', 'cddddr', 'cdddr', 'cddr',
+        'cdr', 'ceiling', 'char->integer', 'char-alphabetic?', 'char-ci<=?',
+        'char-ci<?', 'char-ci=?', 'char-ci>=?', 'char-ci>?', 'char-downcase',
+        'char-lower-case?', 'char-numeric?', 'char-ready?', 'char-upcase',
+        'char-upper-case?', 'char-whitespace?', 'char<=?', 'char<?', 'char=?',
+        'char>=?', 'char>?', 'char?', 'close-input-port', 'close-output-port',
+        'complex?', 'cons', 'cos', 'current-input-port', 'current-output-port',
+        'denominator', 'display', 'dynamic-wind', 'eof-object?', 'eq?',
+        'equal?', 'eqv?', 'eval', 'even?', 'exact->inexact', 'exact?', 'exp',
+        'expt', 'floor', 'for-each', 'force', 'gcd', 'imag-part',
+        'inexact->exact', 'inexact?', 'input-port?', 'integer->char',
+        'integer?', 'interaction-environment', 'lcm', 'length', 'list',
+        'list->string', 'list->vector', 'list-ref', 'list-tail', 'list?',
+        'load', 'log', 'magnitude', 'make-polar', 'make-rectangular',
+        'make-string', 'make-vector', 'map', 'max', 'member', 'memq', 'memv',
+        'min', 'modulo', 'negative?', 'newline', 'not', 'null-environment',
+        'null?', 'number->string', 'number?', 'numerator', 'odd?',
+        'open-input-file', 'open-output-file', 'output-port?', 'pair?',
+        'peek-char', 'port?', 'positive?', 'procedure?', 'quotient',
+        'rational?', 'rationalize', 'read', 'read-char', 'real-part', 'real?',
+        'remainder', 'reverse', 'round', 'scheme-report-environment',
+        'set-car!', 'set-cdr!', 'sin', 'sqrt', 'string', 'string->list',
+        'string->number', 'string->symbol', 'string-append', 'string-ci<=?',
+        'string-ci<?', 'string-ci=?', 'string-ci>=?', 'string-ci>?',
+        'string-copy', 'string-fill!', 'string-length', 'string-ref',
+        'string-set!', 'string<=?', 'string<?', 'string=?', 'string>=?',
+        'string>?', 'string?', 'substring', 'symbol->string', 'symbol?',
+        'tan', 'transcript-off', 'transcript-on', 'truncate', 'values',
+        'vector', 'vector->list', 'vector-fill!', 'vector-length',
+        'vector-ref', 'vector-set!', 'vector?', 'with-input-from-file',
+        'with-output-to-file', 'write', 'write-char', 'zero?'
+    ]
+
+    # valid names for identifiers
+    # well, names can only not consist fully of numbers
+    # but this should be good enough for now
+    valid_name = r'[a-zA-Z0-9!$%&*+,/:<=>?@^_~-]+'
+
+    tokens = {
+        'root' : [
+            # the comments - always starting with semicolon
+            # and going to the end of the line
+            (r';.*$', Comment.Single),
+
+            # whitespaces - usually not relevant
+            (r'\s+', Text),
+
+            # numbers
+            (r'-?\d+\.\d+', Number.Float),
+            (r'-?\d+', Number.Integer),
+            # support for uncommon kinds of numbers -
+            # have to figure out what the characters mean
+            #(r'(#e|#i|#b|#o|#d|#x)[\d.]+', Number),
+
+            # strings, symbols and characters
+            (r'"(\\\\|\\"|[^"])*"', String),
+            (r"'[a-zA-Z0-9]+", String.Symbol),
+            (r"#\\([()/'\".'_!§$%& ?=+-]{1}|[a-zA-Z0-9]+)", String.Char),
+
+            # constants
+            (r'(#t|#f)', Name.Constant),
+
+            # special operators
+            (r"('|#|`|,@|,|\.)", Operator),
+
+            # highlight the keywords
+            ('(%s)' % '|'.join([
+                re.escape(entry) + ' ' for entry in keywords]),
+                Keyword
+            ),
+
+            # first variable in a quoted string like
+            # '(this is syntactic sugar)
+            (r"(?<='\()" + valid_name, Name.Variable),
+            (r"(?<=#\()" + valid_name, Name.Variable),
+
+            # highlight the builtins
+            ("(?<=\()(%s)" % '|'.join([
+                re.escape(entry) + ' ' for entry in builtins]),
+                Name.Builtin
+            ),
+
+            # the remaining functions
+            (r'(?<=\()' + valid_name, Name.Function),
+            # find the remaining variables
+            (valid_name, Name.Variable),
+
+            # the famous parentheses!
+            (r'(\(|\))', Punctuation),
+        ],
+    }

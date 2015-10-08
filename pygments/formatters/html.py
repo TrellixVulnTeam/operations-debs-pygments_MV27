@@ -6,9 +6,10 @@
     Formatter for HTML output.
 
     :copyright: 2006 by Georg Brandl, Armin Ronacher.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
-import StringIO
+import sys, os
+import cStringIO
 
 from pygments.formatter import Formatter
 from pygments.token import Token, Text, STANDARD_TYPES
@@ -41,12 +42,13 @@ def get_random_id():
 
 def _get_ttype_class(ttype):
     fname = STANDARD_TYPES.get(ttype)
-    if fname: return fname
+    if fname:
+        return fname
     aname = ''
     while fname is None:
         aname = '-' + ttype[-1] + aname
         ttype = ttype.parent
-        fname = STANDARD_TYPES.get(ttype)
+        fname = STANDARD_TYPES.get(ttype, '')
     return fname + aname
 
 
@@ -57,6 +59,7 @@ DOC_TEMPLATE = '''\
 <html>
 <head>
   <title>%(title)s</title>
+  <meta http-equiv="content-type" content="text/html; charset=%(encoding)s">
   <style type="text/css">
 td.linenos { background-color: #f0f0f0; padding-right: 10px; }
 %(styledefs)s
@@ -69,6 +72,32 @@ td.linenos { background-color: #f0f0f0; padding-right: 10px; }
 
 </body>
 </html>
+'''
+
+
+DOC_TEMPLATE_EXTERNALCSS = '''\
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title>%(title)s</title>
+  <meta http-equiv="content-type" content="text/html; charset=%(encoding)s">
+  <link rel="stylesheet" href="%(cssfile)s">
+</head>
+<body>
+<h2>%(title)s</h2>
+
+%(code)s
+
+</body>
+</html>
+'''
+
+
+CSSFILE_TEMPLATE = '''\
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+%(styledefs)s
 '''
 
 
@@ -92,6 +121,10 @@ class HtmlFormatter(Formatter):
         CSS class for the wrapping <div> (default: 'highlight').
     ``cssstyles``
         Inline CSS styles for the wrapping <div>. (default: '').
+    ``cssfile``
+        If the ``full`` option is ``True`` and this is not ``''``,
+        put the CSS in a separate file whose name is given by this option
+        (default: ''). New in 0.6.
     ``linenos``
         If set to ``True``, output line numbers (default: False).
     ``linenostart``
@@ -106,7 +139,7 @@ class HtmlFormatter(Formatter):
         If set to ``True`` the formatter won't output the background color
         for the overall element (this automatically defaults to ``False``
         when there is no overall element [eg: no argument for the
-        `get_syntax_defs` method given]) (default: ``False``)
+        `get_syntax_defs` method given]) (default: ``False``). New in 0.6.
     """
 
     def __init__(self, **options):
@@ -116,6 +149,7 @@ class HtmlFormatter(Formatter):
         self.classprefix = options.get('classprefix', '')
         self.cssclass = options.get('cssclass', 'highlight')
         self.cssstyles = options.get('cssstyles', '')
+        self.cssfile = options.get('cssfile', '')
         self.linenos = get_bool_opt(options, 'linenos', False)
         self.linenostart = abs(get_int_opt(options, 'linenostart', 1))
         self.linenostep = abs(get_int_opt(options, 'linenostep', 1))
@@ -130,8 +164,7 @@ class HtmlFormatter(Formatter):
         the classprefix option."""
         if ttype in self._class_cache:
             return self._class_cache[ttype]
-
-        return self.classprefix + STANDARD_TYPES.get(ttype) or _get_ttype_class(ttype)
+        return self.classprefix + _get_ttype_class(ttype)
 
     def _create_stylesheet(self):
         t2c = self.ttype2class = {Token: ''}
@@ -164,13 +197,22 @@ class HtmlFormatter(Formatter):
         current highlighting style. ``arg`` can be a string of selectors
         to insert before the token type classes.
         """
-        if arg:
-            arg += ' '
+        if isinstance(arg, basestring):
+            args = [arg]
+        else:
+            args = list(arg)
+
+        def prefix(cls):
+            tmp = []
+            for arg in args:
+                tmp.append((arg and arg + ' ' or '') + '.' + cls)
+            return ', '.join(tmp)
+
         styles = [(level, ttype, cls, style)
                   for cls, (style, ttype, level) in self.class2style.iteritems()
                   if cls and style]
         styles.sort()
-        lines = ['%s.%s { %s } /* %s */' % (arg, cls, style, repr(ttype)[6:])
+        lines = ['%s { %s } /* %s */' % (prefix(cls), style, repr(ttype)[6:])
                  for level, ttype, cls, style in styles]
         if arg and not self.nobackground and \
            self.style.background_color is not None:
@@ -184,6 +226,7 @@ class HtmlFormatter(Formatter):
     def _format_nowrap(self, tokensource, outfile, lnos=False):
         lncount = 0
         nocls = self.noclasses
+        enc = self.encoding
         # for <span style=""> lookup only
         getcls = self.ttype2class.get
         c2s = self.class2style
@@ -191,6 +234,8 @@ class HtmlFormatter(Formatter):
         write = outfile.write
         lspan = ''
         for ttype, value in tokensource:
+            if enc:
+                value = value.encode(enc)
             htmlvalue = escape_html(value)
             if lnos:
                 lncount += value.count("\n")
@@ -235,7 +280,7 @@ class HtmlFormatter(Formatter):
         div = ('<div' + (self.cssclass and ' class="%s" ' % self.cssclass)
                + (self.cssstyles and ' style="%s"' % self.cssstyles) + '>')
         if full or lnos:
-            outfile = StringIO.StringIO()
+            outfile = cStringIO.StringIO()
         else:
             outfile.write(div)
 
@@ -268,10 +313,33 @@ class HtmlFormatter(Formatter):
         if full:
             if not ret:
                 ret = div + outfile.getvalue() + '</div>\n'
-            realoutfile.write(DOC_TEMPLATE %
-                dict(title     = self.title,
-                     styledefs = self.get_style_defs('body'),
-                     code      = ret))
+            if self.cssfile:
+                try:
+                    filename = realoutfile.name
+                    cssfilename = os.path.join(os.path.dirname(filename), self.cssfile)
+                except AttributeError:
+                    print >>sys.stderr, 'Note: Cannot determine output file name, ' \
+                          'using current directory as base for the CSS file name'
+                    cssfilename = self.cssfile
+                realoutfile.write(DOC_TEMPLATE_EXTERNALCSS %
+                                  dict(title     = self.title,
+                                       cssfile   = self.cssfile,
+                                       encoding  = self.encoding,
+                                       code      = ret))
+                try:
+                    cf = open(cssfilename, "w")
+                    cf.write(CSSFILE_TEMPLATE % {'styledefs':
+                                                 self.get_style_defs('body')})
+                    cf.close()
+                except IOError, err:
+                    err.strerror = 'Error writing CSS file: ' + err.strerror
+                    raise
+            else:
+                realoutfile.write(DOC_TEMPLATE %
+                                  dict(title     = self.title,
+                                       styledefs = self.get_style_defs('body'),
+                                       encoding  = self.encoding,
+                                       code      = ret))
         elif lnos:
             realoutfile.write(ret + '</div>\n')
         else:

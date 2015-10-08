@@ -1,11 +1,11 @@
 Metadata-Version: 1.0
 Name: Pygments
-Version: 0.5.1
+Version: 0.6
 Summary: Pygments is a syntax highlighting package written in Python.
 Home-page: http://pygments.pocoo.org/
 Author: Georg Brandl
 Author-email: g.brandl@gmx.net
-License: GNU Lesser General Public License (LGPL)
+License: BSD License
 Description: 
         Pygments
         ~~~~~~~~
@@ -27,11 +27,11 @@ Description:
         is installable via *easy_install* with ``easy_install Pygments==dev``.
         
         :copyright: 2006 by Georg Brandl, Armin Ronacher, Lukas Meuser and others.
-        :license: GNU LGPL, see LICENSE for more details.
+        :license: BSD, see LICENSE for more details.
         
 Keywords: syntax highlighting
 Platform: any
-Classifier: License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)
+Classifier: License :: OSI Approved :: BSD License
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: End Users/Desktop
 Classifier: Intended Audience :: System Administrators

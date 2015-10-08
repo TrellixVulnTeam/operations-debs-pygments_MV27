@@ -6,9 +6,9 @@
     Formatter for LaTeX fancyvrb output.
 
     :copyright: 2006 by Georg Brandl.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
-import StringIO
+import cStringIO
 
 from pygments.formatter import Formatter
 from pygments.token import Token
@@ -31,6 +31,7 @@ DOC_TEMPLATE = r'''
 \documentclass{%(docclass)s}
 \usepackage{fancyvrb}
 \usepackage{color}
+\usepackage[%(encoding)s]{inputenc}
 %(preamble)s
 
 %(styledefs)s
@@ -148,10 +149,11 @@ class LatexFormatter(Formatter):
 
     def format(self, tokensource, outfile):
         # TODO: add support for background colors
+        enc = self.encoding
 
         if self.full:
             realoutfile = outfile
-            outfile = StringIO.StringIO()
+            outfile = cStringIO.StringIO()
 
         outfile.write(r'\begin{Verbatim}[commandchars=@\[\]')
         if self.linenos:
@@ -164,6 +166,8 @@ class LatexFormatter(Formatter):
         outfile.write(']\n')
 
         for ttype, value in tokensource:
+            if enc:
+                value = value.encode(enc)
             value = escape_tex(value)
             cmd = self.ttype2cmd.get(ttype)
             while cmd is None:
@@ -187,5 +191,6 @@ class LatexFormatter(Formatter):
                 dict(docclass  = self.docclass,
                      preamble  = self.preamble,
                      title     = self.title,
+                     encoding  = self.encoding,
                      styledefs = self.get_style_defs(),
                      code      = outfile.getvalue()))

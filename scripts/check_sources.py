@@ -30,8 +30,10 @@ def checker(*suffixes, **kwds):
 
 
 name_mail_re = r'[\w ]+(<.*?>)?'
-copyright_re = re.compile(r'^    :copyright: 200\d(-200\d)? by %s(, %s)*\.$' %
+copyright_re = re.compile(r'^    :copyright: 200\d(-200\d)? by %s(, %s)*[,.]$' %
                           (name_mail_re, name_mail_re))
+copyright_2_re = re.compile(r'^                %s(, %s)*[,.]$' %
+                            (name_mail_re, name_mail_re))
 coding_re    = re.compile(r'coding[:=]\s*([-\w.]+)')
 not_ix_re    = re.compile(r'\bnot\s+\S+?\s+i[sn]\s\S+')
 is_const_re  = re.compile(r'if.*?==\s+(None|False|True)\b')
@@ -124,10 +126,14 @@ def check_fileheader(fn, lines):
 
     # check for copyright and license fields
     license = llist[-2:-1]
-    if license != ["    :license: GNU LGPL, see LICENSE for more details.\n"]:
+    if license != ["    :license: BSD, see LICENSE for more details.\n"]:
         yield 0, "no correct license info"
 
-    copyright = llist[-3:-2]
+    ci = -3
+    copyright = llist[ci:ci+1]
+    while copyright and copyright_2_re.match(copyright[0]):
+        ci -= 1
+        copyright = llist[ci:ci+1]
     if not copyright or not copyright_re.match(copyright[0]):
         yield 0, "no correct copyright info"
 
@@ -179,6 +185,9 @@ def main(argv):
 
     num = 0
     out = cStringIO.StringIO()
+
+    # TODO: replace os.walk run with iteration over output of
+    #       `svn list -R`.
 
     for root, dirs, files in os.walk(path):
         if '.svn' in dirs:

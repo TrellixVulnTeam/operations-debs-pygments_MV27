@@ -71,12 +71,14 @@ def run_tests():
                  if (entry.startswith('test_') and entry.endswith('.py'))]
         files.sort()
 
-    print >>sys.stderr, '    Pygments Test Suite running, stand by...    '
+    print >>sys.stderr, '    Pygments Test Suite running, stand by...   '
+    print >>sys.stderr, '             (using Python %s)' % sys.version.split()[0]
     print >>sys.stderr, '==============================================='
 
     for testfile in files:
         globs = {}
         try:
+            __builtin__.testfile = testfile
             execfile(join(testdir, testfile), globs)
         except Exception, exc:
             raise

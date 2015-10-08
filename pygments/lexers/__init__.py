@@ -6,7 +6,7 @@
     Pygments lexers.
 
     :copyright: 2006 by Georg Brandl.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 import fnmatch
 import types
@@ -29,12 +29,23 @@ _lexer_cache = {}
 
 def _load_lexers(module_name):
     """
-    Loads a lexer (and all others in the module too)
+    Load a lexer (and all others in the module too).
     """
     mod = __import__(module_name, None, None, ['__all__'])
     for lexer_name in mod.__all__:
         cls = getattr(mod, lexer_name)
         _lexer_cache[cls.name] = cls
+
+
+def get_all_lexers():
+    """
+    Return a generator of tuples in the form ``(name, aliases,
+    filenames, mimetypes)`` of all know lexers.
+    """
+    for item in LEXERS.itervalues():
+        yield item[1:]
+    for lexer in find_plugin_lexers():
+        yield lexer.name, lexer.aliases, lexer.filenames, lexer.mimetypes
 
 
 def get_lexer_by_name(_alias, **options):
@@ -89,7 +100,7 @@ def get_lexer_for_mimetype(_mime, **options):
 
 def _iter_lexerclasses():
     """
-    Returns an iterator over all lexer classes.
+    Return an iterator over all lexer classes.
     """
     for module_name, name, _, _, _ in LEXERS.itervalues():
         if name not in _lexer_cache:
@@ -146,8 +157,6 @@ def guess_lexer(_text, **options):
     """
     Guess a lexer by strong distinctions in the text (eg, shebang).
     """
-    #XXX: i (mitsuhiko) would like to drop this function in favor of the
-    #     better guess_lexer_for_filename function.
     best_lexer = [0.0, None]
     for lexer in _iter_lexerclasses():
         rv = lexer.analyse_text(_text)

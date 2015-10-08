@@ -9,6 +9,27 @@ This page lists all builtin formatters.
 Common options
 ==============
 
+All formatters support this option:
+
+`encoding`
+    *New in Pygments 0.6.*
+
+    If given, must be an encoding name (such as ``"utf-8"``). This will
+    be used to convert the token strings (which are Unicode strings)
+    to byte strings in the output (default: ``None``).
+    It will also be written in an encoding declaration suitable for the
+    document format if the `full` option is given (e.g. a ``meta
+    content-type`` directive in HTML or an invocation of the `inputenc`
+    package in LaTeX).
+
+    If this is ``""`` or ``None``, Unicode strings will be written
+    to the output file, which most file-like objects do not support.
+    For example, `pygments.highlight()` will return a Unicode string if
+    called with no `outfile` argument and a formatter that has `encoding`
+    set to ``None`` because it uses a `StringIO.StringIO` object that
+    supports Unicode arguments to `write()`. Using a regular file object
+    wouldn't work.
+
 The `HtmlFormatter` and `LatexFormatter` classes support these options:
 
 `style`
@@ -71,7 +92,8 @@ All these classes are importable from `pygments.formatters`.
     `nowrap` option.
 
     With the `full` option, a complete HTML 4 document is output, including
-    the style definitions inside a ``<style>`` tag.
+    the style definitions inside a ``<style>`` tag, or in a separate file if
+    the `cssfile` option is given.
 
     The `get_style_defs(arg='')` method of a `HtmlFormatter` returns a string
     containing CSS rules for the CSS classes used by the formatter. The
@@ -83,6 +105,23 @@ All these classes are importable from `pygments.formatters`.
 
         td .code .kw { font-weight: bold; color: #00FF00 }
         td .code .cm { color: #999999 }
+        ...
+
+    If you have pygments 0.6 or higher you can also pass a list of tuple to the
+    `get_style_defs` method to request multiple prefixes for the tokens:
+
+    .. sourcecode:: python
+
+        formatter.get_style_defs(['div.syntax pre', 'pre.syntax'])
+
+    The output would then look like this:
+
+    .. sourcecode:: css
+
+        div.syntax pre .kw,
+        pre.syntax .kw { font-weight: bold; color: #00FF00 }
+        div.syntax pre .cm,
+        pre.syntax .cm { color: #999999 }
         ...
 
     Additional options accepted by the `HtmlFormatter`:
@@ -109,9 +148,21 @@ All these classes are importable from `pygments.formatters`.
     `cssstyles`
         Inline CSS styles for the wrapping ``<div>`` tag (default: ``''``).
 
+    `cssfile`
+        If the `full` option is true and this option is given, it must be the
+        name of an external file. The stylesheet is then written to this file
+        instead of the HTML file. *New in Pygments 0.6.*
+
     `linenospecial`
         If set to a number n > 0, every nth line number is given the CSS
         class ``"special"`` (default: ``0``).
+
+    `nobackground`
+        If set to ``True``, the formatter won't output the background color
+        for the wrapping element (this automatically defaults to ``False``
+        when there is no wrapping element [eg: no argument for the
+        `get_syntax_defs` method given]) (default: ``False``). *New in
+        Pygments 0.6.*
     
     :Aliases: ``html``
     :Filename patterns: ``*.html``, ``*.htm``
@@ -160,7 +211,26 @@ All these classes are importable from `pygments.formatters`.
     
     :Aliases: ``latex``, ``tex``
     :Filename pattern: ``*.tex``
+
+
+`RtfFormatter`
+--------------
+
+    Formats tokens as RTF markup. This formatter automatically outputs full RTF
+    documents with color information and other useful stuff. Perfect for Copy and
+    Paste into Microsoft® Word® documents.
     
+    *New in Pygments 0.6.*
+
+    Additional options accepted by the `RtfFormatter`:
+
+    `fontface`
+        The used font famliy, for example ``Bitstream Vera Sans``. Defaults to
+        some generic font which is supposed to have fixed width.
+
+    :Aliases: ``rtf``
+    :Filename pattern: ``*.rtf``
+
 
 `BBCodeFormatter`
 -----------------
@@ -246,4 +316,3 @@ All these classes are importable from `pygments.formatters`.
 
     :Aliases: ``text``, ``null``
     :Filename pattern: ``*.txt``
-

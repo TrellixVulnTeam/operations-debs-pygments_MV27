@@ -10,7 +10,7 @@
     Do not edit the MODULES dict by hand.
 
     :copyright: 2006 by Lukas Meuser.
-    :license: GNU LGPL, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 MODULES = {'basic': ['_G',
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     import pprint
 
     # you can't generally find out what module a function belongs to if you
-    # have only it's name. Because of this, here are some callback functions
+    # have only its name. Because of this, here are some callback functions
     # that recognize if a gioven function belongs to a specific module
     def module_callbacks():
         def is_in_coroutine_module(name):
