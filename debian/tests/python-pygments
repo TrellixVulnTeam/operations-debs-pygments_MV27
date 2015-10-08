@@ -4,6 +4,7 @@ set -eu
 
 cp -r tests "$ADTTMP"
 cd "$ADTTMP/tests"
+rm test_examplefiles.py test_lexers_other.py
 
 for python in $(pyversions -i); do
 	PYTHONWARNINGS=d $python ./run.py --verbose 2>&1
