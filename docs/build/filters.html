@@ -312,27 +312,6 @@ lexer.</p>
 </tbody>
 </table>
 </blockquote>
-<p><cite>GobbleFilter</cite></p>
-<blockquote>
-<p>Gobbles source code lines (eats initial characters).</p>
-<p>This filter drops the first <tt class="docutils literal">n</tt> characters off every line of code.  This
-may be useful when the source code fed to the lexer is indented by a fixed
-amount of space that isn't desired in the output.</p>
-<p>Options accepted:</p>
-<dl class="docutils">
-<dt><cite>n</cite> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>The number of characters to gobble.</dd>
-</dl>
-<p><em>New in Pygments 1.2.</em></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Name:</th><td class="field-body">gobble</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
 <p><cite>NameHighlightFilter</cite></p>
 <blockquote>
 <p>Highlight a normal Name token with a different token type.</p>
@@ -360,6 +339,27 @@ used for highlighting the strings in <cite>names</cite>.  The default is
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Name:</th><td class="field-body">highlight</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>GobbleFilter</cite></p>
+<blockquote>
+<p>Gobbles source code lines (eats initial characters).</p>
+<p>This filter drops the first <tt class="docutils literal">n</tt> characters off every line of code.  This
+may be useful when the source code fed to the lexer is indented by a fixed
+amount of space that isn't desired in the output.</p>
+<p>Options accepted:</p>
+<dl class="docutils">
+<dt><cite>n</cite> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>The number of characters to gobble.</dd>
+</dl>
+<p><em>New in Pygments 1.2.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Name:</th><td class="field-body">gobble</td>
 </tr>
 </tbody>
 </table>
@@ -407,6 +407,6 @@ code to your styleguide.</p>
 
   </div>
 </body>
-<!-- generated on: 2010-03-01 21:18:21.142721
+<!-- generated on: 2011-01-03 18:05:49.071135
      file id: filters -->
 </html>

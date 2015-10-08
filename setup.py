@@ -21,7 +21,7 @@
     The `Pygments tip`_ is installable with ``easy_install Pygments==dev``.
 
     .. _Pygments tip:
-       http://dev.pocoo.org/hg/pygments-main/archive/tip.tar.gz#egg=Pygments-dev
+       http://bitbucket.org/birkenfeld/pygments-main/get/tip.zip#egg=Pygments-dev
 
     :copyright: Copyright 2006-2010 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
@@ -60,7 +60,7 @@ else:
 
 setup(
     name = 'Pygments',
-    version = '1.3.1',
+    version = '1.4',
     url = 'http://pygments.org/',
     license = 'BSD License',
     author = 'Georg Brandl',
