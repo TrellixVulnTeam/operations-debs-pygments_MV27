@@ -211,13 +211,22 @@ div.toc h2 {
         <h2>Contents</h2>
         <ul class="contents">
         
+          <li><a href="#options-and-filters">Options and filters</a></li>
+        
+          <li><a href="#generating-styles">Generating styles</a></li>
+        
+          <li><a href="#getting-help">Getting help</a></li>
+        
+          <li><a href="#examples">Examples</a></li>
+        
           <li><a href="#a-note-on-encodings">A note on encodings</a></li>
         
         </ul>
       </div>
     
     <!-- -*- mode: rst -*- -->
-<p>You can use Pygments from the shell, provided you installed the <cite>pygmentize</cite> script:</p>
+<p>You can use Pygments from the shell, provided you installed the <cite>pygmentize</cite>
+script:</p>
 <pre class="literal-block">
 $ pygmentize test.py
 print &quot;Hello World&quot;
@@ -242,6 +251,8 @@ If no output file name is given and <tt class="docutils literal"><span class="pr
 <pre class="literal-block">
 $ pygmentize -o test.html test.py
 </pre>
+<div class="section">
+<h3><a id="options-and-filters" name="options-and-filters">Options and filters</a></h3>
 <p>Lexer and formatter options can be given using the <tt class="docutils literal"><span class="pre">-O</span></tt> option:</p>
 <pre class="literal-block">
 $ pygmentize -f html -O style=colorful,linenos=1 -l python test.py
@@ -265,8 +276,13 @@ $ pygmentize -f html -l pascal -F keywordcase:case=upper main.pas
 <p>As you see, options for the filter are given after a colon. As for <tt class="docutils literal"><span class="pre">-O</span></tt>, the
 filter name and options must be one shell word, so there may not be any spaces
 around the colon.</p>
-<p>There's a special <tt class="docutils literal"><span class="pre">-S</span></tt> option for generating style definitions. Usage is
-as follows:</p>
+</div>
+<div class="section">
+<h3><a id="generating-styles" name="generating-styles">Generating styles</a></h3>
+<p>Formatters normally don't output full style information.  For example, the HTML
+formatter by default only outputs <tt class="docutils literal"><span class="pre">&lt;span&gt;</span></tt> tags with <tt class="docutils literal"><span class="pre">class</span></tt> attributes.
+Therefore, there's a special <tt class="docutils literal"><span class="pre">-S</span></tt> option for generating style definitions.
+Usage is as follows:</p>
 <pre class="literal-block">
 $ pygmentize -f html -S colorful -a .syntax
 </pre>
@@ -274,6 +290,9 @@ $ pygmentize -f html -S colorful -a .syntax
 the &quot;colorful&quot; style prepending a &quot;.syntax&quot; selector to all style rules.</p>
 <p>For an explanation what <tt class="docutils literal"><span class="pre">-a</span></tt> means for <a class="reference" href="./formatters.html">a particular formatter</a>, look for
 the <cite>arg</cite> argument for the formatter's <cite>get_style_defs()</cite> method.</p>
+</div>
+<div class="section">
+<h3><a id="getting-help" name="getting-help">Getting help</a></h3>
 <p>The <tt class="docutils literal"><span class="pre">-L</span></tt> option lists lexers, formatters, along with their short
 names and supported file name extensions, styles and filters. If you want to see
 only one category, give it as an argument:</p>
@@ -291,6 +310,15 @@ $ pygmentize -H formatter html
 $ pygmentize -H lexer python
 </pre>
 <p>will print the help for the Python lexer, etc.</p>
+</div>
+<div class="section">
+<h3><a id="examples" name="examples">Examples</a></h3>
+<p>Create a full HTML document, including line numbers and stylesheet (using the
+&quot;emacs&quot; style), highlighting the Python file <tt class="docutils literal"><span class="pre">setup.py</span></tt> to <tt class="docutils literal"><span class="pre">setup.html</span></tt>:</p>
+<pre class="literal-block">
+$ pygmentize -O full,style=emacs -o setup.html setup.py
+</pre>
+</div>
 <div class="section">
 <h3><a id="a-note-on-encodings" name="a-note-on-encodings">A note on encodings</a></h3>
 <p><em>New in Pygments 0.9.</em></p>
@@ -311,6 +339,6 @@ formatter is the terminal encoding (<cite>sys.stdout.encoding</cite>).</li>
 
   </div>
 </body>
-<!-- generated on: 2007-10-14 22:21:01.828025
+<!-- generated on: 2008-05-06 18:28:09.993208
      file id: cmdline -->
 </html>

@@ -11,7 +11,8 @@
                 Dennis Kaarsemaker,
                 Kumar Appaiah <akumar@ee.iitm.ac.in>,
                 Varun Hiremath <varunhiremath@gmail.com>,
-                Jeremy Thurgood.
+                Jeremy Thurgood,
+                Max Battcher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -22,18 +23,19 @@ except NameError:
     from sets import Set as set
 from bisect import bisect
 
-from pygments.lexer import RegexLexer, bygroups, include, using, this, \
+from pygments.lexer import Lexer, RegexLexer, bygroups, include, using, this, \
      do_insertions
 from pygments.token import Punctuation, \
     Text, Comment, Keyword, Name, String, Generic, Operator, Number, \
-    Whitespace
+    Whitespace, Literal
 from pygments.util import get_bool_opt
+from pygments.lexers.other import BashLexer
 
-
-__all__ = ['IniLexer', 'SourcesListLexer', 'MakefileLexer', 'DiffLexer',
-           'IrcLogsLexer', 'TexLexer', 'GroffLexer', 'ApacheConfLexer',
-           'BBCodeLexer', 'MoinWikiLexer', 'RstLexer', 'VimLexer',
-           'GettextLexer', 'SquidConfLexer', 'DebianControlLexer']
+__all__ = ['IniLexer', 'SourcesListLexer', 'BaseMakefileLexer',
+           'MakefileLexer', 'DiffLexer', 'IrcLogsLexer', 'TexLexer',
+           'GroffLexer', 'ApacheConfLexer', 'BBCodeLexer', 'MoinWikiLexer',
+           'RstLexer', 'VimLexer', 'GettextLexer', 'SquidConfLexer',
+           'DebianControlLexer', 'DarcsPatchLexer']
 
 
 class IniLexer(RegexLexer):
@@ -43,7 +45,7 @@ class IniLexer(RegexLexer):
 
     name = 'INI'
     aliases = ['ini', 'cfg']
-    filenames = ['*.ini', '*.cfg']
+    filenames = ['*.ini', '*.cfg', '*.properties']
     mimetypes = ['text/x-ini']
 
     tokens = {
@@ -113,56 +115,89 @@ class SourcesListLexer(RegexLexer):
         return True
 
 
-class MakefileLexer(RegexLexer):
+class MakefileLexer(Lexer):
     """
-    Lexer for Makefiles.
+    Lexer for BSD and GNU make extensions (lenient enough to handle both in
+    the same file even).
+
+    *Rewritten in Pygments 0.10.*
     """
 
     name = 'Makefile'
-    aliases = ['make', 'makefile', 'mf']
-    filenames = ['*.mak', 'Makefile', 'makefile']
+    aliases = ['make', 'makefile', 'mf', 'bsdmake']
+    filenames = ['*.mak', 'Makefile', 'makefile', 'Makefile.*']
     mimetypes = ['text/x-makefile']
+
+    r_special = re.compile(r'^(?:'
+        # BSD Make
+        r'\.\s*(include|undef|error|warning|if|else|elif|endif|for|endfor)|'
+        # GNU Make
+        r'\s*(ifeq|ifneq|ifdef|ifndef|else|endif|-?include|define|endef|:))(?=\s)')
+    r_comment = re.compile(r'^\s*@?#')
+
+    def get_tokens_unprocessed(self, text):
+        ins = []
+        lines = text.splitlines(True)
+        done = ''
+        lex = BaseMakefileLexer(**self.options)
+        backslashflag = False
+        for line in lines:
+            if self.r_special.match(line) or backslashflag:
+                ins.append((len(done), [(0, Comment.Preproc, line)]))
+                backslashflag = line.strip().endswith('\\')
+            elif self.r_comment.match(line):
+                ins.append((len(done), [(0, Comment, line)]))
+            else:
+                done += line
+        for item in do_insertions(ins, lex.get_tokens_unprocessed(done)):
+            yield item
+
+
+class BaseMakefileLexer(RegexLexer):
+    """
+    Lexer for simple Makefiles (no preprocessing).
+
+    *New in Pygments 0.10.*
+    """
+
+    name = 'Makefile'
+    aliases = ['basemake']
+    filenames = []
+    mimetypes = []
 
     tokens = {
         'root': [
+            (r'^(?:[\t ]+.*\n|\n)+', using(BashLexer)),
+            (r'\$\((?:.*\\\n|.*\n)+', using(BashLexer)),
             (r'\s+', Text),
             (r'#.*?\n', Comment),
-            (r'(cmdswitches|error|export|message|include|if|ifdef|ifndef|else|'
-             r'else\s*if|else\s*ifdef|else\s*ifndef|endif|undef)\b', Keyword),
+            (r'(export)(\s+)(?=[a-zA-Z0-9_${}\t -]+\n)',
+             bygroups(Keyword, Text), 'export'),
+            (r'export\s+', Keyword),
             # assignment
-            (r'([a-zA-Z_][a-zA-Z0-9_]*)(\s*)([?:+]?=)([ \t]*)',
-             bygroups(Name.Variable, Text, Operator, Text), 'var'),
+            (r'([a-zA-Z0-9_${}.-]+)(\s*)([!?:+]?=)([ \t]*)((?:.*\\\n|.*\n)+)',
+             bygroups(Name.Variable, Text, Operator, Text, using(BashLexer))),
+            # strings
             (r'"(\\\\|\\"|[^"])*"', String.Double),
             (r"'(\\\\|\\'|[^'])*'", String.Single),
             # targets
-            (r'([^\n:]+)(:)([ \t]*)', bygroups(Name.Function, Operator, Text),
-             'block-header')
+            (r'([^\n:]+)(:+)([ \t]*)', bygroups(Name.Function, Operator, Text),
+             'block-header'),
+            #TODO: add paren handling (grr)
         ],
-        'var': [
-            (r'\\\n', String),
+        'export': [
+            (r'[a-zA-Z0-9_${}-]+', Name.Variable),
             (r'\n', Text, '#pop'),
-            (r'\\', String),
-            (r'[^\\\n]+', String),
+            (r'\s+', Text),
         ],
         'block-header': [
             (r'[^,\\\n#]+', Number),
             (r',', Punctuation),
             (r'#.*?\n', Comment),
-            # line continuation
-            (r'\\\n', Text),
-            (r'\\', Text),
-            (r'\n[\t ]+', Text, 'block'),
-            (r'\n', Text, '#pop')
+            (r'\\\n', Text), # line continuation
+            (r'\\.', Text),
+            (r'(?:[\t ]+.*\n|\n)+', using(BashLexer), '#pop'),
         ],
-        'block': [
-            (r'#.*?(?=\n)', Comment),
-            (r'\n[\t ]+', Text),
-            (r'[^\n$]+', String),
-            (r'\$[A-Za-z0-9_]+', String.Interpol),
-            (r'\$\(.*?\)', String.Interpol),
-            (r'\$', String),
-            (r'\n', Text, '#pop:2'),
-        ]
     }
 
 
@@ -196,6 +231,44 @@ class DiffLexer(RegexLexer):
             return True
         if text[:4] == '--- ':
             return 0.9
+
+
+class DarcsPatchLexer(RegexLexer):
+    """
+    DarcsPatchLexer is a lexer for the various versions of the darcs patch
+    format.  Examples of this format are derived by commands such as
+    ``darcs annotate --patch`` and ``darcs send``.
+
+    *New in Pygments 0.10.*
+    """
+    name = 'Darcs Patch'
+    aliases = ['dpatch']
+    filenames = ['*.dpatch', '*.darcspatch']
+
+    tokens = {
+        'root': [
+            (r'<', Operator),
+            (r'>', Operator),
+            (r'{', Operator, 'patch'),
+            (r'(\[)((?:TAG )?)(.*)(\n)(.*)(\*\*)(\d+)(\s?)', bygroups(Operator, Keyword, Name, Text,
+                Name, Operator, Literal.Date, Text), 'comment'),
+            (r'New patches:', Generic.Heading),
+            (r'Context:', Generic.Heading),
+            (r'Patch bundle hash:', Generic.Heading),
+            (r'\s+|\w+', Text),
+        ],
+        'comment': [
+            (r' .*\n', Comment),
+            (r'\]', Operator, "#pop"),
+        ],
+        'patch': [
+            (r'}', Operator, "#pop"),
+            (r'(\w+)(.*\n)', bygroups(Keyword, Text)),
+            (r'\+.*\n', Generic.Inserted),
+            (r'-.*\n', Generic.Deleted),
+            (r'.*\n', Text),
+        ],
+    }
 
 
 class IrcLogsLexer(RegexLexer):
@@ -233,7 +306,7 @@ class IrcLogsLexer(RegexLexer):
             ("^" + timestamp + r'(\s*<.*>\s*)$', bygroups(Comment.Preproc, Name.Tag)),
             # normal msgs
             ("^" + timestamp + r"""
-                (\s*<.*>\s*)          # Nick """,
+                (\s*<.*?>\s*)          # Nick """,
              bygroups(Comment.Preproc, Name.Tag), 'msg'),
             # /me msgs
             ("^" + timestamp + r"""
@@ -249,7 +322,7 @@ class IrcLogsLexer(RegexLexer):
             (r"^.*?\n", Text),
         ],
         'msg': [
-            (r"[^\s]+:", Name.Attribute),  # Prefix
+            (r"[^\s]+:(?!//)", Name.Attribute),  # Prefix
             (r".*\n", Text, '#pop'),
         ],
     }
@@ -410,11 +483,13 @@ class ApacheConfLexer(RegexLexer):
             (r'(<[^\s>]+)(?:(\s+)(.*?))?(>)',
              bygroups(Name.Tag, Text, String, Name.Tag)),
             (r'([a-zA-Z][a-zA-Z0-9]*)(\s+)',
-             bygroups(Name.Builtin, Text), 'value')
+             bygroups(Name.Builtin, Text), 'value'),
+            (r'\.+', Text),
         ],
         'value': [
             (r'$', Text, '#pop'),
             (r'[^\S\n]+', Text),
+            (r'\d+\.\d+\.\d+\.\d+(?:/\d+)?', Number),
             (r'\d+', Number),
             (r'/([a-zA-Z0-9][a-zA-Z0-9_./-]+)', String.Other),
             (r'(on|off|none|any|all|double|email|dns|min|minimal|'
@@ -561,7 +636,7 @@ class RstLexer(RegexLexer):
              r'(\n[ \t]*\n)([ \t]+)(.*)(\n)((?:(?:\8.*|)\n)+)',
              _handle_sourcecode),
             # A directive
-            (r'^( *\.\.)(\s*)(\w+)(::)(?:([ \t]*)(.+))?',
+            (r'^( *\.\.)(\s*)([\w-]+)(::)(?:([ \t]*)(.+))?',
              bygroups(Punctuation, Text, Operator.Word, Punctuation, Text, Keyword)),
             # A reference target
             (r'^( *\.\.)(\s*)([\w\t ]+:)(.*?)$',
