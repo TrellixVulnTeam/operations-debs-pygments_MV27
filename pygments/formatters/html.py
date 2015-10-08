@@ -48,9 +48,16 @@ def _get_ttype_class(ttype):
     while fname is None:
         aname = '-' + ttype[-1] + aname
         ttype = ttype.parent
-        fname = STANDARD_TYPES.get(ttype, '')
+        fname = STANDARD_TYPES.get(ttype)
     return fname + aname
 
+
+CSSFILE_TEMPLATE = '''\
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%%; }
+%(styledefs)s
+'''
 
 DOC_HEADER = '''\
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -61,16 +68,13 @@ DOC_HEADER = '''\
   <title>%(title)s</title>
   <meta http-equiv="content-type" content="text/html; charset=%(encoding)s">
   <style type="text/css">
-td.linenos { background-color: #f0f0f0; padding-right: 10px; }
-span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
-%(styledefs)s
+''' + CSSFILE_TEMPLATE + '''
   </style>
 </head>
 <body>
 <h2>%(title)s</h2>
 
 '''
-
 
 DOC_HEADER_EXTERNALCSS = '''\
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -90,12 +94,6 @@ DOC_HEADER_EXTERNALCSS = '''\
 DOC_FOOTER = '''\
 </body>
 </html>
-'''
-
-
-CSSFILE_TEMPLATE = '''\
-td.linenos { background-color: #f0f0f0; padding-right: 10px; }
-%(styledefs)s
 '''
 
 
@@ -199,6 +197,10 @@ class HtmlFormatter(Formatter):
         If you set this option, the default selector for `get_style_defs()`
         will be this class.
 
+        *New in Pygments 0.9:* If you select the ``'table'`` line numbers, the
+        wrapping table will have a CSS class of this string plus ``'table'``,
+        the default is accordingly ``'highlighttable'``.
+
     `cssstyles`
         Inline CSS styles for the wrapping ``<div>`` tag (default: ``''``).
 
@@ -223,6 +225,12 @@ class HtmlFormatter(Formatter):
 
         The default value is ``False``, which means no line numbers at all.
 
+        **Note:** with the default ("table") line number mechanism, the line
+        numbers and code will have different line heights in Internet Explorer
+        unless you give the enclosing ``<pre>`` tags an explicit ``line-height``
+        CSS property (you get the default line spacing with ``line-height:
+        125%``).
+
     `linenostart`
         The line number for the first line (default: ``1``).
 
@@ -245,6 +253,11 @@ class HtmlFormatter(Formatter):
         which is enough to break a line inside ``<pre>`` tags, but you can
         e.g. set it to ``"<br>"`` to get HTML line breaks. *New in Pygments
         0.7.*
+
+    `lineanchors`
+        If set to a nonempty string, e.g. ``foo``, the formatter will wrap each
+        output line in an anchor tag with a ``name`` of ``foo-linenumber``.
+        This allows easy linking to certain lines. *New in Pygments 0.9.*
 
 
     **Subclassing the HTML formatter**
@@ -321,6 +334,7 @@ class HtmlFormatter(Formatter):
         self.linenospecial = abs(get_int_opt(options, 'linenospecial', 0))
         self.nobackground = get_bool_opt(options, 'nobackground', False)
         self.lineseparator = options.get('lineseparator', '\n')
+        self.lineanchors = options.get('lineanchors', '')
 
         self._class_cache = {}
         self._create_stylesheet()
@@ -383,7 +397,7 @@ class HtmlFormatter(Formatter):
                   if cls and style]
         styles.sort()
         lines = ['%s { %s } /* %s */' % (prefix(cls), style, repr(ttype)[6:])
-                 for level, ttype, cls, style in styles]
+                 for (level, ttype, cls, style) in styles]
         if arg and not self.nobackground and \
            self.style.background_color is not None:
             text_style = ''
@@ -455,7 +469,8 @@ class HtmlFormatter(Formatter):
             ls = '\n'.join([(i%st == 0 and ('%*d' % (mw, i)) or '')
                             for i in range(fl, fl + lncount)])
 
-        yield 0, ('<table><tr><td class="linenos"><pre>' +
+        yield 0, ('<table class="%stable">' % self.cssclass +
+                  '<tr><td class="linenos"><pre>' +
                   ls + '</pre></td><td class="code">')
         yield 0, dummyoutfile.getvalue()
         yield 0, '</td></tr></table>'
@@ -475,8 +490,19 @@ class HtmlFormatter(Formatter):
                 num += 1
         else:
             for t, line in lines:
-                yield 1, '<span class="lineno">%*s</span> ' % (mw, (num%st and ' ' or num)) + line
+                yield 1, '<span class="lineno">%*s</span> ' % (
+                    mw, (num%st and ' ' or num)) + line
                 num += 1
+
+    def _wrap_lineanchors(self, inner):
+        s = self.lineanchors
+        i = 0
+        for t, line in inner:
+            if t:
+                i += 1
+                yield 1, '<a name="%s-%d"></a>' % (s, i) + line
+            else:
+                yield 0, line
 
     def _wrap_div(self, inner):
         yield 0, ('<div' + (self.cssclass and ' class="%s"' % self.cssclass)
@@ -576,6 +602,8 @@ class HtmlFormatter(Formatter):
         if not self.nowrap:
             if self.linenos == 2:
                 source = self._wrap_inlinelinenos(source)
+            if self.lineanchors:
+                source = self._wrap_lineanchors(source)
             source = self.wrap(source, outfile)
             if self.linenos == 1:
                 source = self._wrap_tablelinenos(source)

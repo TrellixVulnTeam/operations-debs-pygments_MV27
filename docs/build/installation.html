@@ -251,28 +251,29 @@ internet connection.</p>
 <div class="section">
 <h4><a id="if-you-want-to-play-around-with-the-code" name="if-you-want-to-play-around-with-the-code">If you want to play around with the code</a></h4>
 <ol class="arabic simple">
-<li>Install <a class="reference" href="http://subversion.tigris.org/">Subversion</a></li>
-<li><tt class="docutils literal"><span class="pre">svn</span> <span class="pre">co</span> <span class="pre">http://trac.pocoo.org/repos/pygments/trunk</span> <span class="pre">pygments</span></tt></li>
+<li>Install <a class="reference" href="http://selenic.com/mercurial/">Mercurial</a></li>
+<li><tt class="docutils literal"><span class="pre">hg</span> <span class="pre">clone</span> <span class="pre">http://dev.pocoo.org/hg/pygments-main</span> <span class="pre">pygments</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">pygments</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">ln</span> <span class="pre">-s</span> <span class="pre">pygments</span> <span class="pre">/usr/lib/python2.X/site-packages</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">ln</span> <span class="pre">-s</span> <span class="pre">pygmentize</span> <span class="pre">/usr/local/bin</span></tt></li>
 </ol>
 <p>As an alternative to steps 4 and 5 you can also do <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></tt>
 which will install the package via setuptools in development mode.</p>
-</div>
-<div class="section">
-<h4><a id="if-you-just-want-the-latest-features-and-use-them" name="if-you-just-want-the-latest-features-and-use-them">If you just want the latest features and use them</a></h4>
-<pre class="literal-block">
-sudo easy_install Pygments==dev
-</pre>
-<p>This will install a Pygments egg containing the latest Subversion trunk code
+<!-- If you just want the latest features and use them
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+::
+
+   sudo easy_install Pygments==dev
+
+This will install a Pygments egg containing the latest Subversion trunk code
 in your Python installation's site-packages directory. Every time the command
-is run, the sources are updated from Subversion.</p>
+is run, the sources are updated from Subversion. -->
 </div>
 </div>
 
   </div>
 </body>
-<!-- generated on: 2007-06-27 20:57:13.991658
+<!-- generated on: 2007-10-14 22:21:04.062297
      file id: installation -->
 </html>

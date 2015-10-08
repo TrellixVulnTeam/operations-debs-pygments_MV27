@@ -297,17 +297,17 @@ style this formatter isn't in the standard library ;-)</p>
             <span class="c"># a style item is a tuple in the following form:</span>
             <span class="c"># colors are readily specified in hex: &#39;RRGGBB&#39;</span>
             <span class="k">if</span> <span class="n">style</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]:</span>
-                <span class="n">start</span> <span class="o">+=</span> <span class="s">&#39;&lt;font color=&quot;#</span><span class="si">%s</span><span class="s">&quot;&gt;&#39;</span> <span class="o">%</span> <span class="n">color</span>
-                <span class="n">end</span> <span class="o">+=</span> <span class="s">&#39;&lt;/font&gt;&#39;</span>
+                <span class="n">start</span> <span class="o">+=</span> <span class="s">&#39;&lt;font color=&quot;#</span><span class="si">%s</span><span class="s">&quot;&gt;&#39;</span> <span class="o">%</span> <span class="n">style</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="s">&#39;&lt;/font&gt;&#39;</span> <span class="o">+</span> <span class="n">end</span>
             <span class="k">if</span> <span class="n">style</span><span class="p">[</span><span class="s">&#39;bold&#39;</span><span class="p">]:</span>
                 <span class="n">start</span> <span class="o">+=</span> <span class="s">&#39;&lt;b&gt;&#39;</span>
-                <span class="n">end</span> <span class="o">+=</span> <span class="s">&#39;&lt;/b&gt;&#39;</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="s">&#39;&lt;/b&gt;&#39;</span> <span class="o">+</span> <span class="n">end</span>
             <span class="k">if</span> <span class="n">style</span><span class="p">[</span><span class="s">&#39;italic&#39;</span><span class="p">]:</span>
                 <span class="n">start</span> <span class="o">+=</span> <span class="s">&#39;&lt;i&gt;&#39;</span>
-                <span class="n">end</span> <span class="o">+=</span> <span class="s">&#39;&lt;/i&gt;&#39;</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="s">&#39;&lt;/i&gt;&#39;</span> <span class="o">+</span> <span class="n">end</span>
             <span class="k">if</span> <span class="n">style</span><span class="p">[</span><span class="s">&#39;underline&#39;</span><span class="p">]:</span>
                 <span class="n">start</span> <span class="o">+=</span> <span class="s">&#39;&lt;u&gt;&#39;</span>
-                <span class="n">end</span> <span class="o">+=</span> <span class="s">&#39;&lt;/u&gt;&#39;</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="s">&#39;&lt;/u&gt;&#39;</span> <span class="o">+</span> <span class="n">end</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokensource</span><span class="p">,</span> <span class="n">outfile</span><span class="p">):</span>
@@ -367,6 +367,6 @@ is up to the formatter) and has to return a string or <tt class="docutils litera
 
   </div>
 </body>
-<!-- generated on: 2007-06-27 20:57:11.311644
+<!-- generated on: 2007-10-14 22:21:02.413247
      file id: formatterdevelopment -->
 </html>

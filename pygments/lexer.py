@@ -56,9 +56,9 @@ class Lexer(object):
     ``encoding``
         If given, must be an encoding name. This encoding will be used to
         convert the input string to Unicode, if it is not already a Unicode
-        string. The default is to use latin1 (default: 'latin1').
-        Can also be 'guess' to use a simple UTF-8 / Latin1 detection, or
-        'chardet' to use the chardet library, if it is installed.
+        string (default: ``'latin1'``).
+        Can also be ``'guess'`` to use a simple UTF-8 / Latin1 detection, or
+        ``'chardet'`` to use the chardet library, if it is installed.
     """
 
     #: Name of the lexer
@@ -230,7 +230,8 @@ class combined(tuple):
         return tuple.__new__(cls, args)
 
     def __init__(self, *args):
-        tuple.__init__(self, args)
+        # tuple.__init__ doesn't do anything
+        pass
 
 
 class _PseudoMatch(object):
@@ -403,7 +404,8 @@ class RegexLexerMeta(LexerMeta):
                 elif isinstance(tdef2, tuple):
                     # push more than one state
                     for state in tdef2:
-                        assert state in unprocessed, \
+                        assert (state in unprocessed or
+                                state in ('#pop', '#push')), \
                                'unknown new state ' + state
                     new_state = tdef2
                 else:
@@ -486,7 +488,13 @@ class RegexLexer(Lexer):
                     if new_state is not None:
                         # state transition
                         if isinstance(new_state, tuple):
-                            statestack.extend(new_state)
+                            for state in new_state:
+                                if state == '#pop':
+                                    statestack.pop()
+                                elif state == '#push':
+                                    statestack.append(statestack[-1])
+                                else:
+                                    statestack.append(state)
                         elif isinstance(new_state, int):
                             # pop
                             del statestack[new_state:]

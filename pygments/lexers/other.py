@@ -17,8 +17,8 @@ from pygments.token import Error, Punctuation, \
 from pygments.util import shebang_matches
 
 
-__all__ = ['SqlLexer', 'BrainfuckLexer', 'BashLexer', 'BatchLexer',
-           'BefungeLexer', 'RedcodeLexer']
+__all__ = ['SqlLexer', 'MySqlLexer', 'BrainfuckLexer', 'BashLexer',
+           'BatchLexer', 'BefungeLexer', 'RedcodeLexer', 'MOOCodeLexer']
 
 
 class SqlLexer(RegexLexer):
@@ -122,8 +122,81 @@ class SqlLexer(RegexLexer):
             # TODO: Backslash escapes?
             (r"'(''|[^'])*'", String.Single),
             (r'"(""|[^"])*"', String.Symbol), # not a real string literal in ANSI SQL
-            (r"`(``|[^`])*`", String.Backtick),
             (r'[a-zA-Z_][a-zA-Z0-9_]*', Name),
+            (r'[;:()\[\],\.]', Punctuation)
+        ],
+        'multiline-comments': [
+            (r'/\*', Comment.Multiline, 'multiline-comments'),
+            (r'\*/', Comment.Multiline, '#pop'),
+            (r'[^/\*]+', Comment.Multiline),
+            (r'[/*]', Comment.Multiline)
+        ]
+    }
+
+
+class MySqlLexer(RegexLexer):
+    """
+    Special lexer for MySQL.
+    """
+
+    name = 'MySQL'
+    aliases = ['mysql']
+    mimetypes = ['text/x-mysql']
+
+    flags = re.IGNORECASE
+    tokens = {
+        'root': [
+            (r'\s+', Text),
+            (r'(#|--\s+).*?\n', Comment.Single),
+            (r'/\*', Comment.Multiline, 'multiline-comments'),
+            (r'[0-9]+', Number.Integer),
+            (r'[0-9]*\.[0-9]+(e[+-][0-9]+)', Number.Float),
+            # TODO: add backslash escapes
+            (r"'(''|[^'])*'", String.Single),
+            (r'"(""|[^"])*"', String.Double),
+            (r"`(``|[^`])*`", String.Symbol),
+            (r'[+*/<>=~!@#%^&|`?^-]', Operator),
+            (r'\b(tinyint|smallint|mediumint|int|integer|bigint|date|'
+             r'datetime|time|bit|bool|tinytext|mediumtext|longtext|text|'
+             r'tinyblob|mediumblob|longblob|blob|float|double|double\s+'
+             r'precision|real|numeric|dec|decimal|timestamp|year|char|'
+             r'varchar|varbinary|varcharacter|enum|set)(\b\s*)(\()?',
+             bygroups(Keyword.Type, Text, Punctuation)),
+            (r'\b(add|all|alter|analyze|and|as|asc|asensitive|before|between|'
+             r'bigint|binary|blob|both|by|call|cascade|case|change|char|'
+             r'character|check|collate|column|condition|constraint|continue|'
+             r'convert|create|cross|current_date|current_time|'
+             r'current_timestamp|current_user|cursor|database|databases|'
+             r'day_hour|day_microsecond|day_minute|day_second|dec|decimal|'
+             r'declare|default|delayed|delete|desc|describe|deterministic|'
+             r'distinct|distinctrow|div|double|drop|dual|each|else|elseif|'
+             r'enclosed|escaped|exists|exit|explain|fetch|float|float4|float8'
+             r'|for|force|foreign|from|fulltext|grant|group|having|'
+             r'high_priority|hour_microsecond|hour_minute|hour_second|if|'
+             r'ignore|in|index|infile|inner|inout|insensitive|insert|int|'
+             r'int1|int2|int3|int4|int8|integer|interval|into|is|iterate|'
+             r'join|key|keys|kill|leading|leave|left|like|limit|lines|load|'
+             r'localtime|localtimestamp|lock|long|loop|low_priority|match|'
+             r'minute_microsecond|minute_second|mod|modifies|natural|'
+             r'no_write_to_binlog|not|numeric|on|optimize|option|optionally|'
+             r'or|order|out|outer|outfile|precision|primary|procedure|purge|'
+             r'raid0|read|reads|real|references|regexp|release|rename|repeat|'
+             r'replace|require|restrict|return|revoke|right|rlike|schema|'
+             r'schemas|second_microsecond|select|sensitive|separator|set|'
+             r'show|smallint|soname|spatial|specific|sql|sql_big_result|'
+             r'sql_calc_found_rows|sql_small_result|sqlexception|sqlstate|'
+             r'sqlwarning|ssl|starting|straight_join|table|terminated|then|'
+             r'to|trailing|trigger|undo|union|unique|unlock|unsigned|update|'
+             r'usage|use|using|utc_date|utc_time|utc_timestamp|values|'
+             r'varying|when|where|while|with|write|x509|xor|year_month|'
+             r'zerofill)\b', Keyword),
+            # TODO: this list is not complete
+            (r'\b(auto_increment|engine|charset|tables)\b', Keyword.Pseudo),
+            (r'(true|false|null)', Name.Constant),
+            (r'([a-zA-Z_][a-zA-Z0-9_]*)(\s*)(\()',
+             bygroups(Name.Function, Text, Punctuation)),
+            (r'[a-zA-Z_][a-zA-Z0-9_]*', Name),
+            (r'@[A-Za-z0-9]*[._]*[A-Za-z0-9]*', Name.Variable),
             (r'[;:()\[\],\.]', Punctuation)
         ],
         'multiline-comments': [
@@ -209,12 +282,17 @@ class BashLexer(RegexLexer):
     filenames = ['*.sh']
     mimetypes = ['application/x-sh', 'application/x-shellscript']
 
-    # TODO: heredocs and perhaps some other niceties
-
     tokens = {
         'root': [
+            include('basic'),
+            (r'\$\(', Keyword, 'paren'),
+            (r'\${#?', Keyword, 'curly'),
+            (r'`', String.Backtick, 'backticks'),
+            include('data'),
+        ],
+        'basic': [
             (r'\b(if|fi|else|while|do|done|for|then|return|function|case|'
-             r'select|continue|until)\s*\b',
+             r'select|continue|until|esac|elif)\s*\b',
              Keyword),
             (r'\b(alias|bg|bind|break|builtin|caller|cd|command|compgen|'
              r'complete|declare|dirs|disown|echo|enable|eval|exec|exit|'
@@ -224,24 +302,34 @@ class BashLexer(RegexLexer):
              r'ulimit|umask|unalias|unset|wait)\s*\b',
              Name.Builtin),
             (r'#.*\n', Comment),
+            (r'\\[\w\W]', String.Escape),
             (r'(\b\w+)(\s*)(=)', bygroups(Name.Variable, Text, Operator)),
             (r'[\[\]{}()=]+', Operator),
-            (r'(\$\()(.*?)(\))', bygroups(Keyword, using(this), Keyword)),
-            (r'\${#?', Keyword, 'curly'),
-            (r'`.+`', String),
-            (r'\d+(?= |\Z)', Number),
-            (r'\$#?(\w+|.)', Name.Variable),
+            (r'<<\s*(\'?)\\?(\w+)[\w\W]+?\2', String),
+        ],
+        'data': [
             (r'"(\\\\|\\[0-7]+|\\.|[^"])*"', String.Double),
             (r"'(\\\\|\\[0-7]+|\\.|[^'])*'", String.Single),
             (r'\s+', Text),
-            (r'[^=\s\n\[\]{}()$"\']+', Text),
+            (r'[^=\s\n\[\]{}()$"\'`\\]+', Text),
+            (r'\d+(?= |\Z)', Number),
+            (r'\$#?(\w+|.)', Name.Variable),
         ],
         'curly': [
             (r'}', Keyword, '#pop'),
             (r':-', Keyword),
-            (r'[a-zA-Z0-9]+', Name.Variable),
-            (r'[^}:]+', Punctuation),
+            (r'[a-zA-Z0-9_]+', Name.Variable),
+            (r'[^}:"\'`$]+', Punctuation),
             (r':', Punctuation),
+            include('root'),
+        ],
+        'paren': [
+            (r'\)', Keyword, '#pop'),
+            include('root'),
+        ],
+        'backticks': [
+            (r'`', String.Backtick, '#pop'),
+            include('root'),
         ],
     }
 
@@ -337,4 +425,47 @@ class RedcodeLexer(RegexLexer):
             #  Numbers
             (r'[-+]?\d+', Number.Integer),
         ],
+    }
+
+
+class MOOCodeLexer(RegexLexer):
+    """
+    For `MOOCode <http://www.moo.mud.org/>`_ (the MOO scripting
+    language).
+
+    *New in Pygments 0.9.*
+    """
+    name = 'MOOCode'
+    filenames = ['*.moo']
+    aliases = ['moocode']
+    mimetypes = ['text/x-moocode']
+
+    tokens = {
+        'root' : [
+            # Numbers
+            (r'(0|[1-9][0-9_]*)', Number.Integer),
+            # Strings
+            (r'"(\\\\|\\"|[^"])*"', String),
+            # exceptions
+            (r'(E_PERM|E_DIV)', Name.Exception),
+            # db-refs
+            (r'((#[-0-9]+)|(\$[a-z_A-Z0-9]+))', Name.Entity),
+            # Keywords
+            (r'\b(if|else|elseif|endif|for|endfor|fork|endfork|while'
+             r'|endwhile|break|continue|return|try'
+             r'|except|endtry|finally|in)\b', Keyword),
+            # builtins
+            (r'(random|length)', Name.Builtin),
+            # special variables
+            (r'(player|caller|this|args)', Name.Variable.Instance),
+            # skip whitespace
+            (r'\s+', Text),
+            (r'\n', Text),
+            # other operators
+            (r'([!;=,{}&\|:\.\[\]@\(\)\<\>\?]+)', Operator),
+            # function call
+            (r'([a-z_A-Z0-9]+)(\()', bygroups(Name.Function, Operator)),
+            # variables
+            (r'([a-zA-Z_0-9]+)', Text),
+        ]
     }

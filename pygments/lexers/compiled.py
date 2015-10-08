@@ -24,6 +24,8 @@ from pygments.token import \
      Text, Comment, Operator, Keyword, Name, String, Number, Punctuation, \
      Error
 
+# backwards compatibility
+from pygments.lexers.functional import OcamlLexer
 
 __all__ = ['CLexer', 'CppLexer', 'DLexer', 'DelphiLexer', 'JavaLexer',
            'DylanLexer', 'OcamlLexer', 'ObjectiveCLexer']
@@ -220,7 +222,7 @@ class DLexer(RegexLexer):
             # Comments
             (r'//(.*?)\n', Comment),
             (r'/(\\\n)?[*](.|\n)*?[*](\\\n)?/', Comment),
-            (r'/\+', Comment, 'nestedcomment'),
+            (r'/\+', Comment, 'nested_comment'),
             # Keywords
             (r'(abstract|alias|align|asm|assert|auto|body|break|case|cast'
              r'|catch|class|const|continue|debug|default|delegate|delete'
@@ -230,7 +232,7 @@ class DLexer(RegexLexer):
              r'|package|pragma|private|protected|public|ref|return|scope'
              r'|static|struct|super|switch|synchronized|template|this|throw'
              r'|try|typedef|typeid|typeof|union|unittest|version|volatile'
-             r'|while|with)\b', Keyword
+             r'|while|with|__traits)\b', Keyword
             ),
             (r'(bool|cdouble|cent|cfloat|char|creal|dchar|double|float|idouble'
              r'|ifloat|int|ireal|long|real|short|ubyte|ucent|uint|ulong|ushort'
@@ -238,6 +240,7 @@ class DLexer(RegexLexer):
             ),
             (r'(false|true|null)\b', Keyword.Constant),
             (r'macro\b', Keyword.Reserved),
+            (r'(string|wstring|dstring)\b', Name.Builtin),
             # FloatLiteral
             # -- HexFloat
             (r'0[xX]([0-9a-fA-F_]*\.[0-9a-fA-F_]+|[0-9a-fA-F_]+)'
@@ -262,31 +265,90 @@ class DLexer(RegexLexer):
             ),
             # StringLiteral
             # -- WysiwygString
-            (r'(?s)r"[^"]*"[cwd]?', String),
+            (r'r"[^"]*"[cwd]?', String),
             # -- AlternateWysiwygString
-            (r'(?s)`[^`]*`[cwd]?', String),
+            (r'`[^`]*`[cwd]?', String),
             # -- DoubleQuotedString
-            (r'(?s)"(\\"|[^"])*"[cwd]?', String),
+            (r'"(\\\\|\\"|[^"])*"[cwd]?', String),
             # -- EscapeSequence
             (r"""\\(['"?\\abfnrtv]|x[0-9a-fA-F]{2}|[0-7]{1,3}"""
              r"""|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|&\w+;)""",
              String
             ),
             # -- HexString
-            (r'(?s)x"[0-9a-fA-F_\s]*"[cwd]?', String),
+            (r'x"[0-9a-fA-F_\s]*"[cwd]?', String),
+            # -- DelimitedString
+            (r'q"\[', String, 'delimited_bracket'),
+            (r'q"\(', String, 'delimited_parenthesis'),
+            (r'q"<', String, 'delimited_angle'),
+            (r'q"{', String, 'delimited_curly'),
+            (r'q"([a-zA-Z_]\w*)\n.*?\n\1"', String),
+            (r'q"(.).*?\1"', String),
+            # -- TokenString
+            (r'q{', String, 'token_string'),
             # Tokens
             (r'(~=|\^=|%=|\*=|==|!>=|!<=|!<>=|!<>|!<|!>|!=|>>>=|>>>|>>=|>>|>='
              r'|<>=|<>|<<=|<<|<=|\+\+|\+=|--|-=|\|\||\|=|&&|&=|\.\.\.|\.\.|/=)'
-             r'|[/.&|\-+<>!()\[\]{}?,;:$=*%^~]', Text #Punctuation
+             r'|[/.&|\-+<>!()\[\]{}?,;:$=*%^~]', Punctuation
             ),
             # Identifier
             (r'[a-zA-Z_]\w*', Name),
         ],
-        'nestedcomment': [
+        'nested_comment': [
             (r'[^+/]+', Comment),
             (r'/\+', Comment, '#push'),
             (r'\+/', Comment, '#pop'),
             (r'[+/]', Comment),
+        ],
+        'token_string': [
+            (r'{', Punctuation, 'token_string_nest'),
+            (r'}', String, '#pop'),
+            include('root'),
+        ],
+        'token_string_nest': [
+            (r'{', Punctuation, '#push'),
+            (r'}', Punctuation, '#pop'),
+            include('root'),
+        ],
+        'delimited_bracket': [
+            (r'[^\[\]]+', String),
+            (r'\[', String, 'delimited_inside_bracket'),
+            (r'\]"', String, '#pop'),
+        ],
+        'delimited_inside_bracket': [
+            (r'[^\[\]]+', String),
+            (r'\[', String, '#push'),
+            (r'\]', String, '#pop'),
+        ],
+        'delimited_parenthesis': [
+            (r'[^\(\)]+', String),
+            (r'\(', String, 'delimited_inside_parenthesis'),
+            (r'\)"', String, '#pop'),
+        ],
+        'delimited_inside_parenthesis': [
+            (r'[^\(\)]+', String),
+            (r'\(', String, '#push'),
+            (r'\)', String, '#pop'),
+        ],
+        'delimited_angle': [
+            (r'[^<>]+', String),
+            (r'<', String, 'delimited_inside_angle'),
+            (r'>"', String, '#pop'),
+        ],
+        'delimited_inside_angle': [
+            (r'[^<>]+', String),
+            (r'<', String, '#push'),
+            (r'>', String, '#pop'),
+        ],
+        'delimited_curly': [
+            (r'[^{}]+', String),
+            (r'{', String, 'delimited_inside_curly'),
+            (r'}"', String, '#pop'),
+        ],
+        'delimited_inside_curly': [
+            (r'[^{}]+', String),
+            (r'{', String, '#push'),
+            (r'}', String, '#pop'),
         ],
     }
 
@@ -795,11 +857,8 @@ class JavaLexer(RegexLexer):
             # method names
             (r'^(\s*(?:[a-zA-Z_][a-zA-Z0-9_\.]*\s+)+?)'  # return arguments
              r'([a-zA-Z_][a-zA-Z0-9_]*)'                 # method name
-             r'(\s*\([^;]*?\))'                          # signature
-             r'(?=' + _ws +                              # exception declaration
-             r'(?:throws\s+(?:[a-zA-Z_][a-zA-Z0-9_]*,?\s*)+)?' +
-             _ws + r'\{)',
-             bygroups(using(this), Name.Function, using(this))),
+             r'(\s*)(\()',                               # signature start
+             bygroups(using(this), Name.Function, Text, Operator)),
             (r'[^\S\n]+', Text),
             (r'//.*?\n', Comment),
             (r'/\*.*?\*/', Comment),
@@ -877,86 +936,6 @@ class DylanLexer(RegexLexer):
             (r'#[a-zA-Z0-9-]+', Keyword),
             (r'[a-zA-Z0-9-]+', Name.Variable),
         ],
-    }
-
-
-class OcamlLexer(RegexLexer):
-    """
-    For the OCaml language.
-
-    *New in Pygments 0.7.*
-    """
-
-    name = 'OCaml'
-    aliases = ['ocaml']
-    filenames = ['*.ml', '*.mli']
-    mimetypes = ['text/x-ocaml']
-
-    keywords = [
-      'and', 'as', 'assert', 'asr', 'begin', 'class',
-      'constraint', 'do', 'done', 'downto', 'else', 'end',
-      'exception', 'external', 'false', 'for', 'fun', 'function',
-      'functor', 'if', 'in', 'include', 'inherit', 'initializer',
-      'land', 'lazy', 'let', 'lor', 'lsl', 'lsr',
-      'lxor', 'match', 'method', 'mod', 'module', 'mutable',
-      'new', 'object', 'of', 'open', 'or', 'private',
-      'rec', 'sig', 'struct', 'then', 'to', 'true',
-      'try', 'type', 'val', 'virtual', 'when', 'while', 'with'
-    ]
-    keyopts = [
-      '!=','#','&','&&','\(','\)','\*','\+',',','-',
-      '-\.','->','\.','\.\.',':','::',':=',':>',';',';;','<',
-      '<-','=','>','>]','>}','\?','\?\?','\[','\[<','\[>','\[\|',
-      ']','_','`','{','{<','\|','\|]','}','~'
-    ]
-
-    operators = r'[!$%&*+\./:<=>?@^|~-]'
-    prefix_syms = r'[!?~]'
-    infix_syms = r'[=<>@^|&+\*/$%-]'
-
-    tokens = {
-        'escape-sequence': [
-            (r'\\[\"\'ntbr]', String.Escape),
-            (r'\\[0-9]{3}', String.Escape),
-            (r'\\x[0-9a-fA-F]{2}', String.Escape),
-        ],
-        'root': [
-            (r'\s+', Text),
-            (r'\(\*', Comment, 'comment'),
-            (r'\b(%s)\b' % '|'.join(keywords), Keyword.Reserved),
-            (r'(%s)' % '|'.join(keyopts), Keyword),
-            (r'false|true|\(\)|\[\]', Name.Constant),
-            (r'(%s|%s)?%s' % (infix_syms, prefix_syms, operators), Operator),
-
-            (r"[^\W\d][\w']*", Name),
-
-            (r'\d[\d_]*', Number.Integer),
-            (r'0[xX][\da-fA-F][\da-fA-F_]*', Number.Hex),
-            (r'0[oO][0-7][0-7_]*', Number.Oct),
-            (r'0[bB][01][01_]*', Number),
-            (r'-?\d[\d_]*(.[\d_]*)?([eE][+\-]?\d[\d_]*)', Number.Float),
-
-            (r"'(?:(\\[\\\"'ntbr ])|(\\[0-9]{3})|(\\x[0-9a-fA-F]{2}))'",
-             String.Char),
-            (r"'.'", String.Char),
-            (r"'", Keyword), # a stray quote is another syntax element
-
-            (r'"', String.Double, 'string'),
-
-            (r'[~?][a-z][\w\']*:', Name.Variable),
-        ],
-        'comment': [
-            (r'[^(*)]', Comment),
-            (r'\(\*', Comment, '#push'),
-            (r'\*\)', Comment, '#pop'),
-            (r'[(*)]', Comment),
-        ],
-        'string': [
-            (r'[^\\"]', String.Double),
-            include('escape-sequence'),
-            (r'\\\n', String.Double),
-            (r'"', String.Double, '#pop'),
-        ]
     }
 
 

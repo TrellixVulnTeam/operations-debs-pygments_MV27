@@ -207,6 +207,15 @@ div.toc h2 {
       <a id="backlink" href="index.html">&laquo; Back To Index</a>
     
     
+      <div class="toc">
+        <h2>Contents</h2>
+        <ul class="contents">
+        
+          <li><a href="#a-note-on-encodings">A note on encodings</a></li>
+        
+        </ul>
+      </div>
+    
     <!-- -*- mode: rst -*- -->
 <p>You can use Pygments from the shell, provided you installed the <cite>pygmentize</cite> script:</p>
 <pre class="literal-block">
@@ -241,6 +250,14 @@ $ pygmentize -f html -O style=colorful,linenos=1 -l python test.py
 characters, such as spaces or expansion wildcards like <tt class="docutils literal"><span class="pre">*</span></tt>. If an option
 expects a list value, separate the list entries with spaces (you'll have to
 quote the option value in this case too, so that the shell doesn't split it).</p>
+<p>Since the <tt class="docutils literal"><span class="pre">-O</span></tt> option argument is split at commas and expects the split values
+to be of the form <tt class="docutils literal"><span class="pre">name=value</span></tt>, you can't give an option value that contains
+commas or equals signs.  Therefore, an option <tt class="docutils literal"><span class="pre">-P</span></tt> is provided (as of Pygments
+0.9) that works like <tt class="docutils literal"><span class="pre">-O</span></tt> but can only pass one option per <tt class="docutils literal"><span class="pre">-P</span></tt>. Its value
+can then contain all characters:</p>
+<pre class="literal-block">
+$ pygmentize -P &quot;heading=Pygments, the Python highlighter&quot; ...
+</pre>
 <p>Filters are added to the token stream using the <tt class="docutils literal"><span class="pre">-F</span></tt> option:</p>
 <pre class="literal-block">
 $ pygmentize -f html -l pascal -F keywordcase:case=upper main.pas
@@ -274,9 +291,26 @@ $ pygmentize -H formatter html
 $ pygmentize -H lexer python
 </pre>
 <p>will print the help for the Python lexer, etc.</p>
+<div class="section">
+<h3><a id="a-note-on-encodings" name="a-note-on-encodings">A note on encodings</a></h3>
+<p><em>New in Pygments 0.9.</em></p>
+<p>Pygments tries to be smart regarding encodings in the formatting process:</p>
+<ul class="simple">
+<li>If you give an <tt class="docutils literal"><span class="pre">encoding</span></tt> option, it will be used as the input and
+output encoding.</li>
+<li>If you give an <tt class="docutils literal"><span class="pre">outencoding</span></tt> option, it will override <tt class="docutils literal"><span class="pre">encoding</span></tt>
+as the output encoding.</li>
+<li>If you don't give an encoding and have given an output file, the default
+encoding for lexer and formatter is <tt class="docutils literal"><span class="pre">latin1</span></tt> (which will pass through
+all non-ASCII characters).</li>
+<li>If you don't give an encoding and haven't given an output file (that means
+output is written to the console), the default encoding for lexer and
+formatter is the terminal encoding (<cite>sys.stdout.encoding</cite>).</li>
+</ul>
+</div>
 
   </div>
 </body>
-<!-- generated on: 2007-06-27 20:57:12.817237
+<!-- generated on: 2007-10-14 22:21:01.828025
      file id: cmdline -->
 </html>
