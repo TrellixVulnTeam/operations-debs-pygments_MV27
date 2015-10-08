@@ -84,6 +84,7 @@ pygments/formatters/svg.py
 pygments/formatters/terminal.py
 pygments/formatters/terminal256.py
 pygments/lexers/__init__.py
+pygments/lexers/_asybuiltins.py
 pygments/lexers/_clbuiltins.py
 pygments/lexers/_luabuiltins.py
 pygments/lexers/_mapping.py
@@ -111,6 +112,7 @@ pygments/styles/emacs.py
 pygments/styles/friendly.py
 pygments/styles/fruity.py
 pygments/styles/manni.py
+pygments/styles/monokai.py
 pygments/styles/murphy.py
 pygments/styles/native.py
 pygments/styles/pastie.py
@@ -194,6 +196,7 @@ tests/examplefiles/example.yaml
 tests/examplefiles/example2.aspx
 tests/examplefiles/firefox.mak
 tests/examplefiles/format.ml
+tests/examplefiles/fucked_up.rb
 tests/examplefiles/functional.rst
 tests/examplefiles/genclass.clj
 tests/examplefiles/genshi_example.xml+genshi
@@ -206,6 +209,7 @@ tests/examplefiles/jinjadesignerdoc.rst
 tests/examplefiles/lighttpd_config.conf
 tests/examplefiles/linecontinuation.py
 tests/examplefiles/ltmain.sh
+tests/examplefiles/main.cmake
 tests/examplefiles/matlab_noreturn
 tests/examplefiles/matlab_sample
 tests/examplefiles/matlabsession_sample.txt
@@ -243,6 +247,7 @@ tests/examplefiles/sqlite3.sqlite3-console
 tests/examplefiles/squid.conf
 tests/examplefiles/string_delimiters.d
 tests/examplefiles/test.R
+tests/examplefiles/test.asy
 tests/examplefiles/test.bas
 tests/examplefiles/test.boo
 tests/examplefiles/test.cs
@@ -263,8 +268,8 @@ tests/examplefiles/test.rb
 tests/examplefiles/test.rhtml
 tests/examplefiles/test.tcsh
 tests/examplefiles/test.xsl
+tests/examplefiles/truncated.pytb
 tests/examplefiles/type.lisp
 tests/examplefiles/unicode.applescript
 tests/examplefiles/while.pov
 tests/examplefiles/zmlrpc.f90
-tests/examplefiles/broken/fucked_up.rb

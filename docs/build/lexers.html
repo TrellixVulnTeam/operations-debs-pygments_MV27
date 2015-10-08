@@ -247,19 +247,19 @@ div.toc h2 {
 <p>Currently, <strong>all lexers</strong> support these options:</p>
 <dl class="docutils">
 <dt><cite>stripnl</cite></dt>
-<dd>Strip leading and trailing newlines from the input (default: <tt class="docutils literal"><span class="pre">True</span></tt>)</dd>
+<dd>Strip leading and trailing newlines from the input (default: <tt class="docutils literal">True</tt>)</dd>
 <dt><cite>stripall</cite></dt>
 <dd>Strip all leading and trailing whitespace from the input (default:
-<tt class="docutils literal"><span class="pre">False</span></tt>).</dd>
+<tt class="docutils literal">False</tt>).</dd>
 <dt><cite>tabsize</cite></dt>
-<dd>If given and greater than 0, expand tabs in the input (default: <tt class="docutils literal"><span class="pre">0</span></tt>).</dd>
+<dd>If given and greater than 0, expand tabs in the input (default: <tt class="docutils literal">0</tt>).</dd>
 <dt><cite>encoding</cite></dt>
 <dd><p class="first"><em>New in Pygments 0.6.</em></p>
 <p>If given, must be an encoding name (such as <tt class="docutils literal"><span class="pre">&quot;utf-8&quot;</span></tt>). This encoding
 will be used to convert the input string to Unicode (if it is not already
-a Unicode string). The default is <tt class="docutils literal"><span class="pre">&quot;latin1&quot;</span></tt>.</p>
-<p class="last">If this option is set to <tt class="docutils literal"><span class="pre">&quot;guess&quot;</span></tt>, a simple UTF-8 vs. Latin-1
-detection is used, if it is set to <tt class="docutils literal"><span class="pre">&quot;chardet&quot;</span></tt>, the
+a Unicode string). The default is <tt class="docutils literal">&quot;latin1&quot;</tt>.</p>
+<p class="last">If this option is set to <tt class="docutils literal">&quot;guess&quot;</tt>, a simple UTF-8 vs. Latin-1
+detection is used, if it is set to <tt class="docutils literal">&quot;chardet&quot;</tt>, the
 <a class="reference external" href="http://chardet.feedparser.org/">chardet library</a> is used to
 guess the encoding of the input.</p>
 </dd>
@@ -310,8 +310,8 @@ programming language) source.</p>
 <p>Additional options accepted:</p>
 <dl class="docutils">
 <dt><cite>func_name_highlighting</cite></dt>
-<dd>If given and <tt class="docutils literal"><span class="pre">True</span></tt>, highlight builtin function names
-(default: <tt class="docutils literal"><span class="pre">True</span></tt>).</dd>
+<dd>If given and <tt class="docutils literal">True</tt>, highlight builtin function names
+(default: <tt class="docutils literal">True</tt>).</dd>
 <dt><cite>disabled_modules</cite></dt>
 <dd><p class="first">If given, must be a list of module names whose function names
 should not be highlighted. By default all modules are highlighted.</p>
@@ -417,7 +417,7 @@ language) source.</p>
 <p>Additional options:</p>
 <dl class="docutils">
 <dt><cite>python3</cite></dt>
-<dd>Use Python 3 lexer for code.  Default is <tt class="docutils literal"><span class="pre">False</span></tt>.
+<dd>Use Python 3 lexer for code.  Default is <tt class="docutils literal">False</tt>.
 <em>New in Pygments 1.0.</em></dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
@@ -691,6 +691,7 @@ language) source.</p>
 <p><cite>DLexer</cite></p>
 <blockquote>
 <p>For D source.</p>
+<p><em>New in Pygments 1.2.</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -711,14 +712,14 @@ Turbo Pascal and Free Pascal source code.</p>
 <p>Additional options accepted:</p>
 <dl class="docutils">
 <dt><cite>turbopascal</cite></dt>
-<dd>Highlight Turbo Pascal specific keywords (default: <tt class="docutils literal"><span class="pre">True</span></tt>).</dd>
+<dd>Highlight Turbo Pascal specific keywords (default: <tt class="docutils literal">True</tt>).</dd>
 <dt><cite>delphi</cite></dt>
-<dd>Highlight Borland Delphi specific keywords (default: <tt class="docutils literal"><span class="pre">True</span></tt>).</dd>
+<dd>Highlight Borland Delphi specific keywords (default: <tt class="docutils literal">True</tt>).</dd>
 <dt><cite>freepascal</cite></dt>
-<dd>Highlight Free Pascal specific keywords (default: <tt class="docutils literal"><span class="pre">True</span></tt>).</dd>
+<dd>Highlight Free Pascal specific keywords (default: <tt class="docutils literal">True</tt>).</dd>
 <dt><cite>units</cite></dt>
 <dd>A list of units that should be considered builtin, supported are
-<tt class="docutils literal"><span class="pre">System</span></tt>, <tt class="docutils literal"><span class="pre">SysUtils</span></tt>, <tt class="docutils literal"><span class="pre">Classes</span></tt> and <tt class="docutils literal"><span class="pre">Math</span></tt>.
+<tt class="docutils literal">System</tt>, <tt class="docutils literal">SysUtils</tt>, <tt class="docutils literal">Classes</tt> and <tt class="docutils literal">Math</tt>.
 Default is to consider all of them builtin.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
@@ -785,6 +786,22 @@ Default is to consider all of them builtin.</dd>
 </tbody>
 </table>
 </blockquote>
+<p><cite>GoLexer</cite></p>
+<blockquote>
+<p>For <a class="reference external" href="http://golang.org">Go</a> source.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">go</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.go</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-gosrc</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>JavaLexer</cite></p>
 <blockquote>
 <p>For <a class="reference external" href="http://www.sun.com/java/">Java</a> source code.</p>
@@ -813,6 +830,23 @@ Default is to consider all of them builtin.</dd>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.m</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-objective-c</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>OocLexer</cite></p>
+<blockquote>
+<p>For <a class="reference external" href="http://ooc-lang.org/">Ooc</a> source code</p>
+<p><em>New in Pygments 1.2.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">ooc</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ooc</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-ooc</td>
 </tr>
 </tbody>
 </table>
@@ -911,15 +945,15 @@ source code.</p>
 <dd><p class="first">Determines which Unicode characters this lexer allows for identifiers.
 The possible values are:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">none</span></tt> -- only the ASCII letters and numbers are allowed. This
+<li><tt class="docutils literal">none</tt> -- only the ASCII letters and numbers are allowed. This
 is the fastest selection.</li>
-<li><tt class="docutils literal"><span class="pre">basic</span></tt> -- all Unicode characters from the specification except
-category <tt class="docutils literal"><span class="pre">Lo</span></tt> are allowed.</li>
-<li><tt class="docutils literal"><span class="pre">full</span></tt> -- all Unicode characters as specified in the C# specs
+<li><tt class="docutils literal">basic</tt> -- all Unicode characters from the specification except
+category <tt class="docutils literal">Lo</tt> are allowed.</li>
+<li><tt class="docutils literal">full</tt> -- all Unicode characters as specified in the C# specs
 are allowed.  Note that this means a considerable slowdown since the
-<tt class="docutils literal"><span class="pre">Lo</span></tt> category has more than 40,000 characters in it!</li>
+<tt class="docutils literal">Lo</tt> category has more than 40,000 characters in it!</li>
 </ul>
-<p>The default value is <tt class="docutils literal"><span class="pre">basic</span></tt>.</p>
+<p>The default value is <tt class="docutils literal">basic</tt>.</p>
 <p class="last"><em>New in Pygments 0.8.</em></p>
 </dd>
 </dl>
@@ -1048,7 +1082,7 @@ source code.</p>
 <p>Additional options accepted:</p>
 <dl class="docutils">
 <dt><cite>litstyle</cite></dt>
-<dd>If given, must be <tt class="docutils literal"><span class="pre">&quot;bird&quot;</span></tt> or <tt class="docutils literal"><span class="pre">&quot;latex&quot;</span></tt>.  If not given, the style
+<dd>If given, must be <tt class="docutils literal">&quot;bird&quot;</tt> or <tt class="docutils literal">&quot;latex&quot;</tt>.  If not given, the style
 is autodetected: if the first non-whitespace character in the source
 is a backslash or percent character, LaTeX is assumed, else Bird.</dd>
 </dl>
@@ -1235,6 +1269,23 @@ Contributed by Andreas Amann &lt;<a class="reference external" href="mailto:aama
 </tbody>
 </table>
 </blockquote>
+<p><cite>AsymptoteLexer</cite></p>
+<blockquote>
+<p>For <a class="reference external" href="http://asymptote.sf.net/">Asymptote</a> source code.</p>
+<p><em>New in Pygments 1.2.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">asy</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.asy</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-asymptote</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>BashLexer</cite></p>
 <blockquote>
 <p>Lexer for (ba)sh shell scripts.</p>
@@ -1317,6 +1368,23 @@ language.</p>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.bf, *.b</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/x-brainfuck</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>GherkinLexer</cite></p>
+<blockquote>
+<p>For <cite>Gherkin &lt;http://cukes.info/&gt;</cite> syntax.</p>
+<p><em>New in Pygments 1.2.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">Cucumber, cucumber, Gherkin, gherkin</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.feature</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-gherkin</td>
 </tr>
 </tbody>
 </table>
@@ -1792,7 +1860,7 @@ highlighting then call the language-specific Ragel lexer.</p>
 <p><cite>RagelLexer</cite></p>
 <blockquote>
 <p>A pure <a class="reference external" href="http://www.complang.org/ragel/">Ragel</a> lexer.  Use this for
-fragments of Ragel.  For <tt class="docutils literal"><span class="pre">.rl</span></tt> files, use RagelEmbeddedLexer instead
+fragments of Ragel.  For <tt class="docutils literal">.rl</tt> files, use RagelEmbeddedLexer instead
 (or one of the language-specific subclasses).</p>
 <p><em>New in Pygments 1.1.</em></p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1853,8 +1921,8 @@ file is malformed.</p>
 <p>Additional options accepted:</p>
 <dl class="docutils">
 <dt><cite>compress</cite></dt>
-<dd>If set to <tt class="docutils literal"><span class="pre">&quot;gz&quot;</span></tt> or <tt class="docutils literal"><span class="pre">&quot;bz2&quot;</span></tt>, decompress the token stream with
-the given compression algorithm before lexing (default: <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt>).</dd>
+<dd>If set to <tt class="docutils literal">&quot;gz&quot;</tt> or <tt class="docutils literal">&quot;bz2&quot;</tt>, decompress the token stream with
+the given compression algorithm before lexing (default: <tt class="docutils literal">&quot;&quot;</tt>).</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2674,11 +2742,28 @@ format.</p>
 </tbody>
 </table>
 </blockquote>
+<p><cite>CMakeLexer</cite></p>
+<blockquote>
+<p>Lexer for <a class="reference external" href="http://cmake.org/Wiki/CMake">CMake</a> files.</p>
+<p><em>New in Pygments 1.2.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">cmake</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.cmake</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-cmake</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <p><cite>DarcsPatchLexer</cite></p>
 <blockquote>
 <p>DarcsPatchLexer is a lexer for the various versions of the darcs patch
 format.  Examples of this format are derived by commands such as
-<tt class="docutils literal"><span class="pre">darcs</span> <span class="pre">annotate</span> <span class="pre">--patch</span></tt> and <tt class="docutils literal"><span class="pre">darcs</span> <span class="pre">send</span></tt>.</p>
+<tt class="docutils literal">darcs annotate <span class="pre">--patch</span></tt> and <tt class="docutils literal">darcs send</tt>.</p>
 <p><em>New in Pygments 0.10.</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2695,7 +2780,7 @@ format.  Examples of this format are derived by commands such as
 </blockquote>
 <p><cite>DebianControlLexer</cite></p>
 <blockquote>
-<p>Lexer for Debian <tt class="docutils literal"><span class="pre">control</span></tt> files and <tt class="docutils literal"><span class="pre">apt-cache</span> <span class="pre">show</span> <span class="pre">&lt;pkg&gt;</span></tt> outputs.</p>
+<p>Lexer for Debian <tt class="docutils literal">control</tt> files and <tt class="docutils literal"><span class="pre">apt-cache</span> show &lt;pkg&gt;</tt> outputs.</p>
 <p><em>New in Pygments 0.9.</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2869,9 +2954,9 @@ the same file even).</p>
 <p>Additional options accepted:</p>
 <dl class="docutils">
 <dt><cite>handlecodeblocks</cite></dt>
-<dd>Highlight the contents of <tt class="docutils literal"><span class="pre">..</span> <span class="pre">sourcecode::</span> <span class="pre">langauge</span></tt> and
-<tt class="docutils literal"><span class="pre">..</span> <span class="pre">code::</span> <span class="pre">language</span></tt> directives with a lexer for the given
-language (default: <tt class="docutils literal"><span class="pre">True</span></tt>). <em>New in Pygments 0.8.</em></dd>
+<dd>Highlight the contents of <tt class="docutils literal">.. sourcecode:: langauge</tt> and
+<tt class="docutils literal">.. code:: language</tt> directives with a lexer for the given
+language (default: <tt class="docutils literal">True</tt>). <em>New in Pygments 0.8.</em></dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -3081,16 +3166,16 @@ For PHP embedded in HTML, use the <cite>HtmlPhpLexer</cite>.</p>
 <p>Additional options accepted:</p>
 <dl class="docutils">
 <dt><cite>startinline</cite></dt>
-<dd>If given and <tt class="docutils literal"><span class="pre">True</span></tt> the lexer starts highlighting with
+<dd>If given and <tt class="docutils literal">True</tt> the lexer starts highlighting with
 php code (i.e.: no starting <tt class="docutils literal"><span class="pre">&lt;?php</span></tt> required).  The default
-is <tt class="docutils literal"><span class="pre">False</span></tt>.</dd>
+is <tt class="docutils literal">False</tt>.</dd>
 <dt><cite>funcnamehighlighting</cite></dt>
-<dd>If given and <tt class="docutils literal"><span class="pre">True</span></tt>, highlight builtin function names
-(default: <tt class="docutils literal"><span class="pre">True</span></tt>).</dd>
+<dd>If given and <tt class="docutils literal">True</tt>, highlight builtin function names
+(default: <tt class="docutils literal">True</tt>).</dd>
 <dt><cite>disabledmodules</cite></dt>
 <dd><p class="first">If given, must be a list of module names whose function names
 should not be highlighted. By default all modules are highlighted
-except the special <tt class="docutils literal"><span class="pre">'unknown'</span></tt> module that includes functions
+except the special <tt class="docutils literal">'unknown'</tt> module that includes functions
 that are known to php but are undocumented.</p>
 <p>To get a list of allowed modules have a look into the
 <cite>_phpbuiltins</cite> module:</p>
@@ -3165,11 +3250,11 @@ module:</p>
 <span class="go">(&#39;XML+Ruby&#39;, (&#39;xml+erb&#39;, &#39;xml+ruby&#39;), (), ())</span>
 </pre></div>
 <p>As you can see, the return value is an iterator which yields tuples
-in the form <tt class="docutils literal"><span class="pre">(name,</span> <span class="pre">aliases,</span> <span class="pre">filetypes,</span> <span class="pre">mimetypes)</span></tt>.</p>
+in the form <tt class="docutils literal">(name, aliases, filetypes, mimetypes)</tt>.</p>
 </div>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:54.412817
+<!-- generated on: 2010-01-02 15:15:50.249500
      file id: lexers -->
 </html>

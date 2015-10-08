@@ -21,11 +21,11 @@
     .. _Pygments tip:
        http://dev.pocoo.org/hg/pygments-main/archive/tip.tar.gz#egg=Pygments-dev
 
-    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2010 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
-__version__ = '1.1.1'
+__version__ = '1.2.1'
 __docformat__ = 'restructuredtext'
 
 __all__ = ['lex', 'format', 'highlight']

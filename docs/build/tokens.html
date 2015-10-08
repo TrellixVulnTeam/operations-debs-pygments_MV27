@@ -240,9 +240,9 @@ that is used to create token types.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Token</span><span class="o">.</span><span class="n">String</span> <span class="ow">is</span> <span class="n">Token</span><span class="o">.</span><span class="n">String</span>
 <span class="go">True</span>
 </pre></div>
-<p>Note that tokens are singletons so you can use the <tt class="docutils literal"><span class="pre">is</span></tt> operator for comparing
+<p>Note that tokens are singletons so you can use the <tt class="docutils literal">is</tt> operator for comparing
 token types.</p>
-<p>As of Pygments 0.7 you can also use the <tt class="docutils literal"><span class="pre">in</span></tt> operator to perform set tests:</p>
+<p>As of Pygments 0.7 you can also use the <tt class="docutils literal">in</tt> operator to perform set tests:</p>
 <div class="syntax"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Comment</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Comment</span><span class="o">.</span><span class="n">Single</span> <span class="ow">in</span> <span class="n">Comment</span>
 <span class="go">True</span>
@@ -314,11 +314,11 @@ markup in PHP code)</td>
 </tr>
 <tr><td><cite>Operator</cite></td>
 <td><cite>Token.Operator</cite></td>
-<td>operators (<tt class="docutils literal"><span class="pre">+</span></tt>, <tt class="docutils literal"><span class="pre">not</span></tt>...)</td>
+<td>operators (<tt class="docutils literal">+</tt>, <tt class="docutils literal">not</tt>...)</td>
 </tr>
 <tr><td><cite>Punctuation</cite></td>
 <td><cite>Token.Punctuation</cite></td>
-<td>punctuation (<tt class="docutils literal"><span class="pre">[</span></tt>, <tt class="docutils literal"><span class="pre">(</span></tt>...)</td>
+<td>punctuation (<tt class="docutils literal">[</tt>, <tt class="docutils literal">(</tt>...)</td>
 </tr>
 <tr><td><cite>Comment</cite></td>
 <td><cite>Token.Comment</cite></td>
@@ -338,7 +338,7 @@ of those token aliases, a number of subtypes exists (excluding the special token
 <cite>Token.Text</cite>, <cite>Token.Error</cite> and <cite>Token.Other</cite>)</p>
 <p>The <cite>is_token_subtype()</cite> function in the <cite>pygments.token</cite> module can be used to
 test if a token type is a subtype of another (such as <cite>Name.Tag</cite> and <cite>Name</cite>).
-(This is the same as <tt class="docutils literal"><span class="pre">Name.Tag</span> <span class="pre">in</span> <span class="pre">Name</span></tt>. The overloaded <cite>in</cite> operator was newly
+(This is the same as <tt class="docutils literal">Name.Tag in Name</tt>. The overloaded <cite>in</cite> operator was newly
 introduced in Pygments 0.7, the function still exists for backwards
 compatiblity.)</p>
 <p>With Pygments 0.7, it's also possible to convert strings to token types (for example
@@ -358,21 +358,21 @@ if you want to supply a token from the command line):</p>
 <dd>For any kind of keyword (especially if it doesn't match any of the
 subtypes of course).</dd>
 <dt><cite>Keyword.Constant</cite></dt>
-<dd>For keywords that are constants (e.g. <tt class="docutils literal"><span class="pre">None</span></tt> in future Python versions).</dd>
+<dd>For keywords that are constants (e.g. <tt class="docutils literal">None</tt> in future Python versions).</dd>
 <dt><cite>Keyword.Declaration</cite></dt>
-<dd>For keywords used for variable declaration (e.g. <tt class="docutils literal"><span class="pre">var</span></tt> in some programming
+<dd>For keywords used for variable declaration (e.g. <tt class="docutils literal">var</tt> in some programming
 languages like JavaScript).</dd>
 <dt><cite>Keyword.Namespace</cite></dt>
-<dd>For keywords used for namespace declarations (e.g. <tt class="docutils literal"><span class="pre">import</span></tt> in Python and
-Java and <tt class="docutils literal"><span class="pre">package</span></tt> in Java).</dd>
+<dd>For keywords used for namespace declarations (e.g. <tt class="docutils literal">import</tt> in Python and
+Java and <tt class="docutils literal">package</tt> in Java).</dd>
 <dt><cite>Keyword.Pseudo</cite></dt>
-<dd>For keywords that aren't really keywords (e.g. <tt class="docutils literal"><span class="pre">None</span></tt> in old Python
+<dd>For keywords that aren't really keywords (e.g. <tt class="docutils literal">None</tt> in old Python
 versions).</dd>
 <dt><cite>Keyword.Reserved</cite></dt>
 <dd>For reserved keywords.</dd>
 <dt><cite>Keyword.Type</cite></dt>
-<dd>For builtin types that can't be used as identifiers (e.g. <tt class="docutils literal"><span class="pre">int</span></tt>,
-<tt class="docutils literal"><span class="pre">char</span></tt> etc. in C).</dd>
+<dd>For builtin types that can't be used as identifiers (e.g. <tt class="docutils literal">int</tt>,
+<tt class="docutils literal">char</tt> etc. in C).</dd>
 </dl>
 </div>
 <div class="section" id="name-tokens">
@@ -385,30 +385,30 @@ versions).</dd>
 <dt><cite>Name.Builtin</cite></dt>
 <dd>Builtin names; names that are available in the global namespace.</dd>
 <dt><cite>Name.Builtin.Pseudo</cite></dt>
-<dd>Builtin names that are implicit (e.g. <tt class="docutils literal"><span class="pre">self</span></tt> in Ruby, <tt class="docutils literal"><span class="pre">this</span></tt> in Java).</dd>
+<dd>Builtin names that are implicit (e.g. <tt class="docutils literal">self</tt> in Ruby, <tt class="docutils literal">this</tt> in Java).</dd>
 <dt><cite>Name.Class</cite></dt>
 <dd>Class names. Because no lexer can know if a name is a class or a function
 or something else this token is meant for class declarations.</dd>
 <dt><cite>Name.Constant</cite></dt>
 <dd>Token type for constants. In some languages you can recognise a token by the
-way it's defined (the value after a <tt class="docutils literal"><span class="pre">const</span></tt> keyword for example). In
+way it's defined (the value after a <tt class="docutils literal">const</tt> keyword for example). In
 other languages constants are uppercase by definition (Ruby).</dd>
 <dt><cite>Name.Decorator</cite></dt>
 <dd>Token type for decorators. Decorators are synatic elements in the Python
 language. Similar syntax elements exist in C# and Java.</dd>
 <dt><cite>Name.Entity</cite></dt>
-<dd>Token type for special entities. (e.g. <tt class="docutils literal"><span class="pre">&amp;nbsp;</span></tt> in HTML).</dd>
+<dd>Token type for special entities. (e.g. <tt class="docutils literal">&amp;nbsp;</tt> in HTML).</dd>
 <dt><cite>Name.Exception</cite></dt>
-<dd>Token type for exception names (e.g. <tt class="docutils literal"><span class="pre">RuntimeError</span></tt> in Python). Some languages
+<dd>Token type for exception names (e.g. <tt class="docutils literal">RuntimeError</tt> in Python). Some languages
 define exceptions in the function signature (Java). You can highlight
 the name of that exception using this token then.</dd>
 <dt><cite>Name.Function</cite></dt>
 <dd>Token type for function names.</dd>
 <dt><cite>Name.Label</cite></dt>
-<dd>Token type for label names (e.g. in languages that support <tt class="docutils literal"><span class="pre">goto</span></tt>).</dd>
+<dd>Token type for label names (e.g. in languages that support <tt class="docutils literal">goto</tt>).</dd>
 <dt><cite>Name.Namespace</cite></dt>
 <dd>Token type for namespaces. (e.g. import paths in Java/Python), names following
-the <tt class="docutils literal"><span class="pre">module</span></tt>/<tt class="docutils literal"><span class="pre">namespace</span></tt> keyword in other languages.</dd>
+the <tt class="docutils literal">module</tt>/<tt class="docutils literal">namespace</tt> keyword in other languages.</dd>
 <dt><cite>Name.Other</cite></dt>
 <dd>Other names. Normally unused.</dd>
 <dt><cite>Name.Tag</cite></dt>
@@ -431,7 +431,7 @@ example).</dd>
 <dt><cite>Literal</cite></dt>
 <dd>For any literal (if not further defined).</dd>
 <dt><cite>Literal.Date</cite></dt>
-<dd>for date literals (e.g. <tt class="docutils literal"><span class="pre">42d</span></tt> in Boo).</dd>
+<dd>for date literals (e.g. <tt class="docutils literal">42d</tt> in Boo).</dd>
 <dt><cite>String</cite></dt>
 <dd>For any string literal.</dd>
 <dt><cite>String.Backtick</cite></dt>
@@ -447,26 +447,26 @@ example).</dd>
 <dt><cite>String.Heredoc</cite></dt>
 <dd>Token type for &quot;heredoc&quot; strings (e.g. in Ruby or Perl).</dd>
 <dt><cite>String.Interpol</cite></dt>
-<dd>Token type for interpolated parts in strings (e.g. <tt class="docutils literal"><span class="pre">#{foo}</span></tt> in Ruby).</dd>
+<dd>Token type for interpolated parts in strings (e.g. <tt class="docutils literal">#{foo}</tt> in Ruby).</dd>
 <dt><cite>String.Other</cite></dt>
-<dd>Token type for any other strings (for example <tt class="docutils literal"><span class="pre">%q{foo}</span></tt> string constructs
+<dd>Token type for any other strings (for example <tt class="docutils literal">%q{foo}</tt> string constructs
 in Ruby).</dd>
 <dt><cite>String.Regex</cite></dt>
-<dd>Token type for regular expression literals (e.g. <tt class="docutils literal"><span class="pre">/foo/</span></tt> in JavaScript).</dd>
+<dd>Token type for regular expression literals (e.g. <tt class="docutils literal">/foo/</tt> in JavaScript).</dd>
 <dt><cite>String.Single</cite></dt>
 <dd>Token type for single quoted strings.</dd>
 <dt><cite>String.Symbol</cite></dt>
-<dd>Token type for symbols (e.g. <tt class="docutils literal"><span class="pre">:foo</span></tt> in LISP or Ruby).</dd>
+<dd>Token type for symbols (e.g. <tt class="docutils literal">:foo</tt> in LISP or Ruby).</dd>
 <dt><cite>Number</cite></dt>
 <dd>Token type for any number literal.</dd>
 <dt><cite>Number.Float</cite></dt>
-<dd>Token type for float literals (e.g. <tt class="docutils literal"><span class="pre">42.0</span></tt>).</dd>
+<dd>Token type for float literals (e.g. <tt class="docutils literal">42.0</tt>).</dd>
 <dt><cite>Number.Hex</cite></dt>
-<dd>Token type for hexadecimal number literals (e.g. <tt class="docutils literal"><span class="pre">0xdeadbeef</span></tt>).</dd>
+<dd>Token type for hexadecimal number literals (e.g. <tt class="docutils literal">0xdeadbeef</tt>).</dd>
 <dt><cite>Number.Integer</cite></dt>
-<dd>Token type for integer literals (e.g. <tt class="docutils literal"><span class="pre">42</span></tt>).</dd>
+<dd>Token type for integer literals (e.g. <tt class="docutils literal">42</tt>).</dd>
 <dt><cite>Number.Integer.Long</cite></dt>
-<dd>Token type for long integer literals (e.g. <tt class="docutils literal"><span class="pre">42L</span></tt> in Python).</dd>
+<dd>Token type for long integer literals (e.g. <tt class="docutils literal">42L</tt> in Python).</dd>
 <dt><cite>Number.Oct</cite></dt>
 <dd>Token type for octal literals.</dd>
 </dl>
@@ -475,9 +475,9 @@ in Ruby).</dd>
 <h3>Operators</h3>
 <dl class="docutils">
 <dt><cite>Operator</cite></dt>
-<dd>For any punctuation operator (e.g. <tt class="docutils literal"><span class="pre">+</span></tt>, <tt class="docutils literal"><span class="pre">-</span></tt>).</dd>
+<dd>For any punctuation operator (e.g. <tt class="docutils literal">+</tt>, <tt class="docutils literal">-</tt>).</dd>
 <dt><cite>Operator.Word</cite></dt>
-<dd>For any operator that is a word (e.g. <tt class="docutils literal"><span class="pre">not</span></tt>).</dd>
+<dd>For any operator that is a word (e.g. <tt class="docutils literal">not</tt>).</dd>
 </dl>
 </div>
 <div class="section" id="punctuation">
@@ -485,7 +485,7 @@ in Ruby).</dd>
 <p><em>New in Pygments 0.7.</em></p>
 <dl class="docutils">
 <dt><cite>Punctuation</cite></dt>
-<dd>For any punctuation which is not an operator (e.g. <tt class="docutils literal"><span class="pre">[</span></tt>, <tt class="docutils literal"><span class="pre">(</span></tt>...)</dd>
+<dd>For any punctuation which is not an operator (e.g. <tt class="docutils literal">[</tt>, <tt class="docutils literal">(</tt>...)</dd>
 </dl>
 </div>
 <div class="section" id="comments">
@@ -496,9 +496,9 @@ in Ruby).</dd>
 <dt><cite>Comment.Multiline</cite></dt>
 <dd>Token type for multiline comments.</dd>
 <dt><cite>Comment.Preproc</cite></dt>
-<dd>Token type for preprocessor comments (also <tt class="docutils literal"><span class="pre">&lt;?php</span></tt>/<tt class="docutils literal"><span class="pre">&lt;%</span></tt> constructs).</dd>
+<dd>Token type for preprocessor comments (also <tt class="docutils literal"><span class="pre">&lt;?php</span></tt>/<tt class="docutils literal">&lt;%</tt> constructs).</dd>
 <dt><cite>Comment.Single</cite></dt>
-<dd>Token type for comments that end at the end of a line (e.g. <tt class="docutils literal"><span class="pre">#</span> <span class="pre">foo</span></tt>).</dd>
+<dd>Token type for comments that end at the end of a line (e.g. <tt class="docutils literal"># foo</tt>).</dd>
 <dt><cite>Comment.Special</cite></dt>
 <dd>Special data in comments. For example code tags, author and license
 informations etc.</dd>
@@ -536,6 +536,6 @@ highlight a programming language but a patch file.</p>
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:59.168145
+<!-- generated on: 2010-01-02 15:15:52.504228
      file id: tokens -->
 </html>

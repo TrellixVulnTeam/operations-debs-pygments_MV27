@@ -22,7 +22,7 @@
     .. _Pygments tip:
        http://dev.pocoo.org/hg/pygments-main/archive/tip.tar.gz#egg=Pygments-dev
 
-    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2010 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -46,7 +46,7 @@ except ImportError:
 
 setup(
     name = 'Pygments',
-    version = '1.1.1',
+    version = '1.2.1',
     url = 'http://pygments.org/',
     license = 'BSD License',
     author = 'Georg Brandl',

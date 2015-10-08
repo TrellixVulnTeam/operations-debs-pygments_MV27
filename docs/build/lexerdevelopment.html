@@ -245,7 +245,7 @@ some keyword arguments (the lexer options) and that provides a
 <cite>get_tokens_unprocessed()</cite> method which is given a string or unicode object with
 the data to parse.</p>
 <p>The <cite>get_tokens_unprocessed()</cite> method must return an iterator or iterable
-containing tuples in the form <tt class="docutils literal"><span class="pre">(index,</span> <span class="pre">token,</span> <span class="pre">value)</span></tt>. Normally you don't need
+containing tuples in the form <tt class="docutils literal">(index, token, value)</tt>. Normally you don't need
 to do this since there are numerous base lexers you can subclass.</p>
 <div class="section" id="regexlexer">
 <h3>RegexLexer</h3>
@@ -264,9 +264,9 @@ new state is pushed onto the stack.  The most basic lexers (like the
 <cite>new_state</cite>) where the last item is optional.  In the most basic form, <cite>action</cite>
 is a token type (like <cite>Name.Builtin</cite>).  That means: When <cite>regex</cite> matches, emit a
 token with the match text and type <cite>tokentype</cite> and push <cite>new_state</cite> on the state
-stack.  If the new state is <tt class="docutils literal"><span class="pre">'#pop'</span></tt>, the topmost state is popped from the
-stack instead. (To pop more than one state, use <tt class="docutils literal"><span class="pre">'#pop:2'</span></tt> and so on.)
-<tt class="docutils literal"><span class="pre">'#push'</span></tt> is a synonym for pushing the current state on the
+stack.  If the new state is <tt class="docutils literal">'#pop'</tt>, the topmost state is popped from the
+stack instead. (To pop more than one state, use <tt class="docutils literal">'#pop:2'</tt> and so on.)
+<tt class="docutils literal">'#push'</tt> is a synonym for pushing the current state on the
 stack.</p>
 <p>The following example shows the <cite>DiffLexer</cite> from the builtin lexers. Note that
 it contains some additional attributes <cite>name</cite>, <cite>aliases</cite> and <cite>filenames</cite> which
@@ -303,7 +303,7 @@ so on.</p>
 </div>
 <div class="section" id="regex-flags">
 <h3>Regex Flags</h3>
-<p>You can either define regex flags in the regex (<tt class="docutils literal"><span class="pre">r'(?x)foo</span> <span class="pre">bar'</span></tt>) or by adding
+<p>You can either define regex flags in the regex (<tt class="docutils literal"><span class="pre">r'(?x)foo</span> bar'</tt>) or by adding
 a <cite>flags</cite> attribute to your lexer class. If no attribute is defined, it defaults
 to <cite>re.MULTILINE</cite>. For more informations about regular expression flags see the
 <a class="reference external" href="http://docs.python.org/lib/re-syntax.html">regular expressions</a> help page in the python documentation.</p>
@@ -331,7 +331,7 @@ sections, comments and key = value pairs:</p>
     <span class="p">}</span>
 </pre></div>
 <p>The lexer first looks for whitespace, comments and section names. And later it
-looks for a line that looks like a key, value pair, seperated by an <tt class="docutils literal"><span class="pre">'='</span></tt>
+looks for a line that looks like a key, value pair, seperated by an <tt class="docutils literal">'='</tt>
 sign, and optional whitespace.</p>
 <p>The <cite>bygroups</cite> helper makes sure that each group is yielded with a different
 token type. First the <cite>Name.Attribute</cite> token, then a <cite>Text</cite> token for the
@@ -375,24 +375,24 @@ pattern it's impossible to lex just using regular expressions.</p>
         <span class="p">]</span>
     <span class="p">}</span>
 </pre></div>
-<p>This lexer starts lexing in the <tt class="docutils literal"><span class="pre">'root'</span></tt> state. It tries to match as much as
-possible until it finds a slash (<tt class="docutils literal"><span class="pre">'/'</span></tt>). If the next character after the slash
-is a star (<tt class="docutils literal"><span class="pre">'*'</span></tt>) the <cite>RegexLexer</cite> sends those two characters to the output
+<p>This lexer starts lexing in the <tt class="docutils literal">'root'</tt> state. It tries to match as much as
+possible until it finds a slash (<tt class="docutils literal">'/'</tt>). If the next character after the slash
+is a star (<tt class="docutils literal">'*'</tt>) the <cite>RegexLexer</cite> sends those two characters to the output
 stream marked as <cite>Comment.Multiline</cite> and continues parsing with the rules
-defined in the <tt class="docutils literal"><span class="pre">'comment'</span></tt> state.</p>
+defined in the <tt class="docutils literal">'comment'</tt> state.</p>
 <p>If there wasn't a star after the slash, the <cite>RegexLexer</cite> checks if it's a
 singleline comment (eg: followed by a second slash). If this also wasn't the
 case it must be a single slash (the separate regex for a single slash must also
 be given, else the slash would be marked as an error token).</p>
-<p>Inside the <tt class="docutils literal"><span class="pre">'comment'</span></tt> state, we do the same thing again. Scan until the lexer
+<p>Inside the <tt class="docutils literal">'comment'</tt> state, we do the same thing again. Scan until the lexer
 finds a star or slash. If it's the opening of a multiline comment, push the
-<tt class="docutils literal"><span class="pre">'comment'</span></tt> state on the stack and continue scanning, again in the
-<tt class="docutils literal"><span class="pre">'comment'</span></tt> state.  Else, check if it's the end of the multiline comment. If
+<tt class="docutils literal">'comment'</tt> state on the stack and continue scanning, again in the
+<tt class="docutils literal">'comment'</tt> state.  Else, check if it's the end of the multiline comment. If
 yes, pop one state from the stack.</p>
 <p>Note: If you pop from an empty stack you'll get an <cite>IndexError</cite>. (There is an
-easy way to prevent this from happening: don't <tt class="docutils literal"><span class="pre">'#pop'</span></tt> in the root state).</p>
+easy way to prevent this from happening: don't <tt class="docutils literal">'#pop'</tt> in the root state).</p>
 <p>If the <cite>RegexLexer</cite> encounters a newline that is flagged as an error token, the
-stack is emptied and the lexer continues scanning in the <tt class="docutils literal"><span class="pre">'root'</span></tt> state. This
+stack is emptied and the lexer continues scanning in the <tt class="docutils literal">'root'</tt> state. This
 helps producing error-tolerant highlighting for erroneous input, e.g. when a
 single-line string is not closed.</p>
 </div>
@@ -423,13 +423,13 @@ match a comment containing a directive, something like:</p>
     <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
-<p>When this encounters the above sample, first <tt class="docutils literal"><span class="pre">'comment'</span></tt> and <tt class="docutils literal"><span class="pre">'directive'</span></tt>
+<p>When this encounters the above sample, first <tt class="docutils literal">'comment'</tt> and <tt class="docutils literal">'directive'</tt>
 are pushed onto the stack, then the lexer continues in the directive state
-until it finds the closing <tt class="docutils literal"><span class="pre">&gt;</span></tt>, then it continues in the comment state until
-the closing <tt class="docutils literal"><span class="pre">*/</span></tt>. Then, both states are popped from the stack again and
+until it finds the closing <tt class="docutils literal">&gt;</tt>, then it continues in the comment state until
+the closing <tt class="docutils literal">*/</tt>. Then, both states are popped from the stack again and
 lexing continues in the root state.</p>
-<p><em>New in Pygments 0.9:</em> The tuple can contain the special <tt class="docutils literal"><span class="pre">'#push'</span></tt> and
-<tt class="docutils literal"><span class="pre">'#pop'</span></tt> (but not <tt class="docutils literal"><span class="pre">'#pop:n'</span></tt>) directives.</p>
+<p><em>New in Pygments 0.9:</em> The tuple can contain the special <tt class="docutils literal">'#push'</tt> and
+<tt class="docutils literal">'#pop'</tt> (but not <tt class="docutils literal">'#pop:n'</tt>) directives.</p>
 </li>
 <li><p class="first">You can include the rules of a state in the definition of another.  This is
 done by using <cite>include</cite> from <cite>pygments.lexer</cite>:</p>
@@ -460,12 +460,12 @@ done by using <cite>include</cite> from <cite>pygments.lexer</cite>:</p>
 comments. Because comments can occur at toplevel and in functions, we need
 rules for comments in both states. As you can see, the <cite>include</cite> helper saves
 repeating rules that occur more than once (in this example, the state
-<tt class="docutils literal"><span class="pre">'comment'</span></tt> will never be entered by the lexer, as it's only there to be
-included in <tt class="docutils literal"><span class="pre">'root'</span></tt> and <tt class="docutils literal"><span class="pre">'function'</span></tt>).</p>
+<tt class="docutils literal">'comment'</tt> will never be entered by the lexer, as it's only there to be
+included in <tt class="docutils literal">'root'</tt> and <tt class="docutils literal">'function'</tt>).</p>
 </li>
 <li><p class="first">Sometimes, you may want to &quot;combine&quot; a state from existing ones.  This is
 possible with the <cite>combine</cite> helper from <cite>pygments.lexer</cite>.</p>
-<p>If you, instead of a new state, write <tt class="docutils literal"><span class="pre">combined('state1',</span> <span class="pre">'state2')</span></tt> as the
+<p>If you, instead of a new state, write <tt class="docutils literal"><span class="pre">combined('state1',</span> 'state2')</tt> as the
 third item of a rule tuple, a new anonymous state will be formed from state1
 and state2 and if the rule matches, the lexer will enter this state.</p>
 <p>This is not used very often, but can be helpful in some cases, such as the
@@ -486,9 +486,9 @@ the stack by overloading the <cite>get_tokens_unprocessed()</cite> method:</p>
 <p>Some lexers like the <cite>PhpLexer</cite> use this to make the leading <tt class="docutils literal"><span class="pre">&lt;?php</span></tt>
 preprocessor comments optional. Note that you can crash the lexer easily
 by putting values into the stack that don't exist in the token map. Also
-removing <tt class="docutils literal"><span class="pre">'root'</span></tt> from the stack can result in strange errors!</p>
+removing <tt class="docutils literal">'root'</tt> from the stack can result in strange errors!</p>
 </li>
-<li><p class="first">An empty regex at the end of a state list, combined with <tt class="docutils literal"><span class="pre">'#pop'</span></tt>, can
+<li><p class="first">An empty regex at the end of a state list, combined with <tt class="docutils literal">'#pop'</tt>, can
 act as a return point from a state that doesn't have a clear end marker.</p>
 </li>
 </ul>
@@ -525,22 +525,22 @@ lexed with that lexer, and the resulting tokens will be yielded.</p>
         <span class="p">]</span>
     <span class="p">}</span>
 </pre></div>
-<p>Here the content of a <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt> tag is passed to a newly created instance of
+<p>Here the content of a <tt class="docutils literal">&lt;script&gt;</tt> tag is passed to a newly created instance of
 a <cite>JavascriptLexer</cite> and not processed by the <cite>HtmlLexer</cite>. This is done using the
 <cite>using</cite> helper that takes the other lexer class as its parameter.</p>
 <p>Note the combination of <cite>bygroups</cite> and <cite>using</cite>. This makes sure that the content
-up to the <tt class="docutils literal"><span class="pre">&lt;/script&gt;</span></tt> end tag is processed by the <cite>JavascriptLexer</cite>, while the
+up to the <tt class="docutils literal">&lt;/script&gt;</tt> end tag is processed by the <cite>JavascriptLexer</cite>, while the
 end tag is yielded as a normal token with the <cite>Name.Tag</cite> type.</p>
 <p>As an additional goodie, if the lexer class is replaced by <cite>this</cite> (imported from
 <cite>pygments.lexer</cite>), the &quot;other&quot; lexer will be the current one (because you cannot
 refer to the current class within the code that runs at class definition time).</p>
-<p>Also note the <tt class="docutils literal"><span class="pre">(r'&lt;\s*script\s*',</span> <span class="pre">Name.Tag,</span> <span class="pre">('script-content',</span> <span class="pre">'tag'))</span></tt> rule.
+<p>Also note the <tt class="docutils literal"><span class="pre">(r'&lt;\s*script\s*',</span> Name.Tag, <span class="pre">('script-content',</span> <span class="pre">'tag'))</span></tt> rule.
 Here, two states are pushed onto the state stack, <tt class="docutils literal"><span class="pre">'script-content'</span></tt> and
-<tt class="docutils literal"><span class="pre">'tag'</span></tt>.  That means that first <tt class="docutils literal"><span class="pre">'tag'</span></tt> is processed, which will parse
-attributes and the closing <tt class="docutils literal"><span class="pre">&gt;</span></tt>, then the <tt class="docutils literal"><span class="pre">'tag'</span></tt> state is popped and the
+<tt class="docutils literal">'tag'</tt>.  That means that first <tt class="docutils literal">'tag'</tt> is processed, which will parse
+attributes and the closing <tt class="docutils literal">&gt;</tt>, then the <tt class="docutils literal">'tag'</tt> state is popped and the
 next state on top of the stack will be <tt class="docutils literal"><span class="pre">'script-content'</span></tt>.</p>
 <p>The <cite>using()</cite> helper has a special keyword argument, <cite>state</cite>, which works as
-follows: if given, the lexer to use initially is not in the <tt class="docutils literal"><span class="pre">&quot;root&quot;</span></tt> state,
+follows: if given, the lexer to use initially is not in the <tt class="docutils literal">&quot;root&quot;</tt> state,
 but in the state given by this argument. This <em>only</em> works with a <cite>RegexLexer</cite>.</p>
 <p>Any other keywords arguments passed to <cite>using()</cite> are added to the keyword
 arguments used to create the lexer.</p>
@@ -551,7 +551,7 @@ arguments used to create the lexer.</p>
 example used for the template engine lexers. It takes two lexers as
 arguments on initialisation: a <cite>root_lexer</cite> and a <cite>language_lexer</cite>.</p>
 <p>The input is processed as follows: First, the whole text is lexed with the
-<cite>language_lexer</cite>. All tokens yielded with a type of <tt class="docutils literal"><span class="pre">Other</span></tt> are then
+<cite>language_lexer</cite>. All tokens yielded with a type of <tt class="docutils literal">Other</tt> are then
 concatenated and given to the <cite>root_lexer</cite>. The language tokens of the
 <cite>language_lexer</cite> are then inserted into the <cite>root_lexer</cite>'s token stream
 at the appropriate positions.</p>
@@ -564,7 +564,7 @@ at the appropriate positions.</p>
 </pre></div>
 <p>This procedure ensures that e.g. HTML with template tags in it is highlighted
 correctly even if the template tags are put into HTML tags or attributes.</p>
-<p>If you want to change the needle token <tt class="docutils literal"><span class="pre">Other</span></tt> to something else, you can
+<p>If you want to change the needle token <tt class="docutils literal">Other</tt> to something else, you can
 give the lexer another token type as the third parameter:</p>
 <div class="syntax"><pre><span class="n">DelegatingLexer</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">MyLexer</span><span class="p">,</span> <span class="n">OtherLexer</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
 </pre></div>
@@ -580,11 +580,11 @@ callbacks). The callback must be a function taking two arguments:</p>
 <li>the lexer itself</li>
 <li>the match object for the last matched rule</li>
 </ul>
-<p>The callback must then return an iterable of (or simply yield) <tt class="docutils literal"><span class="pre">(index,</span>
-<span class="pre">tokentype,</span> <span class="pre">value)</span></tt> tuples, which are then just passed through by
-<cite>get_tokens_unprocessed()</cite>. The <tt class="docutils literal"><span class="pre">index</span></tt> here is the position of the token in
-the input string, <tt class="docutils literal"><span class="pre">tokentype</span></tt> is the normal token type (like <cite>Name.Builtin</cite>),
-and <tt class="docutils literal"><span class="pre">value</span></tt> the associated part of the input string.</p>
+<p>The callback must then return an iterable of (or simply yield) <tt class="docutils literal">(index,
+tokentype, value)</tt> tuples, which are then just passed through by
+<cite>get_tokens_unprocessed()</cite>. The <tt class="docutils literal">index</tt> here is the position of the token in
+the input string, <tt class="docutils literal">tokentype</tt> is the normal token type (like <cite>Name.Builtin</cite>),
+and <tt class="docutils literal">value</tt> the associated part of the input string.</p>
 <p>You can see an example here:</p>
 <div class="syntax"><pre><span class="kn">from</span> <span class="nn">pygments.lexer</span> <span class="kn">import</span> <span class="n">RegexLexer</span>
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Generic</span>
@@ -665,7 +665,7 @@ has every extension installed. In the case of PHP there are over 3000 builtin
 functions. That's an incredible huge amount of functions, much more than you
 can put into a regular expression.</p>
 <p>But because only <cite>Name</cite> tokens can be function names it's solvable by overriding
-the <tt class="docutils literal"><span class="pre">get_tokens_unprocessed()</span></tt> method. The following lexer subclasses the
+the <tt class="docutils literal">get_tokens_unprocessed()</tt> method. The following lexer subclasses the
 <cite>PythonLexer</cite> so that it highlights some additional names as pseudo keywords:</p>
 <div class="syntax"><pre><span class="kn">from</span> <span class="nn">pygments.lexers.agile</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
 <span class="kn">from</span> <span class="nn">pygments.token</span> <span class="kn">import</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Keyword</span>
@@ -686,6 +686,6 @@ the <tt class="docutils literal"><span class="pre">get_tokens_unprocessed()</spa
 
   </div>
 </body>
-<!-- generated on: 2009-09-15 12:36:53.939837
+<!-- generated on: 2010-01-02 15:15:49.865110
      file id: lexerdevelopment -->
 </html>
