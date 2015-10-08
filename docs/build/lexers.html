@@ -138,7 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
-.syntax { background: #ffffff; }
+.syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .syntax .k { color: #008800; font-weight: bold } /* Keyword */
@@ -149,12 +149,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #999999 } /* Generic.Heading */
+.syntax .gh { color: #303030 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #aaaaaa } /* Generic.Subheading */
+.syntax .gu { color: #606060 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -176,6 +176,7 @@ div.toc h2 {
 .syntax .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
 .syntax .nv { color: #336699 } /* Name.Variable */
 .syntax .ow { color: #008800 } /* Operator.Word */
+.syntax .w { color: #bbbbbb } /* Text.Whitespace */
 .syntax .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
 .syntax .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
 .syntax .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
@@ -216,6 +217,10 @@ div.toc h2 {
         
           <li><a href="#lexers-for-net-languages">Lexers for .net languages</a></li>
         
+          <li><a href="#lexers-for-functional-languages">Lexers for functional languages</a></li>
+        
+          <li><a href="#lexers-for-math-languages">Lexers for math languages</a></li>
+        
           <li><a href="#lexers-for-other-languages">Lexers for other languages</a></li>
         
           <li><a href="#special-lexers">Special lexers</a></li>
@@ -225,6 +230,8 @@ div.toc h2 {
           <li><a href="#lexers-for-non-source-code-file-types">Lexers for non-source code file types</a></li>
         
           <li><a href="#lexers-for-web-related-languages-and-markup">Lexers for web-related languages and markup</a></li>
+        
+          <li><a href="#iterating-over-all-lexers">Iterating over all lexers</a></li>
         
         </ul>
       </div>
@@ -251,6 +258,8 @@ detection is used, if it is set to <tt class="docutils literal"><span class="pre
 guess the encoding of the input.</p>
 </dd>
 </dl>
+<p>The &quot;Short Names&quot; field lists the identifiers that can be used with the
+<cite>get_lexer_by_name()</cite> function.</p>
 <p>These lexers are builtin and can be imported from <cite>pygments.lexers</cite>:</p>
 <div class="section">
 <h3><a id="lexers-for-agile-languages" name="lexers-for-agile-languages">Lexers for agile languages</a></h3>
@@ -277,11 +286,28 @@ should not be highlighted. By default all modules are highlighted.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">lua</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">lua</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.lua</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-lua, application/x-lua</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>MiniDLexer</cite></p>
+<blockquote>
+<p>For <a class="reference" href="http://www.dsource.org/projects/minid">MiniD</a> (a D-like scripting
+language) source.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">minid</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.md</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-minidsrc</td>
 </tr>
 </tbody>
 </table>
@@ -293,7 +319,7 @@ should not be highlighted. By default all modules are highlighted.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">perl, pl</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">perl, pl</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.pl, *.pm</td>
 </tr>
@@ -317,7 +343,7 @@ should not be highlighted. By default all modules are highlighted.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">pycon</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">pycon</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -333,7 +359,7 @@ should not be highlighted. By default all modules are highlighted.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">python, py</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">python, py</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.py, *.pyw</td>
 </tr>
@@ -350,7 +376,7 @@ should not be highlighted. By default all modules are highlighted.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">pytb</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">pytb</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.pytb</td>
 </tr>
@@ -372,7 +398,7 @@ should not be highlighted. By default all modules are highlighted.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">rbcon, irb</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">rbcon, irb</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -388,34 +414,11 @@ should not be highlighted. By default all modules are highlighted.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">rb, ruby</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">rb, ruby</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.rb, *.rbw, Rakefile, *.rake, *.gemspec, *.rbx</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-ruby, application/x-ruby</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-<p><cite>SchemeLexer</cite></p>
-<blockquote>
-<p>A Scheme lexer, parsing a stream and outputting the tokens
-needed to highlight scheme code.
-This lexer could be most probably easily subclassed to parse
-other LISP-Dialects like Common Lisp, Emacs Lisp or AutoLisp.</p>
-<p>This parser is checked with pastes from the LISP pastebin
-at <a class="reference" href="http://paste.lisp.org/">http://paste.lisp.org/</a> to cover as much syntax as possible.</p>
-<p>It supports the full Scheme syntax as defined in R5RS.</p>
-<p><em>New in Pygments 0.6.</em></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">scheme</td>
-</tr>
-<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.scm</td>
-</tr>
-<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-scheme, application/x-scheme</td>
 </tr>
 </tbody>
 </table>
@@ -430,7 +433,7 @@ at <a class="reference" href="http://paste.lisp.org/">http://paste.lisp.org/</a>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">c</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">c</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.c, *.h</td>
 </tr>
@@ -446,11 +449,27 @@ at <a class="reference" href="http://paste.lisp.org/">http://paste.lisp.org/</a>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">cpp, c++</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">cpp, c++</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.cpp, *.hpp, *.c++, *.h++</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-c++hdr, text/x-c++src</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>DLexer</cite></p>
+<blockquote>
+<p>For D source.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">d</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.d, *.di</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-dsrc</td>
 </tr>
 </tbody>
 </table>
@@ -476,7 +495,7 @@ Default is to consider all of them builtin.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">delphi, pas, pascal, objectpascal</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">delphi, pas, pascal, objectpascal</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.pas</td>
 </tr>
@@ -493,7 +512,7 @@ Default is to consider all of them builtin.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">dylan</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">dylan</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.dylan</td>
 </tr>
@@ -509,11 +528,27 @@ Default is to consider all of them builtin.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">java</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">java</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.java</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-java</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>ObjectiveCLexer</cite></p>
+<blockquote>
+<p>For Objective-C source code with preprocessor directives.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">objective-c, objectivec, obj-c, objc</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.m</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-objective-c</td>
 </tr>
 </tbody>
 </table>
@@ -526,7 +561,7 @@ Default is to consider all of them builtin.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">ocaml</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">ocaml</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ml, *.mli</td>
 </tr>
@@ -545,7 +580,7 @@ Default is to consider all of them builtin.</dd>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">boo</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">boo</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.boo</td>
 </tr>
@@ -558,11 +593,29 @@ Default is to consider all of them builtin.</dd>
 <blockquote>
 <p>For <a class="reference" href="http://msdn2.microsoft.com/en-us/vcsharp/default.aspx">C#</a>
 source code.</p>
+<p>Additional options accepted:</p>
+<dl class="docutils">
+<dt><cite>unicodelevel</cite></dt>
+<dd><p class="first">Determines which Unicode characters this lexer allows for identifiers.
+The possible values are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">none</span></tt> -- only the ASCII letters and numbers are allowed. This
+is the fastest selection.</li>
+<li><tt class="docutils literal"><span class="pre">basic</span></tt> -- all Unicode characters from the specification except
+category <tt class="docutils literal"><span class="pre">Lo</span></tt> are allowed.</li>
+<li><tt class="docutils literal"><span class="pre">full</span></tt> -- all Unicode characters as specified in the C# specs
+are allowed.  Note that this means a considerable slowdown since the
+<tt class="docutils literal"><span class="pre">Lo</span></tt> category has more than 40,000 characters in it!</li>
+</ul>
+<p>The default value is <tt class="docutils literal"><span class="pre">basic</span></tt>.</p>
+<p class="last"><em>New in Pygments 0.8.</em></p>
+</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">csharp, c#</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">csharp, c#</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.cs</td>
 </tr>
@@ -580,11 +633,75 @@ source code.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">vb.net, vbnet</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">vb.net, vbnet</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.vb, *.bas</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-vbnet, text/x-vba</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</div>
+<div class="section">
+<h3><a id="lexers-for-functional-languages" name="lexers-for-functional-languages">Lexers for functional languages</a></h3>
+<p><cite>HaskellLexer</cite></p>
+<blockquote>
+<p>A Haskell lexer based on the lexemes defined in the Haskell 98 Report.</p>
+<p><em>New in Pygments 0.8.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">haskell</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.hs</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>SchemeLexer</cite></p>
+<blockquote>
+<p>A Scheme lexer, parsing a stream and outputting the tokens
+needed to highlight scheme code.
+This lexer could be most probably easily subclassed to parse
+other LISP-Dialects like Common Lisp, Emacs Lisp or AutoLisp.</p>
+<p>This parser is checked with pastes from the LISP pastebin
+at <a class="reference" href="http://paste.lisp.org/">http://paste.lisp.org/</a> to cover as much syntax as possible.</p>
+<p>It supports the full Scheme syntax as defined in R5RS.</p>
+<p><em>New in Pygments 0.6.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">scheme</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.scm</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-scheme, application/x-scheme</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</div>
+<div class="section">
+<h3><a id="lexers-for-math-languages" name="lexers-for-math-languages">Lexers for math languages</a></h3>
+<p><cite>MuPADLexer</cite></p>
+<blockquote>
+<p>A <a class="reference" href="http://www.mupad.com">MuPAD</a> lexer.
+Contributed by Christopher Creutzig &lt;<a class="reference" href="mailto:christopher&#64;creutzig.de">christopher&#64;creutzig.de</a>&gt;.</p>
+<p><em>New in Pygments 0.8.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">mupad</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.mu</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">None</td>
 </tr>
 </tbody>
 </table>
@@ -600,7 +717,7 @@ source code.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">bash, sh</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">bash, sh</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.sh</td>
 </tr>
@@ -617,7 +734,7 @@ source code.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">bat</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">bat</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.bat, *.cmd</td>
 </tr>
@@ -635,7 +752,7 @@ language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">befunge</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">befunge</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.befunge</td>
 </tr>
@@ -652,11 +769,29 @@ language.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">brainfuck, bf</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">brainfuck, bf</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.bf, *.b</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">application/x-brainfuck</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>RedcodeLexer</cite></p>
+<blockquote>
+<p>A simple Redcode lexer based on ICWS'94.
+Contributed by Adam Blinkinsop &lt;<a class="reference" href="mailto:blinks&#64;acm.org">blinks&#64;acm.org</a>&gt;.</p>
+<p><em>New in Pygments 0.8.</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">redcode</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.cw</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">None</td>
 </tr>
 </tbody>
 </table>
@@ -669,7 +804,7 @@ not recognize any special syntax except ANSI SQL.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">sql</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">sql</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.sql</td>
 </tr>
@@ -688,13 +823,13 @@ not recognize any special syntax except ANSI SQL.</p>
 <dl class="docutils">
 <dt><cite>compress</cite></dt>
 <dd>If set to <tt class="docutils literal"><span class="pre">&quot;gz&quot;</span></tt> or <tt class="docutils literal"><span class="pre">&quot;bz2&quot;</span></tt>, decompress the token stream with
-the given compression algorithm before lexing (default: <tt class="docutils literal"><span class="pre">''</span></tt>).</dd>
+the given compression algorithm before lexing (default: <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt>).</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">raw</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">raw</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.raw</td>
 </tr>
@@ -710,7 +845,7 @@ the given compression algorithm before lexing (default: <tt class="docutils lite
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">text</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">text</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.txt</td>
 </tr>
@@ -730,7 +865,7 @@ the given compression algorithm before lexing (default: <tt class="docutils lite
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">css+django, css+jinja</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">css+django, css+jinja</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -746,7 +881,7 @@ the given compression algorithm before lexing (default: <tt class="docutils lite
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">css+erb, css+ruby</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">css+erb, css+ruby</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -762,7 +897,7 @@ the given compression algorithm before lexing (default: <tt class="docutils lite
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">css+genshitext, css+genshi</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">css+genshitext, css+genshi</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -778,7 +913,7 @@ the given compression algorithm before lexing (default: <tt class="docutils lite
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">css+php</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">css+php</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -795,7 +930,7 @@ the given compression algorithm before lexing (default: <tt class="docutils lite
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">css+smarty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">css+smarty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -814,7 +949,7 @@ other data is left untouched by the lexer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">django, jinja</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">django, jinja</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -834,7 +969,7 @@ is left untouched by the lexer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">erb</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">erb</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -851,7 +986,7 @@ is left untouched by the lexer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">genshi, kid, xml+genshi, xml+kid</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">genshi, kid, xml+genshi, xml+kid</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.kid</td>
 </tr>
@@ -868,7 +1003,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">genshitext</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">genshitext</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -886,7 +1021,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">html+django, html+jinja</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html+django, html+jinja</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -903,7 +1038,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">html+genshi, html+kid</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html+genshi, html+kid</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -920,7 +1055,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">html+php</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html+php</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.phtml</td>
 </tr>
@@ -938,7 +1073,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">html+smarty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html+smarty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -955,7 +1090,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">js+django, javascript+django, js+jinja, javascript+jinja</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">js+django, javascript+django, js+jinja, javascript+jinja</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -972,7 +1107,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">js+erb, javascript+erb, js+ruby, javascript+ruby</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">js+erb, javascript+erb, js+ruby, javascript+ruby</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -988,7 +1123,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">js+genshitext, js+genshi, javascript+genshitext, javascript+genshi</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">js+genshitext, js+genshi, javascript+genshitext, javascript+genshi</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1005,7 +1140,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">js+php, javascript+php</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">js+php, javascript+php</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1022,7 +1157,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">js+smarty, javascript+smarty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">js+smarty, javascript+smarty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1039,7 +1174,7 @@ templates.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">jsp</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">jsp</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.jsp</td>
 </tr>
@@ -1057,7 +1192,7 @@ with the <cite>CssLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">css+mako</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">css+mako</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1075,7 +1210,7 @@ with the <cite>HtmlLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">html+mako</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html+mako</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1093,7 +1228,7 @@ with the <cite>JavascriptLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">js+mako, javascript+mako</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">js+mako, javascript+mako</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1111,7 +1246,7 @@ markup is yielded as <cite>Token.Other</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">mako</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">mako</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.mao</td>
 </tr>
@@ -1129,7 +1264,7 @@ with the <cite>XmlLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">xml+mako</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xml+mako</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1147,7 +1282,7 @@ with the <cite>CssLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">css+myghty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">css+myghty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1165,7 +1300,7 @@ with the <cite>HtmlLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">html+myghty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html+myghty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1183,7 +1318,7 @@ with the <cite>JavascriptLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">js+myghty, javascript+myghty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">js+myghty, javascript+myghty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1201,7 +1336,7 @@ markup is yielded as <cite>Token.Other</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">myghty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">myghty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.myt, autodelegate</td>
 </tr>
@@ -1219,7 +1354,7 @@ with the <cite>XmlLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">xml+myghty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xml+myghty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1237,7 +1372,7 @@ html lexer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">rhtml, html+erb, html+ruby</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">rhtml, html+erb, html+ruby</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.rhtml</td>
 </tr>
@@ -1255,7 +1390,7 @@ data is left untouched by the lexer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">smarty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">smarty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.tpl</td>
 </tr>
@@ -1272,7 +1407,7 @@ data is left untouched by the lexer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">xml+django, xml+jinja</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xml+django, xml+jinja</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1289,7 +1424,7 @@ directives with the <cite>XmlLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">xml+erb, xml+ruby</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xml+erb, xml+ruby</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1305,7 +1440,7 @@ directives with the <cite>XmlLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">xml+php</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xml+php</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1322,7 +1457,7 @@ directives with the <cite>XmlLexer</cite>.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">xml+smarty</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xml+smarty</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1343,7 +1478,7 @@ format.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">apacheconf, aconf, apache</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">apacheconf, aconf, apache</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">.htaccess, apache.conf, apache2.conf</td>
 </tr>
@@ -1360,7 +1495,7 @@ format.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">bbcode</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">bbcode</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1376,7 +1511,7 @@ format.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">diff</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">diff</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.diff, *.patch</td>
 </tr>
@@ -1394,7 +1529,7 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">groff, nroff, man</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">groff, nroff, man</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.[1234567], *.man</td>
 </tr>
@@ -1410,7 +1545,7 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">ini, cfg</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">ini, cfg</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.ini, *.cfg</td>
 </tr>
@@ -1426,7 +1561,7 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">irc</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">irc</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1442,7 +1577,7 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">make, makefile, mf</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">make, makefile, mf</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.mak, Makefile, makefile</td>
 </tr>
@@ -1459,7 +1594,7 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">trac-wiki, moin</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">trac-wiki, moin</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">None</td>
 </tr>
@@ -1472,11 +1607,18 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <blockquote>
 <p>For <a class="reference" href="http://docutils.sf.net/rst.html">reStructuredText</a> markup.</p>
 <p><em>New in Pygments 0.7.</em></p>
+<p>Additional options accepted:</p>
+<dl class="docutils">
+<dt><cite>handlecodeblocks</cite></dt>
+<dd>Highlight the contents of <tt class="docutils literal"><span class="pre">..</span> <span class="pre">sourcecode::</span> <span class="pre">langauge</span></tt> and
+<tt class="docutils literal"><span class="pre">..</span> <span class="pre">code::</span> <span class="pre">language</span></tt> directives with a lexer for the given
+language (default: <tt class="docutils literal"><span class="pre">True</span></tt>). <em>New in Pygments 0.8.</em></dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">rst, restructuredtext</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">rst, rest, restructuredtext</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.rst, *.rest</td>
 </tr>
@@ -1493,7 +1635,7 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">sourceslist, sources.list</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">sourceslist, sources.list</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">sources.list</td>
 </tr>
@@ -1509,11 +1651,27 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">tex, latex</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">tex, latex</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.tex, *.aux, *.toc</td>
 </tr>
 <tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-tex, text/x-latex</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><cite>VimLexer</cite></p>
+<blockquote>
+<p>Lexer for VimL script files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">vim</td>
+</tr>
+<tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.vim, .vimrc</td>
+</tr>
+<tr class="field"><th class="field-name">Mimetypes:</th><td class="field-body">text/x-vim</td>
 </tr>
 </tbody>
 </table>
@@ -1528,7 +1686,7 @@ extensions. Mainly useful for highlighting manpage sources.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">css</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">css</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.css</td>
 </tr>
@@ -1545,7 +1703,7 @@ by the appropriate lexer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">html</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">html</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.html, *.htm, *.xhtml</td>
 </tr>
@@ -1561,7 +1719,7 @@ by the appropriate lexer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">js, javascript</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">js, javascript</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.js</td>
 </tr>
@@ -1578,7 +1736,8 @@ For PHP embedded in HTML, use the <cite>HtmlPhpLexer</cite>.</p>
 <dl class="docutils">
 <dt><cite>startinline</cite></dt>
 <dd>If given and <tt class="docutils literal"><span class="pre">True</span></tt> the lexer starts highlighting with
-php code. (i.e.: no starting <tt class="docutils literal"><span class="pre">&lt;?php</span></tt> required)</dd>
+php code (i.e.: no starting <tt class="docutils literal"><span class="pre">&lt;?php</span></tt> required).  The default
+is <tt class="docutils literal"><span class="pre">False</span></tt>.</dd>
 <dt><cite>funcnamehighlighting</cite></dt>
 <dd>If given and <tt class="docutils literal"><span class="pre">True</span></tt>, highlight builtin function names
 (default: <tt class="docutils literal"><span class="pre">True</span></tt>).</dd>
@@ -1601,7 +1760,7 @@ the php documentation.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">php, php3, php4, php5</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">php, php3, php4, php5</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.php, *.php[345]</td>
 </tr>
@@ -1617,7 +1776,7 @@ the php documentation.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Aliases:</th><td class="field-body">xml</td>
+<tr class="field"><th class="field-name">Short names:</th><td class="field-body">xml</td>
 </tr>
 <tr class="field"><th class="field-name">Filename patterns:</th><td class="field-body">*.xml, *.xsl, *.rss</td>
 </tr>
@@ -1626,8 +1785,9 @@ the php documentation.</p>
 </tbody>
 </table>
 </blockquote>
+</div>
 <div class="section">
-<h4><a id="iterating-over-all-lexers" name="iterating-over-all-lexers">Iterating over all lexers</a></h4>
+<h3><a id="iterating-over-all-lexers" name="iterating-over-all-lexers">Iterating over all lexers</a></h3>
 <p><em>New in Pygments 0.6.</em></p>
 <p>To get all lexers (both the builtin and the plugin ones), you can
 use the <cite>get_all_lexers()</cite> function from the <cite>pygments.lexers</cite>
@@ -1644,10 +1804,9 @@ module:</p>
 <p>As you can see, the return value is an iterator which yields tuples
 in the form <tt class="docutils literal"><span class="pre">(name,</span> <span class="pre">aliases,</span> <span class="pre">filetypes,</span> <span class="pre">mimetypes)</span></tt>.</p>
 </div>
-</div>
 
   </div>
 </body>
-<!-- generated on: 2007-02-15 19:40:59.433813
+<!-- generated on: 2007-05-30 16:07:35.237168
      file id: lexers -->
 </html>

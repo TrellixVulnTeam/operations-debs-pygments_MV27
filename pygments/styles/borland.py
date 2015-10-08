@@ -3,7 +3,7 @@
     pygments.styles.borland
     ~~~~~~~~~~~~~~~~~~~~~~~
 
-    Style similar to the style used in the borland ides.
+    Style similar to the style used in the Borland IDEs.
 
     :copyright: 2006-2007 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
@@ -11,7 +11,7 @@
 
 from pygments.style import Style
 from pygments.token import Keyword, Name, Comment, String, Error, \
-     Number, Operator, Generic
+     Number, Operator, Generic, Whitespace
 
 
 class BorlandStyle(Style):
@@ -22,16 +22,19 @@ class BorlandStyle(Style):
     default_style = ''
 
     styles = {
+        Whitespace:             '#bbbbbb',
+
         Comment:                'italic #008800',
-        Comment.Preproc:        'noitalic',
+        Comment.Preproc:        'noitalic #008080',
         Comment.Special:        'noitalic bold',
 
         String:                 '#0000FF',
+        String.Char:            '#800080',
         Number:                 '#0000FF',
-        Keyword:                'bold',
+        Keyword:                'bold #000080',
         Operator.Word:          'bold',
-        Name.Tag:               'bold',
-        Name.Attribute:         'italic',
+        Name.Tag:               'bold #000080',
+        Name.Attribute:         '#FF0000',
 
         Generic.Heading:        '#999999',
         Generic.Subheading:     '#aaaaaa',

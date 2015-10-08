@@ -45,13 +45,13 @@ class HtmlFormatterTest(unittest.TestCase):
         fmt1.format(tokensource, tfile)
         try:
             fmt2.format(tokensource, tfile)
+            self.assert_(isfile(join(testdir, 'fmt2.css')))
         except IOError:
             # test directory not writable
             pass
         tfile.close()
 
-        self.assert_(isfile(join(dirname(tfile.name), 'my.css')))
-
+        self.assert_(isfile(join(dirname(tfile.name), 'fmt1.css')))
         os.unlink(join(dirname(tfile.name), 'fmt1.css'))
         try:
             os.unlink(join(testdir, 'fmt2.css'))
@@ -93,3 +93,17 @@ class HtmlFormatterTest(unittest.TestCase):
             self.failIf(ret, 'nsgmls run reported errors')
 
         os.unlink(pathname)
+
+    def test_get_style_defs(self):
+        fmt = HtmlFormatter()
+        sd = fmt.get_style_defs()
+        self.assert_(sd.startswith('.'))
+
+        fmt = HtmlFormatter(cssclass='foo')
+        sd = fmt.get_style_defs()
+        self.assert_(sd.startswith('.foo'))
+        sd = fmt.get_style_defs('.bar')
+        self.assert_(sd.startswith('.bar'))
+        sd = fmt.get_style_defs(['.bar', '.baz'])
+        fl = sd.splitlines()[0]
+        self.assert_('.bar' in fl and '.baz' in fl)

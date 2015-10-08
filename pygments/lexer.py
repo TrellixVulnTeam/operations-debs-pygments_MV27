@@ -348,26 +348,30 @@ class RegexLexerMeta(LexerMeta):
     self.tokens on the first instantiation.
     """
 
-    def _process_state(cls, state):
+    def _process_state(cls, unprocessed, processed, state):
         assert type(state) is str, "wrong state name %r" % state
         assert state[0] != '#', "invalid state name %r" % state
-        if state in cls._tokens:
-            return cls._tokens[state]
-        tokens = cls._tokens[state] = []
+        if state in processed:
+            return processed[state]
+        tokens = processed[state] = []
         rflags = cls.flags
-        for tdef in cls.tokens[state]:
+        for tdef in unprocessed[state]:
             if isinstance(tdef, include):
                 # it's a state reference
                 assert tdef != state, "circular state reference %r" % state
-                tokens.extend(cls._process_state(str(tdef)))
+                tokens.extend(cls._process_state(unprocessed, processed, str(tdef)))
                 continue
 
             assert type(tdef) is tuple, "wrong rule def %r" % tdef
 
-            rex = re.compile(tdef[0], rflags)
+            try:
+                rex = re.compile(tdef[0], rflags).match
+            except Exception, err:
+                raise ValueError("uncompilable regex %r in state %r of %r: %s" %
+                                 (tdef[0], state, cls, err))
 
             assert type(tdef[1]) is _TokenType or callable(tdef[1]), \
-                   'token type must be simple type or callable, not %r' % tdef[1]
+                   'token type must be simple type or callable, not %r' % (tdef[1],)
 
             if len(tdef) == 2:
                 new_state = None
@@ -377,7 +381,7 @@ class RegexLexerMeta(LexerMeta):
                     # an existing state
                     if tdef2 == '#pop':
                         new_state = -1
-                    elif tdef2 in cls.tokens:
+                    elif tdef2 in unprocessed:
                         new_state = (tdef2,)
                     elif tdef2 == '#push':
                         new_state = tdef2
@@ -392,13 +396,14 @@ class RegexLexerMeta(LexerMeta):
                     itokens = []
                     for istate in tdef2:
                         assert istate != state, 'circular state ref %r' % istate
-                        itokens.extend(cls._process_state(istate))
-                    cls._tokens[new_state] = itokens
+                        itokens.extend(cls._process_state(unprocessed,
+                                                          processed, istate))
+                    processed[new_state] = itokens
                     new_state = (new_state,)
                 elif isinstance(tdef2, tuple):
                     # push more than one state
                     for state in tdef2:
-                        assert state in cls.tokens, \
+                        assert state in unprocessed, \
                                'unknown new state ' + state
                     new_state = tdef2
                 else:
@@ -406,12 +411,22 @@ class RegexLexerMeta(LexerMeta):
             tokens.append((rex, tdef[1], new_state))
         return tokens
 
+    def process_tokendef(cls, name, tokendefs=None):
+        processed = cls._all_tokens[name] = {}
+        tokendefs = tokendefs or cls.tokens[name]
+        for state in tokendefs.keys():
+            cls._process_state(tokendefs, processed, state)
+        return processed
+
     def __call__(cls, *args, **kwds):
         if not hasattr(cls, '_tokens'):
-            cls._tokens = {}
+            cls._all_tokens = {}
             cls._tmpname = 0
-            for state in cls.tokens.keys():
-                cls._process_state(state)
+            if hasattr(cls, 'token_variants') and cls.token_variants:
+                # don't process yet
+                pass
+            else:
+                cls._tokens = cls.process_tokendef('', cls.tokens)
 
         return type.__call__(cls, *args, **kwds)
 
@@ -454,11 +469,12 @@ class RegexLexer(Lexer):
         ``stack`` is the inital stack (default: ``['root']``)
         """
         pos = 0
+        tokendefs = self._tokens
         statestack = list(stack)
-        statetokens = self._tokens[statestack[-1]]
+        statetokens = tokendefs[statestack[-1]]
         while 1:
-            for rex, action, new_state in statetokens:
-                m = rex.match(text, pos)
+            for rexmatch, action, new_state in statetokens:
+                m = rexmatch(text, pos)
                 if m:
                     # print rex.pattern
                     if type(action) is _TokenType:
@@ -478,7 +494,7 @@ class RegexLexer(Lexer):
                             statestack.append(statestack[-1])
                         else:
                             assert False, "wrong state def: %r" % new_state
-                        statetokens = self._tokens[statestack[-1]]
+                        statetokens = tokendefs[statestack[-1]]
                     break
             else:
                 try:
@@ -486,7 +502,7 @@ class RegexLexer(Lexer):
                         # at EOL, reset state to "root"
                         pos += 1
                         statestack = ['root']
-                        statetokens = self._tokens['root']
+                        statetokens = tokendefs['root']
                         yield pos, Text, u'\n'
                         continue
                     yield pos, Error, text[pos]
@@ -521,16 +537,17 @@ class ExtendedRegexLexer(RegexLexer):
         Split ``text`` into (tokentype, text) pairs.
         If ``context`` is given, use this lexer context instead.
         """
+        tokendefs = self._tokens
         if not context:
             ctx = LexerContext(text, 0)
-            statetokens = self._tokens['root']
+            statetokens = tokendefs['root']
         else:
             ctx = context
-            statetokens = self._tokens[ctx.stack[-1]]
+            statetokens = tokendefs[ctx.stack[-1]]
             text = ctx.text
         while 1:
-            for rex, action, new_state in statetokens:
-                m = rex.match(text, ctx.pos, ctx.end)
+            for rexmatch, action, new_state in statetokens:
+                m = rexmatch(text, ctx.pos, ctx.end)
                 if m:
                     if type(action) is _TokenType:
                         yield ctx.pos, action, m.group()
@@ -540,7 +557,7 @@ class ExtendedRegexLexer(RegexLexer):
                             yield item
                         if not new_state:
                             # altered the state stack?
-                            statetokens = self._tokens[ctx.stack[-1]]
+                            statetokens = tokendefs[ctx.stack[-1]]
                     # CAUTION: callback must set ctx.pos!
                     if new_state is not None:
                         # state transition
@@ -553,7 +570,7 @@ class ExtendedRegexLexer(RegexLexer):
                             ctx.stack.append(ctx.stack[-1])
                         else:
                             assert False, "wrong state def: %r" % new_state
-                        statetokens = self._tokens[ctx.stack[-1]]
+                        statetokens = tokendefs[ctx.stack[-1]]
                     break
             else:
                 try:
@@ -563,7 +580,7 @@ class ExtendedRegexLexer(RegexLexer):
                         # at EOL, reset state to "root"
                         ctx.pos += 1
                         ctx.stack = ['root']
-                        statetokens = self._tokens['root']
+                        statetokens = tokendefs['root']
                         yield ctx.pos, Text, u'\n'
                         continue
                     yield ctx.pos, Error, text[ctx.pos]
@@ -584,7 +601,7 @@ def do_insertions(insertions, tokens):
 
     The result is a combined token stream.
 
-    FIXME: The indices yielded by this function are not correct!
+    TODO: clean up the code here.
     """
     insertions = iter(insertions)
     try:
@@ -595,21 +612,36 @@ def do_insertions(insertions, tokens):
             yield item
         return
 
+    realpos = None
     insleft = True
+
+    # iterate over the token stream where we want to insert
+    # the tokens from the insertion list.
     for i, t, v in tokens:
+        # first iteration. store the postition of first item
+        if realpos is None:
+            realpos = i
         oldi = 0
         while insleft and i + len(v) >= index:
-            yield i, t, v[oldi:index-i]
-            for item in itokens:
-                yield item
-            oldi = index-i
+            tmpval = v[oldi:index - i]
+            yield realpos, t, tmpval
+            realpos += len(tmpval)
+            for it_index, it_token, it_value in itokens:
+                yield realpos, it_token, it_value
+                realpos += len(it_value)
+            oldi = index - i
             try:
                 index, itokens = insertions.next()
             except StopIteration:
                 insleft = False
                 break  # not strictly necessary
-        yield i, t, v[oldi:]
+        yield realpos, t, v[oldi:]
+        realpos += len(v) - oldi
+
     # leftover tokens
     if insleft:
-        for item in itokens:
-            yield item
+        # no normal tokens, set realpos to zero
+        realpos = realpos or 0
+        for p, t, v in itokens:
+            yield realpos, t, v
+            realpos += len(v)

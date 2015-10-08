@@ -62,6 +62,7 @@ DOC_HEADER = '''\
   <meta http-equiv="content-type" content="text/html; charset=%(encoding)s">
   <style type="text/css">
 td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
 %(styledefs)s
   </style>
 </head>
@@ -144,8 +145,8 @@ class HtmlFormatter(Formatter):
         td .code .cm { color: #999999 }
         ...
 
-    If you have pygments 0.6 or higher you can also pass a list of tuple to the
-    `get_style_defs` method to request multiple prefixes for the tokens:
+    If you have Pygments 0.6 or higher, you can also pass a list or tuple to the
+    `get_style_defs()` method to request multiple prefixes for the tokens:
 
     .. sourcecode:: python
 
@@ -165,7 +166,19 @@ class HtmlFormatter(Formatter):
 
     `nowrap`
         If set to ``True``, don't wrap the tokens at all, not even inside a ``<pre>``
-        tag. This disables all other options (default: ``False``).
+        tag. This disables most other options (default: ``False``).
+
+    `full`
+        Tells the formatter to output a "full" document, i.e. a complete
+        self-contained document (default: ``False``).
+
+    `title`
+        If `full` is true, the title that should be used to caption the
+        document (default: ``''``).
+
+    `style`
+        The style to use, can be a string or a Style subclass (default:
+        ``'default'``).
 
     `noclasses`
         If set to true, token ``<span>`` tags will not use CSS classes, but
@@ -181,6 +194,8 @@ class HtmlFormatter(Formatter):
 
     `cssclass`
         CSS class for the wrapping ``<div>`` tag (default: ``'highlight'``).
+        If you set this option, the default selector for `get_style_defs()`
+        will be this class.
 
     `cssstyles`
         Inline CSS styles for the wrapping ``<div>`` tag (default: ``''``).
@@ -191,6 +206,26 @@ class HtmlFormatter(Formatter):
         path, the file's path will be assumed to be relative to the main output
         file's path, if the latter can be found. The stylesheet is then written
         to this file instead of the HTML file. *New in Pygments 0.6.*
+
+    `linenos`
+        If set to ``'table'``, output line numbers as a table with two cells,
+        one containing the line numbers, the other the whole code.  This is
+        copy-and-paste-friendly, but may cause alignment problems with some
+        browsers or fonts.  If set to ``'inline'``, the line numbers will be
+        integrated in the ``<pre>`` tag that contains the code (that setting
+        is *new in Pygments 0.8*).
+
+        For compatibility with Pygments 0.7 and earlier, every true value
+        except ``'inline'`` means the same as ``'table'`` (in particular, that
+        means also ``True``).
+
+        The default value is ``False``, which means no line numbers at all.
+
+    `linenostart`
+        The line number for the first line (default: ``1``).
+
+    `linenostep`
+        If set to a number n > 1, only every nth line number is printed.
 
     `linenospecial`
         If set to a number n > 0, every nth line number is given the CSS
@@ -271,7 +306,14 @@ class HtmlFormatter(Formatter):
         self.cssclass = options.get('cssclass', 'highlight')
         self.cssstyles = options.get('cssstyles', '')
         self.cssfile = options.get('cssfile', '')
-        self.linenos = get_bool_opt(options, 'linenos', False)
+        linenos = options.get('linenos', False)
+        if linenos == 'inline':
+            self.linenos = 2
+        elif linenos:
+            # compatibility with <= 0.7
+            self.linenos = 1
+        else:
+            self.linenos = 0
         self.linenostart = abs(get_int_opt(options, 'linenostart', 1))
         self.linenostep = abs(get_int_opt(options, 'linenostep', 1))
         self.linenospecial = abs(get_int_opt(options, 'linenospecial', 0))
@@ -313,21 +355,25 @@ class HtmlFormatter(Formatter):
                 # hierarchy (necessary for CSS cascading rules!)
                 c2s[name] = (style[:-2], ttype, len(ttype))
 
-    def get_style_defs(self, arg=''):
+    def get_style_defs(self, arg=None):
         """
-        Return CSS style definitions for the classes produced by the
-        current highlighting style. ``arg`` can be a string of selectors
-        to insert before the token type classes.
+        Return CSS style definitions for the classes produced by the current
+        highlighting style. ``arg`` can be a string or list of selectors to
+        insert before the token type classes.
         """
+        if arg is None:
+            arg = ('cssclass' in self.options and '.'+self.cssclass or '')
         if isinstance(arg, basestring):
             args = [arg]
         else:
             args = list(arg)
 
         def prefix(cls):
+            if cls:
+                cls = '.' + cls
             tmp = []
             for arg in args:
-                tmp.append((arg and arg + ' ' or '') + '.' + cls)
+                tmp.append((arg and arg + ' ' or '') + cls)
             return ', '.join(tmp)
 
         styles = [(level, ttype, cls, style)
@@ -342,7 +388,7 @@ class HtmlFormatter(Formatter):
             if Text in self.ttype2class:
                 text_style = ' ' + self.class2style[self.ttype2class[Text]][0]
             lines.insert(0, '%s { background: %s;%s }' %
-                         (arg, self.style.background_color, text_style))
+                         (prefix(''), self.style.background_color, text_style))
         return '\n'.join(lines)
 
     def _wrap_full(self, inner, outfile):
@@ -385,7 +431,7 @@ class HtmlFormatter(Formatter):
             yield t, line
         yield 0, DOC_FOOTER
 
-    def _wrap_linenos(self, inner):
+    def _wrap_tablelinenos(self, inner):
         dummyoutfile = StringIO.StringIO()
         lncount = 0
         for t, line in inner:
@@ -411,6 +457,24 @@ class HtmlFormatter(Formatter):
                   ls + '</pre></td><td class="code">')
         yield 0, dummyoutfile.getvalue()
         yield 0, '</td></tr></table>'
+
+    def _wrap_inlinelinenos(self, inner):
+        # need a list of lines since we need the width of a single number :(
+        lines = list(inner)
+        sp = self.linenospecial
+        st = self.linenostep
+        num = self.linenostart
+        mw = len(str(len(lines) + num - 1))
+
+        if sp:
+            for t, line in lines:
+                yield 1, '<span class="lineno%s">%*s</span> ' % (
+                    num%sp == 0 and ' special' or '', mw, (num%st and ' ' or num)) + line
+                num += 1
+        else:
+            for t, line in lines:
+                yield 1, '<span class="lineno">%*s</span> ' % (mw, (num%st and ' ' or num)) + line
+                num += 1
 
     def _wrap_div(self, inner):
         yield 0, ('<div' + (self.cssclass and ' class="%s"' % self.cssclass)
@@ -508,9 +572,11 @@ class HtmlFormatter(Formatter):
         """
         source = self._format_lines(tokensource)
         if not self.nowrap:
+            if self.linenos == 2:
+                source = self._wrap_inlinelinenos(source)
             source = self.wrap(source, outfile)
-            if self.linenos:
-                source = self._wrap_linenos(source)
+            if self.linenos == 1:
+                source = self._wrap_tablelinenos(source)
             if self.full:
                 source = self._wrap_full(source, outfile)
 

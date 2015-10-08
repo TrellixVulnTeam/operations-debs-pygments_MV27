@@ -10,6 +10,7 @@
 """
 
 from pygments.formatter import Formatter
+from pygments.util import get_choice_opt
 
 
 __all__ = ['NullFormatter', 'RawTokenFormatter']
@@ -54,7 +55,8 @@ class RawTokenFormatter(Formatter):
 
     def __init__(self, **options):
         Formatter.__init__(self, **options)
-        self.compress = options.get('compress', '')
+        self.compress = get_choice_opt(options, 'compress',
+                                       ['', 'none', 'gz', 'bz2'], '')
 
     def format(self, tokensource, outfile):
         if self.compress == 'gz':
@@ -77,13 +79,5 @@ class RawTokenFormatter(Formatter):
         lasttype = None
         lastval = u''
         for ttype, value in tokensource:
-            value = repr(value)
-            if ttype is lasttype:
-                lastval += value
-            else:
-                if lasttype:
-                    write("%s\t%s\n" % (lasttype, lastval))
-                lastval = value
-                lasttype = ttype
-        write("%s\t%s\n" % (lasttype, lastval))
+            write("%s\t%r\n" % (ttype, value))
         flush()

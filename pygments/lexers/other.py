@@ -11,14 +11,14 @@
 
 import re
 
-from pygments.lexer import RegexLexer, include, bygroups
+from pygments.lexer import RegexLexer, include, bygroups, using, this
 from pygments.token import Error, Punctuation, \
      Text, Comment, Operator, Keyword, Name, String, Number
 from pygments.util import shebang_matches
 
 
 __all__ = ['SqlLexer', 'BrainfuckLexer', 'BashLexer', 'BatchLexer',
-           'BefungeLexer']
+           'BefungeLexer', 'RedcodeLexer']
 
 
 class SqlLexer(RegexLexer):
@@ -213,7 +213,7 @@ class BashLexer(RegexLexer):
 
     tokens = {
         'root': [
-            (r'\b(if|fi|while|do|done|for|then|return|function|case|'
+            (r'\b(if|fi|else|while|do|done|for|then|return|function|case|'
              r'select|continue|until)\s*\b',
              Keyword),
             (r'\b(alias|bg|bind|break|builtin|caller|cd|command|compgen|'
@@ -224,27 +224,24 @@ class BashLexer(RegexLexer):
              r'ulimit|umask|unalias|unset|wait)\s*\b',
              Name.Builtin),
             (r'#.*\n', Comment),
-            (r'(\b\w+\s*)(=)', bygroups(Name.Variable, Operator)),
-            (r'[\[\]{}\(\)=]+', Operator),
-            (r'\$\(', Keyword, 'paren'),
-            (r'\${', Keyword, 'curly'),
+            (r'(\b\w+)(\s*)(=)', bygroups(Name.Variable, Text, Operator)),
+            (r'[\[\]{}()=]+', Operator),
+            (r'(\$\()(.*?)(\))', bygroups(Keyword, using(this), Keyword)),
+            (r'\${#?', Keyword, 'curly'),
             (r'`.+`', String),
             (r'\d+(?= |\Z)', Number),
             (r'\$#?(\w+|.)', Name.Variable),
             (r'"(\\\\|\\[0-7]+|\\.|[^"])*"', String.Double),
             (r"'(\\\\|\\[0-7]+|\\.|[^'])*'", String.Single),
             (r'\s+', Text),
-            (r'[^=\s\n]+', Text),
+            (r'[^=\s\n\[\]{}()$"\']+', Text),
         ],
         'curly': [
             (r'}', Keyword, '#pop'),
             (r':-', Keyword),
+            (r'[a-zA-Z0-9]+', Name.Variable),
             (r'[^}:]+', Punctuation),
             (r':', Punctuation),
-        ],
-        'paren': [
-            (r'\)', Keyword, '#pop'),
-            (r'[^)]*', Punctuation),
         ],
     }
 
@@ -303,5 +300,41 @@ class BatchLexer(RegexLexer):
             (r':\w+', Name.Label),
             (r'\w:\w+', Text),
             (r'([<>|])(\s*)(\w+)', bygroups(Punctuation, Text, Name)),
+        ],
+    }
+
+
+class RedcodeLexer(RegexLexer):
+    """
+    A simple Redcode lexer based on ICWS'94.
+    Contributed by Adam Blinkinsop <blinks@acm.org>.
+
+    *New in Pygments 0.8.*
+    """
+    name = 'Redcode'
+    aliases = ['redcode']
+    filenames = ['*.cw']
+
+    opcodes = ['DAT','MOV','ADD','SUB','MUL','DIV','MOD',
+               'JMP','JMZ','JMN','DJN','CMP','SLT','SPL',
+               'ORG','EQU','END']
+    modifiers = ['A','B','AB','BA','F','X','I']
+
+    tokens = {
+        'root': [
+            # Whitespace:
+            (r'\s+', Text),
+            (r';.*$', Comment.Single),
+            # Lexemes:
+            #  Identifiers
+            (r'\b(%s)\b' % '|'.join(opcodes), Name.Function),
+            (r'\b(%s)\b' % '|'.join(modifiers), Name.Decorator),
+            (r'[A-Za-z_][A-Za-z_0-9]+', Name),
+            #  Operators
+            (r'[-+*/%]', Operator),
+            (r'[#$@<>]', Operator), # mode
+            (r'[.,]', Punctuation), # mode
+            #  Numbers
+            (r'[-+]?\d+', Number.Integer),
         ],
     }

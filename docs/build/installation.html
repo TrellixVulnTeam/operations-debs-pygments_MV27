@@ -138,7 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
-.syntax { background: #ffffff; }
+.syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .syntax .k { color: #008800; font-weight: bold } /* Keyword */
@@ -149,12 +149,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #999999 } /* Generic.Heading */
+.syntax .gh { color: #303030 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #aaaaaa } /* Generic.Subheading */
+.syntax .gu { color: #606060 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -176,6 +176,7 @@ div.toc h2 {
 .syntax .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
 .syntax .nv { color: #336699 } /* Name.Variable */
 .syntax .ow { color: #008800 } /* Operator.Word */
+.syntax .w { color: #bbbbbb } /* Text.Whitespace */
 .syntax .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
 .syntax .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
 .syntax .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
@@ -210,9 +211,7 @@ div.toc h2 {
         <h2>Contents</h2>
         <ul class="contents">
         
-          <li><a href="#install-the-release-version">Install the release version</a></li>
-        
-          <li><a href="#install-via-easy-install">Install via easy_install</a></li>
+          <li><a href="#installing-a-released-version">Installing a released version</a></li>
         
           <li><a href="#installing-the-development-version">Installing the development version</a></li>
         
@@ -221,22 +220,13 @@ div.toc h2 {
     
     <!-- -*- mode: rst -*- -->
 <p>Pygments requires at least Python 2.3 to work correctly. Just to clarify:
-there <em>won't</em> ever be support for Python versions below 2.3.</p>
+there <em>won't</em> ever be support for Python versions below 2.3. However, there
+are no other dependencies.</p>
 <div class="section">
-<h3><a id="install-the-release-version" name="install-the-release-version">Install the release version</a></h3>
-<ol class="arabic simple">
-<li>download the recent tarball from the <a class="reference" href="http://pygments.org/download/">download page</a></li>
-<li>unpack the tarball</li>
-<li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt></li>
-</ol>
-<p>Note that the last command will automatically download and install
-<a class="reference" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a> if you don't already have it installed. This requires a working
-internet connection.</p>
-<p>This will install Pygments into your Python installation's site-packages directory.</p>
-</div>
+<h3><a id="installing-a-released-version" name="installing-a-released-version">Installing a released version</a></h3>
 <div class="section">
-<h3><a id="install-via-easy-install" name="install-via-easy-install">Install via easy_install</a></h3>
-<p>You can also install the most recent Pygments version using <a class="reference" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a>:</p>
+<h4><a id="as-a-python-egg-via-easy-install" name="as-a-python-egg-via-easy-install">As a Python egg (via easy_install)</a></h4>
+<p>You can install the most recent Pygments version using <a class="reference" href="http://peak.telecommunity.com/DevCenter/EasyInstall">easy_install</a>:</p>
 <pre class="literal-block">
 sudo easy_install Pygments
 </pre>
@@ -244,7 +234,22 @@ sudo easy_install Pygments
 directory.</p>
 </div>
 <div class="section">
+<h4><a id="from-the-tarball-release" name="from-the-tarball-release">From the tarball release</a></h4>
+<ol class="arabic simple">
+<li>Download the most recent tarball from the <a class="reference" href="http://pygments.org/download/">download page</a></li>
+<li>Unpack the tarball</li>
+<li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt></li>
+</ol>
+<p>Note that the last command will automatically download and install
+<a class="reference" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a> if you don't already have it installed. This requires a working
+internet connection.</p>
+<p>This will install Pygments into your Python installation's site-packages directory.</p>
+</div>
+</div>
+<div class="section">
 <h3><a id="installing-the-development-version" name="installing-the-development-version">Installing the development version</a></h3>
+<div class="section">
+<h4><a id="if-you-want-to-play-around-with-the-code" name="if-you-want-to-play-around-with-the-code">If you want to play around with the code</a></h4>
 <ol class="arabic simple">
 <li>Install <a class="reference" href="http://subversion.tigris.org/">Subversion</a></li>
 <li><tt class="docutils literal"><span class="pre">svn</span> <span class="pre">co</span> <span class="pre">http://trac.pocoo.org/repos/pygments/trunk</span> <span class="pre">pygments</span></tt></li>
@@ -255,9 +260,19 @@ directory.</p>
 <p>As an alternative to steps 4 and 5 you can also do <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">develop</span></tt>
 which will install the package via setuptools in development mode.</p>
 </div>
+<div class="section">
+<h4><a id="if-you-just-want-the-latest-features-and-use-them" name="if-you-just-want-the-latest-features-and-use-them">If you just want the latest features and use them</a></h4>
+<pre class="literal-block">
+sudo easy_install Pygments==dev
+</pre>
+<p>This will install a Pygments egg containing the latest Subversion trunk code
+in your Python installation's site-packages directory. Every time the command
+is run, the sources are updated from Subversion.</p>
+</div>
+</div>
 
   </div>
 </body>
-<!-- generated on: 2007-02-15 19:40:58.927192
+<!-- generated on: 2007-05-30 16:07:34.890797
      file id: installation -->
 </html>

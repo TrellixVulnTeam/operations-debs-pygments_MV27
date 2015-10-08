@@ -18,6 +18,11 @@ import __builtin__
 
 from os.path import dirname, basename, join, abspath
 
+try:
+    import coverage
+except ImportError:
+    coverage = None
+
 testdir = abspath(dirname(__file__))
 
 # useful for all tests
@@ -57,11 +62,9 @@ class QuietTestRunner(object):
         return result
 
 
-def run_tests():
+def run_tests(with_coverage=False):
     # needed to avoid confusion involving atexit handlers
     import logging
-
-    orig_modules = sys.modules.keys()
 
     if sys.argv[1:]:
         # test only files given on cmdline
@@ -71,11 +74,17 @@ def run_tests():
                  if (entry.startswith('test_') and entry.endswith('.py'))]
         files.sort()
 
-    WIDTH = 70
+    WIDTH = 80
 
-    print >>sys.stderr, 'Pygments Test Suite running, stand by...'.center(WIDTH)
+    print >>sys.stderr, \
+        ('Pygments Test Suite running%s, stand by...' %
+         (with_coverage and " with coverage analysis" or "")).center(WIDTH)
     print >>sys.stderr, ('(using Python %s)' % sys.version.split()[0]).center(WIDTH)
     print >>sys.stderr, '='*WIDTH
+
+    if with_coverage:
+        coverage.erase()
+        coverage.start()
 
     for testfile in files:
         globs = {}
@@ -94,8 +103,7 @@ def run_tests():
             for name, thing in globs.iteritems():
                 if name.endswith('Test'):
                     tests.append((name, unittest.makeSuite(thing)))
-            # PY24: use key keyword arg
-            tests.sort(lambda x, y: cmp(x[0], y[0]))
+            tests.sort()
             suite = unittest.TestSuite()
             suite.addTests([x[1] for x in tests])
             runner.run(suite)
@@ -107,14 +115,26 @@ def run_tests():
         print >>sys.stderr, '%d of %d tests failed.' % \
               (error_test_count, total_test_count)
         print >>sys.stderr, 'Tests failed in:', ', '.join(failed)
-        return 1
+        ret = 1
     else:
         if total_test_count == 1:
             print >>sys.stderr, '1 test happy.'
         else:
             print >>sys.stderr, 'All %d tests happy.' % total_test_count
-        return 0
+        ret = 0
+
+    if with_coverage:
+        coverage.stop()
+        modules = [mod for name, mod in sys.modules.iteritems()
+                   if name.startswith('pygments.') and mod]
+        coverage.report(modules)
+
+    return ret
 
 
 if __name__ == '__main__':
-    sys.exit(run_tests())
+    with_coverage = False
+    if sys.argv[1:2] == ['-C']:
+        with_coverage = bool(coverage)
+        del sys.argv[1]
+    sys.exit(run_tests(with_coverage))

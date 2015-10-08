@@ -11,8 +11,9 @@
 
 from pygments.formatter import Formatter
 from pygments.token import Keyword, Name, Comment, String, Error, \
-     Number, Operator, Generic, Token
+     Number, Operator, Generic, Token, Whitespace
 from pygments.console import ansiformat
+from pygments.util import get_choice_opt
 
 
 __all__ = ['TerminalFormatter']
@@ -23,6 +24,7 @@ __all__ = ['TerminalFormatter']
 TERMINAL_COLORS = {
     Token:              ('',            ''),
 
+    Whitespace:         ('lightgray',   'darkgray'),
     Comment:            ('lightgray',   'darkgray'),
     Keyword:            ('darkblue',    'blue'),
     Keyword.Type:       ('teal',        'turquoise'),
@@ -75,7 +77,7 @@ class TerminalFormatter(Formatter):
 
     def __init__(self, **options):
         Formatter.__init__(self, **options)
-        self.darkbg = options.get('bg', 'light') == 'dark'
+        self.darkbg = get_choice_opt(options, 'bg', ['light', 'dark'], 'light') == 'dark'
         self.colorscheme = options.get('colorscheme', None) or TERMINAL_COLORS
 
     def format(self, tokensource, outfile):

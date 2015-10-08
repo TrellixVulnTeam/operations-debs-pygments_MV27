@@ -138,7 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
-.syntax { background: #ffffff; }
+.syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .syntax .k { color: #008800; font-weight: bold } /* Keyword */
@@ -149,12 +149,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #999999 } /* Generic.Heading */
+.syntax .gh { color: #303030 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #aaaaaa } /* Generic.Subheading */
+.syntax .gu { color: #606060 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -176,6 +176,7 @@ div.toc h2 {
 .syntax .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
 .syntax .nv { color: #336699 } /* Name.Variable */
 .syntax .ow { color: #008800 } /* Operator.Word */
+.syntax .w { color: #bbbbbb } /* Text.Whitespace */
 .syntax .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
 .syntax .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
 .syntax .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
@@ -240,9 +241,42 @@ files using this syntax:</p>
 
     your code here
 </pre>
+<p>If you want to have two or more variants of the directive, you can utilize
+ReST <em>directive options</em>, like so:</p>
+<div class="syntax"><pre><span class="n">normal_fmter</span> <span class="o">=</span> <span class="n">HtmlFormatter</span><span class="p">()</span>
+<span class="n">lineno_fmter</span> <span class="o">=</span> <span class="n">HtmlFormatter</span><span class="p">(</span><span class="n">linenos</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">pygments_directive</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">lineno</span><span class="p">,</span>
+                       <span class="n">content_offset</span><span class="p">,</span> <span class="n">block_text</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">state_machine</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lexer</span> <span class="o">=</span> <span class="n">get_lexer_by_name</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="c"># no lexer found - use the text one instead of an exception</span>
+        <span class="n">lexer</span> <span class="o">=</span> <span class="n">get_lexer_by_name</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">)</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;linenos&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="p">)</span> <span class="ow">and</span> <span class="n">lineno_fmter</span> <span class="n">ornormal_fmter</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">highlight</span><span class="p">(</span><span class="n">u</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">content</span><span class="p">),</span> <span class="n">lexer</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">nodes</span><span class="o">.</span><span class="n">raw</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">parsed</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;html&#39;</span><span class="p">)]</span>
+<span class="n">pygments_directive</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">pygments_directive</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">pygments_directive</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;linenos&#39;</span><span class="p">:</span> <span class="n">directives</span><span class="o">.</span><span class="n">flag</span><span class="p">}</span>
+<span class="n">directives</span><span class="o">.</span><span class="n">register_directive</span><span class="p">(</span><span class="s">&#39;sourcecode&#39;</span><span class="p">,</span> <span class="n">pygments_directive</span><span class="p">)</span>
+</pre></div>
+<p>And use it like so:</p>
+<pre class="literal-block">
+.. sourcecode:: language
+   :linenos:
+
+   the code starts here...
+</pre>
+<p>to get line numbers (to use the normal formatter, just leave out the option
+like above).</p>
+<p>Look at the <a class="reference" href="http://docutils.sourceforge.net/docs/howto/rst-directives.html">directive documentation</a> to get all the gory details.</p>
+<p><em>Loosely related note:</em> The ReST lexer now recognizes <tt class="docutils literal"><span class="pre">..</span> <span class="pre">sourcecode::</span></tt> and
+<tt class="docutils literal"><span class="pre">..</span> <span class="pre">code::</span></tt> directives and highlights the contents in the specified language
+if the <cite>handlecodeblocks</cite> option is true.</p>
 
   </div>
 </body>
-<!-- generated on: 2007-02-15 19:41:01.729517
+<!-- generated on: 2007-05-30 16:07:36.699728
      file id: rstdirective -->
 </html>

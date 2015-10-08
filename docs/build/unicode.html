@@ -2,7 +2,7 @@
    "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-  <title>Unicode Support &mdash; Pygments</title>
+  <title>Unicode and Encodings &mdash; Pygments</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <style type="text/css">
     body {
@@ -138,7 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
-.syntax { background: #ffffff; }
+.syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .syntax .k { color: #008800; font-weight: bold } /* Keyword */
@@ -149,12 +149,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #999999 } /* Generic.Heading */
+.syntax .gh { color: #303030 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #aaaaaa } /* Generic.Subheading */
+.syntax .gu { color: #606060 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -176,6 +176,7 @@ div.toc h2 {
 .syntax .nt { color: #bb0066; font-weight: bold } /* Name.Tag */
 .syntax .nv { color: #336699 } /* Name.Variable */
 .syntax .ow { color: #008800 } /* Operator.Word */
+.syntax .w { color: #bbbbbb } /* Text.Whitespace */
 .syntax .mf { color: #0000DD; font-weight: bold } /* Literal.Number.Float */
 .syntax .mh { color: #0000DD; font-weight: bold } /* Literal.Number.Hex */
 .syntax .mi { color: #0000DD; font-weight: bold } /* Literal.Number.Integer */
@@ -201,32 +202,45 @@ div.toc h2 {
 <body>
   <div id="content">
     <h1 class="heading">Pygments</h1>
-    <h2 class="subheading">Unicode Support</h2>
+    <h2 class="subheading">Unicode and Encodings</h2>
     
       <a id="backlink" href="index.html">&laquo; Back To Index</a>
     
     
-    <p>Since Pygments 0.6, the lexers use unicode strings internally. Because of that
-you might discover the occasional <cite>UnicodeDecodeError</cite> if you pass strings with the
+    <p>Since Pygments 0.6, all lexers use unicode strings internally. Because of that
+you might encounter the occasional <cite>UnicodeDecodeError</cite> if you pass strings with the
 wrong encoding.</p>
-<p>Per default all lexers have <cite>encoding</cite> set to <cite>latin1</cite>. If you pass a lexer a
-string object (not unicode) it tries to decode the data using this encoding.
+<p>Per default all lexers have their input encoding set to <cite>latin1</cite>.
+If you pass a lexer a string object (not unicode), it tries to decode the data
+using this encoding.
 You can override the encoding using the <cite>encoding</cite> lexer option. If you have the
 <a class="reference" href="http://chardet.feedparser.org/">chardet</a> library installed and set the encoding to <tt class="docutils literal"><span class="pre">chardet</span></tt> if will ananlyse
-the text and fetch the best encoding automatically:</p>
+the text and use the encoding it thinks is the right one automatically:</p>
 <div class="syntax"><pre><span class="k">from</span> <span class="nn">pygments.lexers</span> <span class="k">import</span> <span class="n">PythonLexer</span>
 <span class="n">lexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s">&#39;chardet&#39;</span><span class="p">)</span>
 </pre></div>
 <p>The best way is to pass Pygments unicode objects. In that case you can't get
 unexpected output.</p>
-<p>The formatters now send unicode objects to the stream if you don't set the
-encoding. You can do so by passing the formatters an <cite>encoding</cite> option:</p>
+<p>The formatters now send Unicode objects to the stream if you don't set the
+output encoding. You can do so by passing the formatters an <cite>encoding</cite> option:</p>
 <div class="syntax"><pre><span class="k">from</span> <span class="nn">pygments.formatters</span> <span class="k">import</span> <span class="n">HtmlFormatter</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">HtmlFormatter</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
 </pre></div>
+<p><strong>You will have to set this option if you have non-ASCII characters in the
+source and the output stream does not accept Unicode written to it!</strong>
+This is the case for all regular files and for terminals.</p>
+<p>Note: The Terminal formatter tries to be smart: if its output stream has an
+<cite>encoding</cite> attribute, and you haven't set the option,
+it will encode any Unicode string with this encoding
+before writing it. This is the case for <cite>sys.stdout</cite>, for example. The other
+formatters don't have that behavior.</p>
+<p><em>New in Pygments 0.7</em>: the formatters now also accept an <cite>outencoding</cite> option
+which will override the <cite>encoding</cite> option if given. This makes it possible to
+use a single options dict with lexers and formatters, and still have different
+input and output encodings.</p>
 
   </div>
 </body>
-<!-- generated on: 2007-02-15 19:41:02.549877
+<!-- generated on: 2007-05-30 16:07:37.212649
      file id: unicode -->
 </html>

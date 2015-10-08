@@ -3,15 +3,16 @@
     pygments.styles.default
     ~~~~~~~~~~~~~~~~~~~~~~~
 
-    The default highlighting style for Pygments.
+    The default highlighting style.
 
-    :copyright: 2006-2007 by Georg Brandl.
+    :copyright: 2007 by Tiberius Teng.
+    :copyright: 2006 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
 from pygments.style import Style
 from pygments.token import Keyword, Name, Comment, String, Error, \
-     Number, Operator, Generic
+     Number, Operator, Generic, Whitespace
 
 
 class DefaultStyle(Style):
@@ -23,36 +24,44 @@ class DefaultStyle(Style):
     default_style = ""
 
     styles = {
-        Comment:                   "italic #008800",
-        Comment.Preproc:           "noitalic",
-        Comment.Special:           "noitalic bold",
+        Whitespace:                "#bbbbbb",
+        Comment:                   "italic #408080",
+        Comment.Preproc:           "noitalic #BC7A00",
 
-        Keyword:                   "bold #AA22FF",
+        #Keyword:                   "bold #AA22FF",
+        Keyword:                   "bold #008000",
         Keyword.Pseudo:            "nobold",
         Keyword.Type:              "",
 
         Operator:                  "#666666",
         Operator.Word:             "bold #AA22FF",
 
-        Name.Builtin:              "#AA22FF",
-        Name.Function:             "#00A000",
-        Name.Class:                "#0000FF",
+        #Name.Builtin:              "#AA22FF",
+        Name.Builtin:              "#008000",
+        #Name.Function:             "#00A000",
+        Name.Function:             "#0000FF",
+        Name.Class:                "bold #0000FF",
         Name.Namespace:            "bold #0000FF",
         Name.Exception:            "bold #D2413A",
-        Name.Variable:             "#B8860B",
+        #Name.Variable:             "#B8860B",
+        Name.Variable:             "#19177C",
         Name.Constant:             "#880000",
         Name.Label:                "#A0A000",
         Name.Entity:               "bold #999999",
-        Name.Attribute:            "#BB4444",
+        #Name.Attribute:            "#BB4444",
+        #Name.Attribute:            "#705406",
+        Name.Attribute:            "#7D9029",
         Name.Tag:                  "bold #008000",
         Name.Decorator:            "#AA22FF",
 
-        String:                    "#BB4444",
+        #String:                    "#BB4444",
+        String:                    "#BA2121",
         String.Doc:                "italic",
         String.Interpol:           "bold #BB6688",
         String.Escape:             "bold #BB6622",
         String.Regex:              "#BB6688",
-        String.Symbol:             "#B8860B",
+        #String.Symbol:             "#B8860B",
+        String.Symbol:             "#19177C",
         String.Other:              "#008000",
         Number:                    "#666666",
 
