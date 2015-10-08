@@ -341,7 +341,7 @@ class HtmlFormatter(Formatter):
             text_style = ''
             if Text in self.ttype2class:
                 text_style = ' ' + self.class2style[self.ttype2class[Text]][0]
-            lines.insert(0, '%s{ background: %s;%s }' %
+            lines.insert(0, '%s { background: %s;%s }' %
                          (arg, self.style.background_color, text_style))
         return '\n'.join(lines)
 
@@ -413,7 +413,7 @@ class HtmlFormatter(Formatter):
         yield 0, '</td></tr></table>'
 
     def _wrap_div(self, inner):
-        yield 0, ('<div' + (self.cssclass and ' class="%s" ' % self.cssclass)
+        yield 0, ('<div' + (self.cssclass and ' class="%s"' % self.cssclass)
                   + (self.cssstyles and ' style="%s"' % self.cssstyles) + '>')
         for tup in inner:
             yield tup
@@ -445,10 +445,10 @@ class HtmlFormatter(Formatter):
                 while cclass is None:
                     ttype = ttype.parent
                     cclass = getcls(ttype)
-                cspan = cclass and '<span style="%s">' % c2s[cclass][0]
+                cspan = cclass and '<span style="%s">' % c2s[cclass][0] or ''
             else:
                 cls = self._get_css_class(ttype)
-                cspan = cls and '<span class="%s">' % cls
+                cspan = cls and '<span class="%s">' % cls or ''
 
             if enc:
                 value = value.encode(enc)
