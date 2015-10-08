@@ -6,3 +6,6 @@
 pygments_2.0.1+dfsg.orig.tar.gz
 4d697edf6fa3f9c5bd58be4554fa01679f35b471
 936249
+debianTag="debian/%e%v"
+patchedTag="patched/%e%v"
+upstreamTag="upstream/%e%u"
