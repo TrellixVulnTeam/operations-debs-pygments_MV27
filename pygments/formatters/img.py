@@ -5,8 +5,8 @@
 
     Formatter for Pixmap output.
 
-    :copyright: 2007 by Ali Afshar.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 import sys
@@ -61,6 +61,7 @@ class FontManager(object):
         self.font_name = font_name
         self.font_size = font_size
         self.fonts = {}
+        self.encoding = None
         if sys.platform.startswith('win'):
             if not font_name:
                 self.font_name = DEFAULT_FONT_NAME_WIN
@@ -395,26 +396,27 @@ class ImageFormatter(Formatter):
             while ttype not in self.styles:
                 ttype = ttype.parent
             style = self.styles[ttype]
+            # TODO: make sure tab expansion happens earlier in the chain.  It
+            # really ought to be done on the input, as to do it right here is
+            # quite complex.
             value = value.expandtabs(4)
-            lines = value.splitlines()
+            lines = value.splitlines(True)
             #print lines
             for i, line in enumerate(lines):
-                if not line:
-                    lineno += 1
-                    charno = 0
-                else:
-                    # add a line for each extra line in the value
-                    if i:
-                        lineno += 1
-                        charno = 0
+                temp = line.rstrip('\n')
+                if temp:
                     self._draw_text(
                         self._get_text_pos(charno, lineno),
-                        line,
+                        temp,
                         font = self._get_style_font(style),
                         fill = self._get_text_color(style)
                     )
-                    charno += len(value)
+                    charno += len(temp)
                     maxcharno = max(maxcharno, charno)
+                if line.endswith('\n'):
+                    # add a line for each extra line in the value
+                    charno = 0
+                    lineno += 1
         self.maxcharno = maxcharno
         self.maxlineno = lineno
 

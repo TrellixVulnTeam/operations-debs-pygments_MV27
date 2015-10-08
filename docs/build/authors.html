@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -207,38 +209,66 @@ div.toc h2 {
       <a id="backlink" href="index.html">&laquo; Back To Index</a>
     
     
-    <p>Pygments is written and maintained by Georg Brandl &lt;<a class="reference" href="mailto:g.brandl&#64;gmx.net">g.brandl&#64;gmx.net</a>&gt;.</p>
-<p>Other contributors (as mentionend in :copyright:s) are:</p>
+    <p>Pygments is written and maintained by Georg Brandl &lt;<a class="reference external" href="mailto:georg&#64;python.org">georg&#64;python.org</a>&gt;.</p>
+<p>Major developers are Tim Hatch &lt;<a class="reference external" href="mailto:tim&#64;timhatch.com">tim&#64;timhatch.com</a>&gt; and Armin Ronacher
+&lt;<a class="reference external" href="mailto:armin.ronacher&#64;active-4.com">armin.ronacher&#64;active-4.com</a>&gt;.</p>
+<p>Other contributors, listed alphabetically, are:</p>
 <ul class="simple">
-<li>Armin Ronacher &lt;<a class="reference" href="mailto:armin.ronacher&#64;active-4.com">armin.ronacher&#64;active-4.com</a>&gt;</li>
-<li>Lukas Meuser &lt;<a class="reference" href="mailto:pocoo&#64;quittenbrod.de">pocoo&#64;quittenbrod.de</a>&gt;</li>
-<li>Matt Good &lt;<a class="reference" href="mailto:trac&#64;matt-good.net">trac&#64;matt-good.net</a>&gt;</li>
-<li>Tim Hatch &lt;<a class="reference" href="mailto:tim&#64;timhatch.com">tim&#64;timhatch.com</a>&gt;</li>
-<li>Ronny Pfannschmidt</li>
-<li>Dennis Kaarsemaker</li>
-<li>Marek Kubica</li>
-<li>Ben Bangert</li>
-<li>Tiberius Teng</li>
-<li>Adam Blinkinsop &lt;<a class="reference" href="mailto:blinks&#64;acm.org">blinks&#64;acm.org</a>&gt;</li>
-<li>Kirk McDonald</li>
-<li>Christopher Creutzig &lt;<a class="reference" href="mailto:christopher&#64;creutzig.de">christopher&#64;creutzig.de</a>&gt;</li>
-<li>Frits van Bommel</li>
-<li>Matteo Sasso</li>
-<li>Kumar Appaiah &lt;<a class="reference" href="mailto:akumar&#64;ee.iitm.ac.in">akumar&#64;ee.iitm.ac.in</a>&gt;</li>
-<li>Varun Hiremath &lt;<a class="reference" href="mailto:varunhiremath&#64;gmail.com">varunhiremath&#64;gmail.com</a>&gt;</li>
-<li>Jeremy Thurgood</li>
-<li>Matthew Harrison</li>
-<li>Steven Hazel</li>
+<li>Kumar Appaiah -- Debian control lexer</li>
+<li>Ali Afshar -- image formatter</li>
+<li>Andreas Amann -- AppleScript lexer</li>
+<li>Stefan Matthias Aust -- Smalltalk lexer</li>
+<li>Ben Bangert -- Mako lexers</li>
+<li>Max Battcher -- Darcs patch lexer</li>
+<li>Michael Bayer -- Myghty lexers</li>
+<li>Jarrett Billingsley -- MiniD lexer</li>
+<li>Adam Blinkinsop -- Haskell, Redcode lexers</li>
+<li>Frits van Bommel -- assembler lexers</li>
+<li>Pierre Bourdon -- bugfixes</li>
+<li>Christopher Creutzig -- MuPAD lexer</li>
+<li>Pete Curry -- bugfixes</li>
+<li>Nick Efford -- Python 3 lexer</li>
+<li>Artem Egorkine -- terminal256 formatter</li>
+<li>Laurent Gautier -- R/S lexer</li>
+<li>Krzysiek Goj -- Scala lexer</li>
+<li>Matt Good -- Genshi, Cheetah lexers</li>
+<li>Matthew Harrison -- SVG formatter</li>
+<li>Steven Hazel -- Tcl lexer</li>
+<li>Varun Hiremath -- Debian control lexer</li>
+<li>Dennis Kaarsemaker -- sources.list lexer</li>
+<li>Marek Kubica -- Scheme lexer</li>
+<li>Jochen Kupperschmidt -- Markdown processor</li>
+<li>Gerd Kurzbach -- Modelica lexer</li>
+<li>Mark Lee -- Vala lexer</li>
+<li>Kirk McDonald -- D lexer</li>
+<li>Lukas Meuser -- BBCode formatter, Lua lexer</li>
+<li>Paulo Moura -- Logtalk lexer</li>
+<li>Ana Nelson -- Ragel, ANTLR lexers</li>
+<li>Jesper Noehr -- HTML formatter &quot;anchorlinenos&quot;</li>
+<li>Jonas Obrist -- BBCode lexer</li>
+<li>David Oliva -- Rebol lexer</li>
+<li>Ronny Pfannschmidt -- BBCode lexer</li>
+<li>Benjamin Peterson -- Test suite refactoring</li>
+<li>Justin Reidy -- MXML lexer</li>
+<li>Andre Roberge -- Tango style</li>
+<li>Mario Ruggier -- Evoque lexers</li>
+<li>Stou Sandalski -- NumPy, FORTRAN, tcsh and XSLT lexers</li>
+<li>Matteo Sasso -- Common Lisp lexer</li>
+<li>Ken Schutte -- Matlab lexers</li>
+<li>Tassilo Schweyer -- Io, MOOCode lexers</li>
+<li>Joerg Sieker -- ABAP lexer</li>
+<li>Kirill Simonov -- YAML lexer</li>
+<li>Tiberius Teng -- default style overhaul</li>
+<li>Jeremy Thurgood -- Erlang, Squid config lexers</li>
+<li>Whitney Young -- ObjectiveC lexer</li>
+<li>Dietmar Winkler -- Modelica lexer</li>
+<li>Nils Winter -- Smalltalk lexer</li>
+<li>Davy Wybiral -- Clojure lexer</li>
 </ul>
-<p>Many thanks for all your contributions!</p>
-<p>Also thanks to the following contributors that helped fixing minor
-bugs:</p>
-<ul class="simple">
-<li>Pierre Bourdon</li>
-</ul>
+<p>Many thanks for all contributions!</p>
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:08.035395
+<!-- generated on: 2009-09-15 12:36:50.740246
      file id: authors -->
 </html>

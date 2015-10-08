@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -215,6 +217,8 @@ div.toc h2 {
         
           <li><a href="#generating-styles">Generating styles</a></li>
         
+          <li><a href="#getting-lexer-names">Getting lexer names</a></li>
+        
           <li><a href="#getting-help">Getting help</a></li>
         
           <li><a href="#examples">Examples</a></li>
@@ -251,8 +255,8 @@ If no output file name is given and <tt class="docutils literal"><span class="pr
 <pre class="literal-block">
 $ pygmentize -o test.html test.py
 </pre>
-<div class="section">
-<h3><a id="options-and-filters" name="options-and-filters">Options and filters</a></h3>
+<div class="section" id="options-and-filters">
+<h3>Options and filters</h3>
 <p>Lexer and formatter options can be given using the <tt class="docutils literal"><span class="pre">-O</span></tt> option:</p>
 <pre class="literal-block">
 $ pygmentize -f html -O style=colorful,linenos=1 -l python test.py
@@ -277,8 +281,8 @@ $ pygmentize -f html -l pascal -F keywordcase:case=upper main.pas
 filter name and options must be one shell word, so there may not be any spaces
 around the colon.</p>
 </div>
-<div class="section">
-<h3><a id="generating-styles" name="generating-styles">Generating styles</a></h3>
+<div class="section" id="generating-styles">
+<h3>Generating styles</h3>
 <p>Formatters normally don't output full style information.  For example, the HTML
 formatter by default only outputs <tt class="docutils literal"><span class="pre">&lt;span&gt;</span></tt> tags with <tt class="docutils literal"><span class="pre">class</span></tt> attributes.
 Therefore, there's a special <tt class="docutils literal"><span class="pre">-S</span></tt> option for generating style definitions.
@@ -288,11 +292,21 @@ $ pygmentize -f html -S colorful -a .syntax
 </pre>
 <p>generates a CSS style sheet (because you selected the HTML formatter) for
 the &quot;colorful&quot; style prepending a &quot;.syntax&quot; selector to all style rules.</p>
-<p>For an explanation what <tt class="docutils literal"><span class="pre">-a</span></tt> means for <a class="reference" href="./formatters.html">a particular formatter</a>, look for
+<p>For an explanation what <tt class="docutils literal"><span class="pre">-a</span></tt> means for <a class="reference external" href="./formatters.html">a particular formatter</a>, look for
 the <cite>arg</cite> argument for the formatter's <cite>get_style_defs()</cite> method.</p>
 </div>
-<div class="section">
-<h3><a id="getting-help" name="getting-help">Getting help</a></h3>
+<div class="section" id="getting-lexer-names">
+<h3>Getting lexer names</h3>
+<p><em>New in Pygments 1.0.</em></p>
+<p>The <tt class="docutils literal"><span class="pre">-N</span></tt> option guesses a lexer name for a given filename, so that</p>
+<pre class="literal-block">
+$ pygmentize -N setup.py
+</pre>
+<p>will print out <tt class="docutils literal"><span class="pre">python</span></tt>.  It won't highlight anything yet.  If no specific
+lexer is known for that filename, <tt class="docutils literal"><span class="pre">text</span></tt> is printed.</p>
+</div>
+<div class="section" id="getting-help">
+<h3>Getting help</h3>
 <p>The <tt class="docutils literal"><span class="pre">-L</span></tt> option lists lexers, formatters, along with their short
 names and supported file name extensions, styles and filters. If you want to see
 only one category, give it as an argument:</p>
@@ -311,16 +325,16 @@ $ pygmentize -H lexer python
 </pre>
 <p>will print the help for the Python lexer, etc.</p>
 </div>
-<div class="section">
-<h3><a id="examples" name="examples">Examples</a></h3>
+<div class="section" id="examples">
+<h3>Examples</h3>
 <p>Create a full HTML document, including line numbers and stylesheet (using the
 &quot;emacs&quot; style), highlighting the Python file <tt class="docutils literal"><span class="pre">setup.py</span></tt> to <tt class="docutils literal"><span class="pre">setup.html</span></tt>:</p>
 <pre class="literal-block">
 $ pygmentize -O full,style=emacs -o setup.html setup.py
 </pre>
 </div>
-<div class="section">
-<h3><a id="a-note-on-encodings" name="a-note-on-encodings">A note on encodings</a></h3>
+<div class="section" id="a-note-on-encodings">
+<h3>A note on encodings</h3>
 <p><em>New in Pygments 0.9.</em></p>
 <p>Pygments tries to be smart regarding encodings in the formatting process:</p>
 <ul class="simple">
@@ -339,6 +353,6 @@ formatter is the terminal encoding (<cite>sys.stdout.encoding</cite>).</li>
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:09.993208
+<!-- generated on: 2009-09-15 12:36:51.960944
      file id: cmdline -->
 </html>

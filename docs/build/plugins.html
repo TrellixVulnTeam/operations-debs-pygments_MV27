@@ -138,6 +138,7 @@ div.toc {
 div.toc h2 {
     font-size: 20px;
 }
+.syntax .hll { background-color: #ffffcc }
 .syntax  { background: #ffffff; }
 .syntax .c { color: #888888 } /* Comment */
 .syntax .err { color: #a61717; background-color: #e3d2d2 } /* Error */
@@ -158,6 +159,7 @@ div.toc h2 {
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
+.syntax .kn { color: #008800; font-weight: bold } /* Keyword.Namespace */
 .syntax .kp { color: #008800 } /* Keyword.Pseudo */
 .syntax .kr { color: #008800; font-weight: bold } /* Keyword.Reserved */
 .syntax .kt { color: #888888; font-weight: bold } /* Keyword.Type */
@@ -222,12 +224,12 @@ div.toc h2 {
     
     <p>If you want to extend Pygments without hacking the sources, but want to
 use the lexer/formatter/style/filter lookup functions (<cite>lexers.get_lexer_by_name</cite>
-et al.), you can use <a class="reference" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a> entrypoints to add new lexers, formatters
+et al.), you can use <a class="reference external" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools</a> entrypoints to add new lexers, formatters
 or styles as if they were in the Pygments core.</p>
 <p>That means you can use your highlighter modules with the <cite>pygmentize</cite> script,
 which relies on the mentioned functions.</p>
-<div class="section">
-<h3><a id="entrypoints" name="entrypoints">Entrypoints</a></h3>
+<div class="section" id="entrypoints">
+<h3>Entrypoints</h3>
 <p>Here is a list of setuptools entrypoints that Pygments understands:</p>
 <p><cite>pygments.lexers</cite></p>
 <blockquote>
@@ -272,14 +274,14 @@ entrypoint is the name of the filter:</p>
 </pre></div>
 </blockquote>
 </div>
-<div class="section">
-<h3><a id="how-to-use-entrypoints" name="how-to-use-entrypoints">How To Use Entrypoints</a></h3>
+<div class="section" id="how-to-use-entrypoints">
+<h3>How To Use Entrypoints</h3>
 <p>This documentation doesn't explain how to use those entrypoints because this is
-covered in the <a class="reference" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools documentation</a>. That page should cover everything
-you need to write a plugin. Also <a class="reference" href="http://lucumr.pocoo.org/entry/setuptools-plugins/">this blog entry</a> might be interesting.</p>
+covered in the <a class="reference external" href="http://peak.telecommunity.com/DevCenter/setuptools">setuptools documentation</a>. That page should cover everything
+you need to write a plugin. Also <a class="reference external" href="http://lucumr.pocoo.org/2006/7/30/setuptools-plugins">this blog entry</a> might be interesting.</p>
 </div>
-<div class="section">
-<h3><a id="extending-the-core" name="extending-the-core">Extending The Core</a></h3>
+<div class="section" id="extending-the-core">
+<h3>Extending The Core</h3>
 <p>If you have written a Pygments plugin that is open source, please inform us
 about that. There is a high chance that we'll add it to the Pygments
 distribution.</p>
@@ -287,6 +289,6 @@ distribution.</p>
 
   </div>
 </body>
-<!-- generated on: 2008-05-06 18:28:10.250238
+<!-- generated on: 2009-09-15 12:36:58.639406
      file id: plugins -->
 </html>

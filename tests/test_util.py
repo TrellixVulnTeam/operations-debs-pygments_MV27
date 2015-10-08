@@ -3,8 +3,8 @@
     Test suite for the util module
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: 2006-2007 by Georg Brandl.
-    :license: BSD, see LICENSE for more details.
+    :copyright: Copyright 2006-2009 by the Pygments team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
 """
 
 import unittest
@@ -85,6 +85,3 @@ class UtilTest(unittest.TestCase):
             '<?xml ?><!DOCTYPE html PUBLIC  "-//W3C//DTD XHTML 1.0 Strict//EN">'))
         self.assert_(util.looks_like_xml('<html xmlns>abc</html>'))
         self.failIf(util.looks_like_xml('<html>'))
-
-if __name__ == '__main__':
-    unittest.main()
