@@ -3,9 +3,9 @@
     pygments.lexers.web
     ~~~~~~~~~~~~~~~~~~~
 
-    Lexers for web-related languages: JavaScript, CSS, HTML, XML, PHP.
+    Lexers for web-related languages and markup.
 
-    :copyright: 2006 by Georg Brandl, Armin Ronacher,
+    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher,
                 Tim Hatch <tim@timhatch.com>.
     :license: BSD, see LICENSE for more details.
 """
@@ -28,6 +28,10 @@ __all__ = ['HtmlLexer', 'XmlLexer', 'JavascriptLexer', 'CssLexer',
 
 
 class JavascriptLexer(RegexLexer):
+    """
+    For JavaScript source code.
+    """
+
     name = 'JavaScript'
     aliases = ['js', 'javascript']
     filenames = ['*.js']
@@ -37,10 +41,11 @@ class JavascriptLexer(RegexLexer):
     tokens = {
         'root': [
             (r'\s+', Text),
+            (r'<!--', Comment),
             (r'//.*?\n', Comment),
             (r'/\*.*?\*/', Comment),
             (r'/(\\\\|\\/|[^/\n])*/[gim]*', String.Regex),
-            (r'[~\^\*!%&<>\|+=:;,/?-\\]+', Operator),
+            (r'[~\^\*!%&<>\|+=:;,/?\\-]+', Operator),
             (r'[{}\[\]();.]+', Punctuation),
             (r'(for|in|while|do|break|return|continue|if|else|throw|try|'
              r'catch|var|with|const|label|function|new|typeof|'
@@ -52,7 +57,9 @@ class JavascriptLexer(RegexLexer):
              r'Error|eval|isFinite|isNaN|parseFloat|parseInt|document|this|'
              r'window)\b', Name.Builtin),
             (r'[$a-zA-Z_][a-zA-Z0-9_]*', Name.Other),
-            (r'[0-9]+', Number),
+            (r'[0-9][0-9]*\.[0-9]+([eE][0-9]+)?[fd]?', Number.Float),
+            (r'0x[0-9a-f]+', Number.Hex),
+            (r'[0-9]+', Number.Integer),
             (r'"(\\\\|\\"|[^"])*"', String.Double),
             (r"'(\\\\|\\'|[^'])*'", String.Single),
         ]
@@ -60,6 +67,10 @@ class JavascriptLexer(RegexLexer):
 
 
 class CssLexer(RegexLexer):
+    """
+    For CSS (Cascading Style Sheets).
+    """
+
     name = 'CSS'
     aliases = ['css']
     filenames = ['*.css']
@@ -189,6 +200,11 @@ class CssLexer(RegexLexer):
 
 
 class HtmlLexer(RegexLexer):
+    """
+    For HTML 4 and XHTML 1 markup. Nested JavaScript and CSS is highlighted
+    by the appropriate lexer.
+    """
+
     name = 'HTML'
     aliases = ['html']
     filenames = ['*.html', '*.htm', '*.xhtml']
@@ -216,6 +232,7 @@ class HtmlLexer(RegexLexer):
         'tag': [
             (r'\s+', Text),
             (r'[a-zA-Z0-9_:-]+\s*=', Name.Attribute, 'attr'),
+            (r'[a-zA-Z0-9_:-]+', Name.Attribute),
             (r'/?\s*>', Name.Tag, '#pop'),
         ],
         'script-content': [
@@ -239,9 +256,41 @@ class HtmlLexer(RegexLexer):
 
 
 class PhpLexer(RegexLexer):
+    """
+    For `PHP <http://www.php.net/>`_ source code.
+    For PHP embedded in HTML, use the `HtmlPhpLexer`.
+
+    Additional options accepted:
+
+    `startinline`
+        If given and ``True`` the lexer starts highlighting with
+        php code. (i.e.: no starting ``<?php`` required)
+    `funcnamehighlighting`
+        If given and ``True``, highlight builtin function names
+        (default: ``True``).
+    `disabledmodules`
+        If given, must be a list of module names whose function names
+        should not be highlighted. By default all modules are highlighted
+        except the special ``'unknown'`` module that includes functions
+        that are known to php but are undocumented.
+
+        To get a list of allowed modules have a look into the
+        `_phpbuiltins` module:
+
+        .. sourcecode:: pycon
+
+            >>> from pygments.lexers._phpbuiltins import MODULES
+            >>> MODULES.keys()
+            ['PHP Options/Info', 'Zip', 'dba', ...]
+
+        In fact the names of those modules match the module names from
+        the php documentation.
+    """
+
     name = 'PHP'
     aliases = ['php', 'php3', 'php4', 'php5']
     filenames = ['*.php', '*.php[345]']
+    mimetypes = ['text/x-php']
 
     flags = re.IGNORECASE | re.DOTALL | re.MULTILINE
     tokens = {
@@ -264,6 +313,8 @@ class PhpLexer(RegexLexer):
             (r'(class)(\s+)', bygroups(Keyword, Text), 'classname'),
             (r'(function)(\s+)(&?)(\s*)',
               bygroups(Keyword, Text, Operator, Text), 'functionname'),
+            (r'(const)(\s+)([a-zA-Z_][a-zA-Z0-9_]*)',
+              bygroups(Keyword, Text, Name.Constant)),
             (r'(and|E_PARSE|old_function|E_ERROR|or|as|E_WARNING|parent|'
              r'eval|PHP_OS|break|exit|case|extends|PHP_VERSION|cfunction|'
              r'FALSE|print|for|require|continue|foreach|require_once|'
@@ -348,6 +399,10 @@ class PhpLexer(RegexLexer):
 
 
 class XmlLexer(RegexLexer):
+    """
+    Generic lexer for XML (eXtensible Markup Language).
+    """
+
     flags = re.MULTILINE | re.DOTALL
 
     name = 'XML'
@@ -365,8 +420,8 @@ class XmlLexer(RegexLexer):
             ('<!--', Comment, 'comment'),
             (r'<\?.*?\?>', Comment.Preproc),
             ('<![^>]*>', Comment.Preproc),
-            (r'<\s*[a-zA-Z0-9:.-]+', Name.Tag, 'tag'),
-            (r'<\s*/\s*[a-zA-Z0-9:.-]+\s*>', Name.Tag),
+            (r'<\s*[a-zA-Z0-9:._-]+', Name.Tag, 'tag'),
+            (r'<\s*/\s*[a-zA-Z0-9:._-]+\s*>', Name.Tag),
         ],
         'comment': [
             ('[^-]+', Comment),

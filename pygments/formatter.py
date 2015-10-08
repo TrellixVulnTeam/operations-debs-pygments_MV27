@@ -5,7 +5,7 @@
 
     Base formatter class.
 
-    :copyright: 2006 by Georg Brandl, Armin Ronacher.
+    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -44,7 +44,18 @@ class Formatter(object):
         output. If it is "" or None, Unicode strings will be written
         to the output file, which most file-like objects do not
         support (default: None).
+    ``outencoding``
+        Overrides ``encoding`` if given.
     """
+
+    #: Name of the formatter
+    name = None
+
+    #: Shortcuts for the formatter
+    aliases = []
+
+    #: fn match rules
+    filenames = []
 
     #: If True, this formatter outputs Unicode strings when no encoding
     #: option is given.
@@ -55,6 +66,7 @@ class Formatter(object):
         self.full  = get_bool_opt(options, 'full', False)
         self.title = options.get('title', '')
         self.encoding = options.get('encoding', None) or None
+        self.encoding = options.get('outencoding', None) or self.encoding
         self.options = options
 
     def get_style_defs(self, arg=''):

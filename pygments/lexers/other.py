@@ -3,9 +3,9 @@
     pygments.lexers.other
     ~~~~~~~~~~~~~~~~~~~~~
 
-    Lexers for other languages: SQL, BrainFuck.
+    Lexers for other languages.
 
-    :copyright: 2006 by Georg Brandl, Tim Hatch <tim@timhatch.com>.
+    :copyright: 2006-2007 by Georg Brandl, Tim Hatch <tim@timhatch.com>.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -17,10 +17,16 @@ from pygments.token import Error, Punctuation, \
 from pygments.util import shebang_matches
 
 
-__all__ = ['SqlLexer', 'BrainfuckLexer', 'BashLexer']
+__all__ = ['SqlLexer', 'BrainfuckLexer', 'BashLexer', 'BatchLexer',
+           'BefungeLexer']
 
 
 class SqlLexer(RegexLexer):
+    """
+    Lexer for Structured Query Language. Currently, this lexer does
+    not recognize any special syntax except ANSI SQL.
+    """
+
     name = 'SQL'
     aliases = ['sql']
     filenames = ['*.sql']
@@ -113,7 +119,10 @@ class SqlLexer(RegexLexer):
              Name.Builtin),
             (r'[+*/<>=~!@#%^&|`?^-]', Operator),
             (r'[0-9]+', Number.Integer),
-            (r"'(''|[^'])*'", String),
+            # TODO: Backslash escapes?
+            (r"'(''|[^'])*'", String.Single),
+            (r'"(""|[^"])*"', String.Symbol), # not a real string literal in ANSI SQL
+            (r"`(``|[^`])*`", String.Backtick),
             (r'[a-zA-Z_][a-zA-Z0-9_]*', Name),
             (r'[;:()\[\],\.]', Punctuation)
         ],
@@ -127,9 +136,15 @@ class SqlLexer(RegexLexer):
 
 
 class BrainfuckLexer(RegexLexer):
+    """
+    Lexer for the esoteric `BrainFuck <http://www.muppetlabs.com/~breadbox/bf/>`_
+    language.
+    """
+
     name = 'Brainfuck'
     aliases = ['brainfuck', 'bf']
     filenames = ['*.bf', '*.b']
+    mimetypes = ['application/x-brainfuck']
 
     tokens = {
         'common': [
@@ -152,10 +167,43 @@ class BrainfuckLexer(RegexLexer):
     }
 
 
+class BefungeLexer(RegexLexer):
+    """
+    Lexer for the esoteric `Befunge <http://en.wikipedia.org/wiki/Befunge>`_
+    language.
+
+    *New in Pygments 0.7.*
+    """
+    name = 'Befunge'
+    aliases = ['befunge']
+    filenames = ['*.befunge']
+    mimetypes = ['application/x-befunge']
+
+    tokens = {
+        'root': [
+            (r'[0-9a-f]', Number),
+            (r'[\+\*/%!`-]', Operator), # Traditional math
+            (r'[<>^v?\[\]rxjk]', Name.Variable), # Move, imperatives
+            (r'[:\\$.,n]', Name.Builtin), # Stack ops, imperatives
+            (r'[|_mw]', Keyword),
+            (r'[{}]', Name.Tag), # Befunge-98 stack ops
+            (r'".*?"', String.Double), # Strings don't appear to allow escapes
+            (r'\'.', String.Single), # Single character
+            (r'[#;]', Comment), # Trampoline... depends on direction hit
+            (r'[pg&~=@iotsy]', Keyword), # Misc
+            (r'[()A-Z]', Comment), # Fingerprints
+            (r'\s+', Text), # Whitespace doesn't matter
+        ],
+    }
+
+
 class BashLexer(RegexLexer):
     """
-    Lex (ba)sh source files.
+    Lexer for (ba)sh shell scripts.
+
+    *New in Pygments 0.6.*
     """
+
     name = 'Bash'
     aliases = ['bash', 'sh']
     filenames = ['*.sh']
@@ -202,3 +250,58 @@ class BashLexer(RegexLexer):
 
     def analyse_text(text):
         return shebang_matches(text, r'(ba|z|)sh')
+
+
+class BatchLexer(RegexLexer):
+    """
+    Lexer for the DOS/Windows Batch file format.
+
+    *New in Pygments 0.7.*
+    """
+    name = 'Batchfile'
+    aliases = ['bat']
+    filenames = ['*.bat', '*.cmd']
+    mimetypes = ['application/x-dos-batch']
+
+    flags = re.MULTILINE | re.IGNORECASE
+
+    tokens = {
+        'root': [
+            # Lines can start with @ to prevent echo
+            (r'^\s*@', Punctuation),
+            (r'".*?"', String.Double),
+            (r"'.*?'", String.Single),
+            # If made more specific, make sure you still allow expansions
+            # like %~$VAR:zlt
+            (r'%%?[~$:\w]+%?', Name.Variable),
+            (r'(::|rem).*', Comment), # Technically :: only works at BOL
+            (r'(set)(\s+)(\w+)', bygroups(Keyword, Text, Name.Variable)),
+            (r'(call)(\s+)(:\w+)', bygroups(Keyword, Text, Name.Label)),
+            (r'(goto)(\s+)(\w+)', bygroups(Keyword, Text, Name.Label)),
+            (r'\b(set|call|echo|on|off|endlocal|for|do|goto|if|pause|rem|'
+             r'setlocal|shift|errorlevel|exist|defined|cmdextversion|'
+             r'errorlevel|else|cd|md|del|deltree|cls|choice)\b', Keyword),
+            (r'equ|neq|lss|leq|gtr|geq', Operator),
+            include('basic'),
+            (r'.', Text),
+        ],
+        'echo': [
+            # Escapes only valid within echo args?
+            (r'\^\^|\^<|\^>|\^\|', String.Escape),
+            (r'\n', Text, '#pop'),
+            include('basic'),
+            (r'[^\'"^]+', Text),
+        ],
+        'basic': [
+            (r'".*?"', String.Double),
+            (r"'.*?'", String.Single),
+            (r'`.*?`', String.Backtick),
+            (r'-?\d+', Number),
+            (r',', Punctuation),
+            (r'=', Operator),
+            (r'/\S+', Name),
+            (r':\w+', Name.Label),
+            (r'\w:\w+', Text),
+            (r'([<>|])(\s*)(\w+)', bygroups(Punctuation, Text, Name)),
+        ],
+    }

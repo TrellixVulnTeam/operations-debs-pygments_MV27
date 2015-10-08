@@ -3,9 +3,9 @@
     pygments.lexers.dotnet
     ~~~~~~~~~~~~~~~~~~~~~~
 
-    .net languages
+    Lexers for .net languages.
 
-    :copyright: 2006 by Georg Brandl, Armin Ronacher.
+    :copyright: 2006-2007 by Georg Brandl, Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 import re
@@ -18,6 +18,11 @@ __all__ = ['CSharpLexer', 'BooLexer', 'VbNetLexer']
 
 
 class CSharpLexer(RegexLexer):
+    """
+    For `C# <http://msdn2.microsoft.com/en-us/vcsharp/default.aspx>`_
+    source code.
+    """
+
     name = 'C#'
     aliases = ['csharp', 'c#']
     filenames = ['*.cs']
@@ -55,7 +60,7 @@ class CSharpLexer(RegexLexer):
              r'internal|is|lock|nwe|null|operator|'
              r'out|override|params|private|protected|public|readonly|'
              r'ref|return|sealed|sizeof|stackalloc|static|'
-             r'switch|this|throw|true|try|typeof|'
+             r'switch|this|throw|true|try|typeof|partial|'
              r'unchecked|unsafe|virtual|void|while|'
              r'get|set|new)\b', Keyword),
             (r'(bool|byte|char|decimal|double|float|int|long|object|sbyte|'
@@ -75,6 +80,10 @@ class CSharpLexer(RegexLexer):
 
 
 class BooLexer(RegexLexer):
+    """
+    For `Boo <http://boo.codehaus.org/>`_ source code.
+    """
+
     name = 'Boo'
     aliases = ['boo']
     filenames = ['*.boo']
@@ -138,6 +147,12 @@ class BooLexer(RegexLexer):
 
 
 class VbNetLexer(RegexLexer):
+    """
+    For
+    `Visual Basic.NET <http://msdn2.microsoft.com/en-us/vbasic/default.aspx>`_
+    source code.
+    """
+
     name = 'VB.net'
     aliases = ['vb.net', 'vbnet']
     filenames = ['*.vb', '*.bas']

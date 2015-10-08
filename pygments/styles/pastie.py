@@ -7,7 +7,7 @@
 
     .. _pastie: http://pastie.caboo.se/
 
-    :copyright: 2006 by Armin Ronacher.
+    :copyright: 2006-2007 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -17,12 +17,16 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class PastieStyle(Style):
+    """
+    Style similar to the pastie default style.
+    """
 
     default_style = ''
 
     styles = {
         Comment:                '#888888',
         Comment.Preproc:        'bold #cc0000',
+        Comment.Special:        'bg:#fff0f0 bold #cc0000',
 
         String:                 'bg:#fff0f0 #dd2200',
         String.Regex:           'bg:#fff0ff #008800',
@@ -41,7 +45,7 @@ class PastieStyle(Style):
         Name.Exception:         'bold #bb0066',
         Name.Function:          'bold #0066bb',
         Name.Property:          'bold #336699',
-        Name.Module:            'bold #bb0066',
+        Name.Namespace:         'bold #bb0066',
         Name.Builtin:           '#003388',
         Name.Variable:          '#336699',
         Name.Variable.Class:    '#336699',

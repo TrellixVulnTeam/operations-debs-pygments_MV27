@@ -5,7 +5,7 @@
 
     Murphy's style from CodeRay.
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -15,12 +15,16 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class MurphyStyle(Style):
+    """
+    Murphy's style from CodeRay.
+    """
 
     default_style = ""
 
     styles = {
         Comment:                   "#666 italic",
         Comment.Preproc:           "#579 noitalic",
+        Comment.Special:           "#c00 bold",
 
         Keyword:                   "bold #289",
         Keyword.Pseudo:            "#08f",

@@ -24,22 +24,22 @@ SCRIPT_VERSION = '0.1'
 
 COLORS = {
     # Numeric Colors
-    '0': '000000',
-    '1': 'c00000',
-    '2': '008000',
-    '3': '808000',
-    '4': '0000c0',
-    '5': 'c000c0',
-    '6': '008080',
-    '7': 'c0c0c0',
-    '8': '808080',
-    '9': 'ff6060',
-    '10': '00ff00',
-    '11': 'ffff00',
-    '12': '8080ff',
-    '13': 'ff40ff',
-    '14': '00ffff',
-    '15': 'ffffff',
+    '0': '#000000',
+    '1': '#c00000',
+    '2': '#008000',
+    '3': '#808000',
+    '4': '#0000c0',
+    '5': '#c000c0',
+    '6': '#008080',
+    '7': '#c0c0c0',
+    '8': '#808080',
+    '9': '#ff6060',
+    '10': '#00ff00',
+    '11': '#ffff00',
+    '12': '#8080ff',
+    '13': '#ff40ff',
+    '14': '#00ffff',
+    '15': '#ffffff',
     # Named Colors
     'alice': '#f0f8ff',
     'aliceblue': '#f0f8ff',
@@ -775,11 +775,10 @@ for token in TOKENS.itervalues():
 
 def get_vim_color(color):
     if color.startswith('#'):
-        color = color[1:]
-        if len(color) == 6:
+        if len(color) == 7:
             return color
         else:
-            return '0'.join(color)[:5] + '0'
+            return '#%s0' % '0'.join(color)[1:]
     return COLORS.get(color.lower())
 
 
@@ -873,8 +872,8 @@ class StyleWriter(object):
         out.write('    %s Colorscheme\n' % self.name.title())
         out.write('    %s\n\n' % ('~' * (len(self.name) + 12)))
         out.write('    Converted by %s\n' % SCRIPT_NAME)
-        out.write('"""\nfrom pykleur.style import Style\n')
-        out.write('from pykleur.token import %s\n\n' % ', '.join(TOKEN_TYPES))
+        out.write('"""\nfrom pygments.style import Style\n')
+        out.write('from pygments.token import Token, %s\n\n' % ', '.join(TOKEN_TYPES))
         out.write('class %sStyle(Style):\n\n' % self.name.title())
 
     def write(self, out):
@@ -882,7 +881,11 @@ class StyleWriter(object):
         default_token, tokens = find_colors(self.code)
         tokens = tokens.items()
         tokens.sort(lambda a, b: cmp(len(a[0]), len(a[1])))
-        out.write('    default_style = %r\n    styles = {\n' % default_token)
+        bg_color = [x[3:] for x in default_token.split() if x.startswith('bg:')]
+        if bg_color:
+            out.write('    background_color = %r\n' % bg_color[0])
+        out.write('    styles = {\n')
+        out.write('        %-20s%r\n' % ('Token:', default_token))
         for token, definition in tokens:
             if definition:
                 out.write('        %-20s%r\n' % (token + ':', definition))

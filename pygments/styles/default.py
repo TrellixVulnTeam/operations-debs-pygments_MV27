@@ -5,7 +5,7 @@
 
     The default highlighting style for Pygments.
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -25,6 +25,7 @@ class DefaultStyle(Style):
     styles = {
         Comment:                   "italic #008800",
         Comment.Preproc:           "noitalic",
+        Comment.Special:           "noitalic bold",
 
         Keyword:                   "bold #AA22FF",
         Keyword.Pseudo:            "nobold",

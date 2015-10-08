@@ -5,7 +5,7 @@
 
     A colorful style, inspired by the terminal highlighting style.
 
-    :copyright: 2006 by Armin Ronacher.
+    :copyright: 2006-2007 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -15,12 +15,16 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class AutumnStyle(Style):
+    """
+    A colorful style, inspired by the terminal highlighting style.
+    """
 
     default_style = ""
 
     styles = {
         Comment:                    "italic #aaaaaa",
         Comment.Preproc:            "noitalic #4c8317",
+        Comment.Special:            "italic #0000aa",
 
         Keyword:                    "#0000aa",
         Keyword.Type:               "#00aaaa",

@@ -8,7 +8,7 @@
     This is a port of the style used in the `php port`_ of pygments
     by Manni. The style is called 'default' there.
 
-    :copyright: 2006 by Armin Ronacher, Manni <manni@fnord.name>.
+    :copyright: 2006-2007 by Armin Ronacher, Manni <manni@fnord.name>.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -18,12 +18,16 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class ManniStyle(Style):
+    """
+    A colorful style, inspired by the terminal highlighting style.
+    """
 
     background_color = '#f0f3f3'
 
     styles = {
         Comment:            'italic #0099FF',
         Comment.Preproc:    'noitalic #009999',
+        Comment.Special:    'bold',
 
         Keyword:            'bold #006699',
         Keyword.Pseudo:     'nobold',

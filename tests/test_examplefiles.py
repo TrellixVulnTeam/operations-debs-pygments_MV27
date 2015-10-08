@@ -3,12 +3,12 @@
     Pygments tests with example files
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: 2006 by Georg Brandl.
+    :copyright: 2006-2007 by Georg Brandl.
     :license: BSD, see LICENSE for more details.
 """
 
-import unittest
 import os
+import unittest
 
 from pygments import highlight
 from pygments.lexers import get_lexer_for_filename, get_lexer_by_name

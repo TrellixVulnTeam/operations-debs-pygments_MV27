@@ -5,7 +5,7 @@
 
     pygments version of my "native" vim theme.
 
-    :copyright: 2006 by Armin Ronacher.
+    :copyright: 2006-2007 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -15,6 +15,9 @@ from pygments.token import Keyword, Name, Comment, String, Error, \
 
 
 class NativeStyle(Style):
+    """
+    Pygments version of the "native" vim theme.
+    """
 
     background_color = '#202020'
 
@@ -23,6 +26,7 @@ class NativeStyle(Style):
 
         Comment:            'italic #999999',
         Comment.Preproc:    'noitalic bold #cd2828',
+        Comment.Special:    'noitalic bold #e50808 bg:#520000',
 
         Keyword:            'bold #6ab825',
         Keyword.Pseudo:     'nobold',
