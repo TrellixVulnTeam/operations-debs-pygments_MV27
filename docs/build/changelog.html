@@ -150,12 +150,12 @@ div.toc h2 {
 .syntax .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
 .syntax .ge { font-style: italic } /* Generic.Emph */
 .syntax .gr { color: #aa0000 } /* Generic.Error */
-.syntax .gh { color: #303030 } /* Generic.Heading */
+.syntax .gh { color: #333333 } /* Generic.Heading */
 .syntax .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
 .syntax .go { color: #888888 } /* Generic.Output */
 .syntax .gp { color: #555555 } /* Generic.Prompt */
 .syntax .gs { font-weight: bold } /* Generic.Strong */
-.syntax .gu { color: #606060 } /* Generic.Subheading */
+.syntax .gu { color: #666666 } /* Generic.Subheading */
 .syntax .gt { color: #aa0000 } /* Generic.Traceback */
 .syntax .kc { color: #008800; font-weight: bold } /* Keyword.Constant */
 .syntax .kd { color: #008800; font-weight: bold } /* Keyword.Declaration */
@@ -213,6 +213,8 @@ div.toc h2 {
         <h2>Contents</h2>
         <ul class="contents">
         
+          <li><a href="#version-1-6rc1">Version 1.6rc1</a></li>
+        
           <li><a href="#version-1-5">Version 1.5</a></li>
         
           <li><a href="#version-1-4">Version 1.4</a></li>
@@ -259,7 +261,68 @@ div.toc h2 {
       </div>
     
     <p>Issue numbers refer to the tracker at
-<a class="reference external" href="http://bitbucket.org/birkenfeld/pygments-main/issues">http://bitbucket.org/birkenfeld/pygments-main/issues</a>.</p>
+&lt;<a class="reference external" href="http://bitbucket.org/birkenfeld/pygments-main/issues">http://bitbucket.org/birkenfeld/pygments-main/issues</a>&gt;,
+pull request numbers to the requests at
+&lt;<a class="reference external" href="http://bitbucket.org/birkenfeld/pygments-main/pull-requests/merged">http://bitbucket.org/birkenfeld/pygments-main/pull-requests/merged</a>&gt;.</p>
+<div class="section" id="version-1-6rc1">
+<h3>Version 1.6rc1</h3>
+<p>(released Jan 9, 2013)</p>
+<ul class="simple">
+<li>Lexers added:<ul>
+<li>AspectJ (PR#90)</li>
+<li>AutoIt (PR#122)</li>
+<li>BUGS-like languages (PR#89)</li>
+<li>Ceylon (PR#86)</li>
+<li>Croc (new name for MiniD)</li>
+<li>CUDA (PR#75)</li>
+<li>Dg (PR#116)</li>
+<li>IDL (PR#115)</li>
+<li>Jags (PR#89)</li>
+<li>Julia (PR#61)</li>
+<li>Kconfig (#711)</li>
+<li>Lasso (PR#95, PR#113)</li>
+<li>LiveScript (PR#84)</li>
+<li>Monkey (PR#117)</li>
+<li>Mscgen (PR#80)</li>
+<li>NSIS scripts (PR#136)</li>
+<li>OpenCOBOL (PR#72)</li>
+<li>QML (PR#123)</li>
+<li>Puppet (PR#133)</li>
+<li>Racket (PR#94)</li>
+<li>Rdoc (PR#99)</li>
+<li>Robot Framework (PR#137)</li>
+<li>RPM spec files (PR#124)</li>
+<li>Rust (PR#67)</li>
+<li>Smali (Dalvik assembly)</li>
+<li>SourcePawn (PR#39)</li>
+<li>Stan (PR#89)</li>
+<li>Treetop (PR#125)</li>
+<li>TypeScript (PR#114)</li>
+<li>VGL (PR#12)</li>
+<li>Visual FoxPro (#762)</li>
+<li>Windows Registry (#819)</li>
+<li>Xtend (PR#68)</li>
+</ul>
+</li>
+<li>The HTML formatter now supports linking to tags using CTags files, when the
+python-ctags package is installed (PR#87).</li>
+<li>The HTML formatter now has a &quot;linespans&quot; option that wraps every line in a
+&lt;span&gt; tag with a specific id (PR#82).</li>
+<li>When deriving a lexer from another lexer with token definitions, definitions
+for states not in the child lexer are now inherited.  If you override a state
+in the child lexer, an &quot;inherit&quot; keyword has been added to insert the base
+state at that position (PR#141).</li>
+<li>The C family lexers now inherit token definitions from a common base class,
+removing code duplication (PR#141).</li>
+<li>Use &quot;colorama&quot; on Windows for console color output (PR#142).</li>
+<li>Fix Template Haskell highlighting (PR#63).</li>
+<li>Fix some S/R lexer errors (PR#91).</li>
+<li>Fix a bug in the Prolog lexer with names that start with 'is' (#810).</li>
+<li>Rewrite Dylan lexer, add Dylan LID lexer (PR#147).</li>
+<li>Add a Java quickstart document (PR#146).</li>
+<li>Add a &quot;external/autopygmentize&quot; file that can be used as .lessfilter (#802).</li>
+</ul>
+</div>
 <div class="section" id="version-1-5">
 <h3>Version 1.5</h3>
 <p>(codename Zeitdilatation, released Mar 10, 2012)</p>
@@ -862,6 +925,6 @@ continuations.</li>
 
   </div>
 </body>
-<!-- generated on: 2012-03-10 22:10:15.041447
+<!-- generated on: 2013-01-09 17:48:44.022954
      file id: changelog -->
 </html>
