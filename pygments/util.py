@@ -5,7 +5,7 @@
 
     Utility functions.
 
-    :copyright: Copyright 2006-2014 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2015 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -55,7 +55,7 @@ def get_bool_opt(options, optname, default=None):
     elif not isinstance(string, string_types):
         raise OptionError('Invalid type %r for option %s; use '
                           '1/0, yes/no, true/false, on/off' % (
-                          string, optname))
+                              string, optname))
     elif string.lower() in ('1', 'yes', 'true', 'on'):
         return True
     elif string.lower() in ('0', 'no', 'false', 'off'):
@@ -63,7 +63,7 @@ def get_bool_opt(options, optname, default=None):
     else:
         raise OptionError('Invalid value %r for option %s; use '
                           '1/0, yes/no, true/false, on/off' % (
-                          string, optname))
+                              string, optname))
 
 
 def get_int_opt(options, optname, default=None):
@@ -73,11 +73,11 @@ def get_int_opt(options, optname, default=None):
     except TypeError:
         raise OptionError('Invalid type %r for option %s; you '
                           'must give an integer value' % (
-                          string, optname))
+                              string, optname))
     except ValueError:
         raise OptionError('Invalid value %r for option %s; you '
                           'must give an integer value' % (
-                          string, optname))
+                              string, optname))
 
 
 def get_list_opt(options, optname, default=None):
@@ -89,7 +89,7 @@ def get_list_opt(options, optname, default=None):
     else:
         raise OptionError('Invalid type %r for option %s; you '
                           'must give a list value' % (
-                          val, optname))
+                              val, optname))
 
 
 def docstring_headline(obj):
@@ -122,7 +122,7 @@ def make_analysator(f):
 
 
 def shebang_matches(text, regex):
-    """Check if the given regular expression matches the last part of the
+    r"""Check if the given regular expression matches the last part of the
     shebang if one exists.
 
         >>> from pygments.util import shebang_matches
@@ -160,7 +160,7 @@ def shebang_matches(text, regex):
                      if x and not x.startswith('-')][-1]
         except IndexError:
             return False
-        regex = re.compile('^%s(\.(exe|cmd|bat|bin))?$' % regex, re.IGNORECASE)
+        regex = re.compile(r'^%s(\.(exe|cmd|bat|bin))?$' % regex, re.IGNORECASE)
         if regex.search(found) is not None:
             return True
     return False
@@ -185,6 +185,8 @@ def html_doctype_matches(text):
 
 
 _looks_like_xml_cache = {}
+
+
 def looks_like_xml(text):
     """Check if a doctype exists or if we have some tags."""
     if xml_decl_re.match(text):
@@ -200,6 +202,7 @@ def looks_like_xml(text):
         _looks_like_xml_cache[key] = rv
         return rv
 
+
 # Python narrow build compatibility
 
 def _surrogatepair(c):
@@ -209,6 +212,7 @@ def _surrogatepair(c):
     # From example D28 of:
     # http://www.unicode.org/book/ch03.pdf
     return (0xd7c0 + (c >> 10), (0xdc00 + (c & 0x3ff)))
+
 
 def unirange(a, b):
     """Returns a regular expression string to match the given non-BMP range."""
@@ -350,7 +354,8 @@ if sys.version_info < (3, 0):
     u_prefix = 'u'
     iteritems = dict.iteritems
     itervalues = dict.itervalues
-    import StringIO, cStringIO
+    import StringIO
+    import cStringIO
     # unfortunately, io.StringIO in Python 2 doesn't accept str at all
     StringIO = StringIO.StringIO
     BytesIO = cStringIO.StringIO
@@ -362,7 +367,12 @@ else:
     u_prefix = ''
     iteritems = dict.items
     itervalues = dict.values
-    from io import StringIO, BytesIO
+    from io import StringIO, BytesIO, TextIOWrapper
+
+    class UnclosingTextIOWrapper(TextIOWrapper):
+        # Don't close underlying buffer on destruction.
+        def close(self):
+            self.flush()
 
 
 def add_metaclass(metaclass):

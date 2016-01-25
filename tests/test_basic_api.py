@@ -3,7 +3,7 @@
     Pygments basic API tests
     ~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: Copyright 2006-2014 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2015 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -12,7 +12,7 @@ from __future__ import print_function
 import random
 import unittest
 
-from pygments import lexers, formatters, filters, format
+from pygments import lexers, formatters, lex, format
 from pygments.token import _TokenType, Text
 from pygments.lexer import RegexLexer
 from pygments.formatters.img import FontNotFound
@@ -98,13 +98,10 @@ def test_lexer_options():
         inst = cls(stripall=True)
         ensure(inst.get_tokens('   \n  b\n\n\n'), 'b\n')
         # some lexers require full lines in input
-        if cls.__name__ not in (
-                'PythonConsoleLexer', 'RConsoleLexer', 'RubyConsoleLexer',
-                'SqliteConsoleLexer', 'MatlabSessionLexer', 'ErlangShellLexer',
-                'BashSessionLexer', 'LiterateHaskellLexer', 'LiterateAgdaLexer',
-                'PostgresConsoleLexer', 'ElixirConsoleLexer', 'JuliaConsoleLexer',
-                'RobotFrameworkLexer', 'DylanConsoleLexer', 'ShellSessionLexer',
-                'LiterateIdrisLexer', 'LiterateCryptolLexer'):
+        if ('ConsoleLexer' not in cls.__name__ and
+            'SessionLexer' not in cls.__name__ and
+            not cls.__name__.startswith('Literate') and
+            cls.__name__ not in ('ErlangShellLexer', 'RobotFrameworkLexer')):
             inst = cls(ensurenl=False)
             ensure(inst.get_tokens('a\nb'), 'a\nb')
             inst = cls(ensurenl=False, stripall=True)
@@ -252,6 +249,23 @@ def test_styles():
     # minimal style test
     from pygments.formatters import HtmlFormatter
     HtmlFormatter(style="pastie")
+
+
+def test_bare_class_handler():
+    from pygments.formatters import HtmlFormatter
+    from pygments.lexers import PythonLexer
+    try:
+        lex('test\n', PythonLexer)
+    except TypeError as e:
+        assert 'lex() argument must be a lexer instance' in str(e)
+    else:
+        assert False, 'nothing raised'
+    try:
+        format([], HtmlFormatter)
+    except TypeError as e:
+        assert 'format() argument must be a formatter instance' in str(e)
+    else:
+        assert False, 'nothing raised'
 
 
 class FiltersTest(unittest.TestCase):

@@ -5,7 +5,7 @@
 
     Lexers for various template engines' markup.
 
-    :copyright: Copyright 2006-2014 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2015 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -369,7 +369,7 @@ class DjangoLexer(RegexLexer):
              r'with(?:(?:out)?\s*context)?|scoped|ignore\s+missing)\b',
              Keyword),
             (r'(loop|block|super|forloop)\b', Name.Builtin),
-            (r'[a-zA-Z][\w-]*', Name.Variable),
+            (r'[a-zA-Z_][\w-]*', Name.Variable),
             (r'\.\w+', Name.Variable),
             (r':?"(\\\\|\\"|[^"])*"', String.Double),
             (r":?'(\\\\|\\'|[^'])*'", String.Single),
@@ -568,10 +568,12 @@ class MasonLexer(RegexLexer):
     }
 
     def analyse_text(text):
-        rv = 0.0
-        if re.search('<&', text) is not None:
-            rv = 1.0
-        return rv
+        result = 0.0
+        if re.search(r'</%(class|doc|init)%>', text) is not None:
+            result = 1.0
+        elif re.search(r'<&.+&>', text, re.DOTALL) is not None:
+            result = 0.11
+        return result
 
 
 class MakoLexer(RegexLexer):
@@ -1122,7 +1124,7 @@ class HtmlPhpLexer(DelegatingLexer):
 
 class XmlPhpLexer(DelegatingLexer):
     """
-    Subclass of `PhpLexer` that higlights unhandled data with the `XmlLexer`.
+    Subclass of `PhpLexer` that highlights unhandled data with the `XmlLexer`.
     """
 
     name = 'XML+PHP'
@@ -1180,7 +1182,7 @@ class JavascriptPhpLexer(DelegatingLexer):
 
 class HtmlSmartyLexer(DelegatingLexer):
     """
-    Subclass of the `SmartyLexer` that highighlights unlexed data with the
+    Subclass of the `SmartyLexer` that highlights unlexed data with the
     `HtmlLexer`.
 
     Nested Javascript and CSS is highlighted too.
@@ -1263,7 +1265,7 @@ class JavascriptSmartyLexer(DelegatingLexer):
 
 class HtmlDjangoLexer(DelegatingLexer):
     """
-    Subclass of the `DjangoLexer` that highighlights unlexed data with the
+    Subclass of the `DjangoLexer` that highlights unlexed data with the
     `HtmlLexer`.
 
     Nested Javascript and CSS is highlighted too.
@@ -1778,8 +1780,6 @@ class LassoJavascriptLexer(DelegatingLexer):
 
     def analyse_text(text):
         rv = LassoLexer.analyse_text(text) - 0.05
-        if 'function' in text:
-            rv += 0.2
         return rv
 
 
@@ -1851,7 +1851,7 @@ class HandlebarsHtmlLexer(DelegatingLexer):
 
 class YamlJinjaLexer(DelegatingLexer):
     """
-    Subclass of the `DjangoLexer` that highighlights unlexed data with the
+    Subclass of the `DjangoLexer` that highlights unlexed data with the
     `YamlLexer`.
 
     Commonly used in Saltstack salt states.

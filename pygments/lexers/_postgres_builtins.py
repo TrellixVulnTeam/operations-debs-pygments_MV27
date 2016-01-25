@@ -5,7 +5,7 @@
 
     Self-updating data files for PostgreSQL lexer.
 
-    :copyright: Copyright 2006-2014 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2015 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -507,7 +507,8 @@ PLPGSQL_KEYWORDS = (
     'RETURN', 'REVERSE', 'SQLSTATE', 'WHILE',
 )
 
-if __name__ == '__main__':
+
+if __name__ == '__main__':  # pragma: no cover
     import re
     try:
         from urllib import urlopen
