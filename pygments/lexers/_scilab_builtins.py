@@ -5,7 +5,7 @@
 
     Builtin list for the ScilabLexer.
 
-    :copyright: Copyright 2006-2014 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2015 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -3051,7 +3051,8 @@ variables_kw = (
     'xcoslib',
 )
 
-if __name__ == '__main__':
+
+if __name__ == '__main__':  # pragma: no cover
     import subprocess
     from pygments.util import format_lines, duplicates_removed
 

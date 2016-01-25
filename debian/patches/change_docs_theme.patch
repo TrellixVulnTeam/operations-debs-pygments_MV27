@@ -1,4 +1,4 @@
-From 41619bd44acdfd66fb9c56ce3dae3d84c28ea862 Mon Sep 17 00:00:00 2001
+From ee06730e4e7551f20bb14e4d395b122f099a15c9 Mon Sep 17 00:00:00 2001
 From: SVN-Git Migration <python-modules-team@lists.alioth.debian.org>
 Date: Thu, 8 Oct 2015 10:34:58 -0700
 Subject: change_docs_theme
@@ -9,10 +9,10 @@ Patch-Name: change_docs_theme.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/doc/conf.py b/doc/conf.py
-index 4ac487f..79be2e3 100644
+index 51a9161..82ae598 100644
 --- a/doc/conf.py
 +++ b/doc/conf.py
-@@ -93,7 +93,7 @@ exclude_patterns = ['_build']
+@@ -85,7 +85,7 @@ exclude_patterns = ['_build']
  
  # The theme to use for HTML and HTML Help pages.  See the documentation for
  # a list of builtin themes.

@@ -16,7 +16,7 @@
       formats that PIL supports and ANSI sequences
     * it is usable as a command-line tool and as a library
 
-    :copyright: Copyright 2006-2014 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2015 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -54,7 +54,7 @@ else:
 
 setup(
     name = 'Pygments',
-    version = '2.0.1',
+    version = '2.1',
     url = 'http://pygments.org/',
     license = 'BSD License',
     author = 'Georg Brandl',
