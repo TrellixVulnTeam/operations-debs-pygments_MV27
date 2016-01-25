@@ -26,7 +26,7 @@ install: build install-stamp $(PYVERS:%=install-python%-stamp)
 
 install-stamp:
 	dh_installdirs
-	install -m 644 external/pygments.bashcomp debian/python-pygments/etc/bash_completion.d/pygmentize
+	install -m 644 external/pygments.bashcomp debian/python-pygments/usr/share/bash-completion/completions/pygmentize
 	touch $@
 
 install-python%-stamp:
