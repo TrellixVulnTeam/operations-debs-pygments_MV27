@@ -1,10 +1,15 @@
-pygments (2.1+dfsg-1) UNRELEASED; urgency=medium
+pygments (2.1+dfsg-1) unstable; urgency=medium
 
+  [ Dmitry Shachnev ]
   * New upstream release.
   * Drop CVE-2015-8557.patch, applied upstream.
   * Disable two tests that need example files, again.
   * Stop setting PYTHONWARNINGS=d when running the autopkgtests, that
     breaks the cmdline test which checks that process stderr is empty.
+
+  [ Piotr Ożarowski ]
+  * Remove /etc/bash_completion.d/pygmentize conffile in maintainer scripts
+    (closes: #810661)
 
  -- Dmitry Shachnev <mitya57@debian.org>  Mon, 25 Jan 2016 18:04:14 +0300
 
