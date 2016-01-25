@@ -7,5 +7,5 @@ cd "$ADTTMP/tests"
 rm test_examplefiles.py test_lexers_other.py
 
 for python in $(py3versions -i); do
-	PYTHONWARNINGS=d $python ./run.py --verbose 2>&1
+	$python ./run.py --verbose 2>&1
 done
