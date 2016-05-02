@@ -2,10 +2,10 @@
 ee06730e4e7551f20bb14e4d395b122f099a15c9
 ee06730e4e7551f20bb14e4d395b122f099a15c9
 2795ecc67b331bde9b00cbad508e1ace0e4eed18
-2795ecc67b331bde9b00cbad508e1ace0e4eed18
-pygments_2.1+dfsg.orig.tar.gz
-b3903c22be80f67eeaa670b823dca13b1c6771b8
-1062778
+e69a782be13ffbdc263a758c17f1929526a111a9
+pygments_2.1.3+dfsg.orig.tar.gz
+8b1e44c3bf6df7e46c64f01bad88a108c833615f
+1066081
 debianTag="debian/%e%v"
 patchedTag="patched/%e%v"
 upstreamTag="upstream/%e%u"
