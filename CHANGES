@@ -6,6 +6,34 @@ Issue numbers refer to the tracker at
 pull request numbers to the requests at
 <https://bitbucket.org/birkenfeld/pygments-main/pull-requests/merged>.
 
+Version 2.1.3
+-------------
+(released Mar 2, 2016)
+
+- Fixed regression in Bash lexer (PR#563)
+
+
+Version 2.1.2
+-------------
+(released Feb 29, 2016)
+
+- Fixed Python 3 regression in image formatter (#1215)
+- Fixed regression in Bash lexer (PR#562)
+
+
+Version 2.1.1
+-------------
+(relased Feb 14, 2016)
+
+- Fixed Jython compatibility (#1205)
+- Fixed HTML formatter output with leading empty lines (#1111)
+- Added a mapping table for LaTeX encodings and added utf8 (#1152)
+- Fixed image formatter font searching on Macs (#1188)
+- Fixed deepcopy-ing of Token instances (#1168)
+- Fixed Julia string interpolation (#1170)
+- Fixed statefulness of HttpLexer between get_tokens calls
+- Many smaller fixes to various lexers
+
 
 Version 2.1
 -----------
