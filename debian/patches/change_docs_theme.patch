@@ -1,4 +1,4 @@
-From a8814206e0d8cd8842dd0c634b19e85ed0455300 Mon Sep 17 00:00:00 2001
+From b6beafb7d7e6065f8d71cb260bd3cea68581dc43 Mon Sep 17 00:00:00 2001
 From: SVN-Git Migration <python-modules-team@lists.alioth.debian.org>
 Date: Thu, 8 Oct 2015 10:34:58 -0700
 Subject: Change Sphinx documentation theme to 'default'
