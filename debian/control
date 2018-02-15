@@ -50,7 +50,6 @@ Description: syntax highlighting package written in Python 3
 Package: python-pygments-doc
 Section: doc
 Architecture: all
-Priority: extra
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}
 Recommends: python-pygments
 Conflicts: python-pygments (<= 2.0~)
