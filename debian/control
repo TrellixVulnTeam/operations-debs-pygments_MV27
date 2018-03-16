@@ -11,7 +11,6 @@ Homepage: http://pygments.org/
 Vcs-Git: https://salsa.debian.org/python-team/modules/pygments.git
 Vcs-Browser: https://salsa.debian.org/python-team/modules/pygments
 X-Python-Version: >= 2.6
-XS-Testsuite: autopkgtest
 
 Package: python-pygments
 Architecture: all
