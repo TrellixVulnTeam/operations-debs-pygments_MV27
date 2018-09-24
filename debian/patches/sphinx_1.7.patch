@@ -1,0 +1,15 @@
+Description: Fix failure with Sphinx 1.7
+Origin: https://bitbucket.org/birkenfeld/pygments-main/pull-requests/726/change-to-docutilsparsers-in-sphinxext/diff
+Bug-Debian: https://bugs.debian.org/896627
+
+--- a/pygments/sphinxext.py
++++ b/pygments/sphinxext.py
+@@ -16,7 +16,7 @@
+ 
+ from docutils import nodes
+ from docutils.statemachine import ViewList
+-from sphinx.util.compat import Directive
++from docutils.parsers.rst import Directive
+ from sphinx.util.nodes import nested_parse_with_titles
+ 
+ 

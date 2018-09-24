@@ -13,6 +13,7 @@ pygments (2.2.0+dfsg-2) UNRELEASED; urgency=medium
 
   [ Mattia Rizzolo ]
   * Suggests python-pygments-doc from the library packages.  Closes: #902690
+  * Add patch from Dmitry Shachnev to fix FTBFS with Sphinx 1.7.  Closes: 896627
 
  -- Ondřej Nový <onovy@debian.org>  Tue, 13 Feb 2018 10:12:15 +0100
 
