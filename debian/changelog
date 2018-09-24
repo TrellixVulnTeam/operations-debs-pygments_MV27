@@ -11,6 +11,9 @@ pygments (2.2.0+dfsg-2) UNRELEASED; urgency=medium
   [ Helmut Grohne ]
   * Mark all packages Multi-Arch: foreign.  Closes: #892948
 
+  [ Mattia Rizzolo ]
+  * Suggests python-pygments-doc from the library packages.  Closes: #902690
+
  -- Ondřej Nový <onovy@debian.org>  Tue, 13 Feb 2018 10:12:15 +0100
 
 pygments (2.2.0+dfsg-1) unstable; urgency=medium
