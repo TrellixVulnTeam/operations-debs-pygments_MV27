@@ -13,6 +13,7 @@ Vcs-Browser: https://salsa.debian.org/python-team/modules/pygments
 
 Package: python-pygments
 Architecture: all
+Multi-Arch: foreign
 Depends: ${python:Depends}, ${misc:Depends}, ${sphinxdoc:Depends}
 Recommends: python-chardet, python-pkg-resources
 Suggests: ttf-bitstream-vera
@@ -30,6 +31,7 @@ Description: syntax highlighting package written in Python
 
 Package: python3-pygments
 Architecture: all
+Multi-Arch: foreign
 Depends: ${python3:Depends}, ${misc:Depends}
 Recommends: python3-pkg-resources
 Suggests: ttf-bitstream-vera
@@ -48,6 +50,7 @@ Description: syntax highlighting package written in Python 3
 Package: python-pygments-doc
 Section: doc
 Architecture: all
+Multi-Arch: foreign
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}
 Recommends: python-pygments
 Conflicts: python-pygments (<= 2.0~)
