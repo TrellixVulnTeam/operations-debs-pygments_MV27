@@ -1,0 +1,51 @@
+Description: compatibility with python 3.7
+Origin: https://bitbucket.org/birkenfeld/pygments-main/pull-requests/772/pep-479-raising-stopiteration-from-a/diff
+Bug-Debian: https://bugs.debian.org/904325
+
+--- a/pygments/lexers/lisp.py
++++ b/pygments/lexers/lisp.py
+@@ -2327,13 +2327,13 @@
+             token = Name.Function if token == Literal else token
+             yield index, token, value
+ 
+-        raise StopIteration
++        raise
+ 
+     def _process_signature(self, tokens):
+         for index, token, value in tokens:
+             if token == Literal and value == '}':
+                 yield index, Punctuation, value
+-                raise StopIteration
++                raise
+             elif token in (Literal, Name.Function):
+                 token = Name.Variable if value.istitle() else Keyword.Type
+             yield index, token, value
+--- a/pygments/lexers/sql.py
++++ b/pygments/lexers/sql.py
+@@ -308,13 +308,7 @@
+             # and continue until the end of command is detected
+             curcode = ''
+             insertions = []
+-            while 1:
+-                try:
+-                    line = next(lines)
+-                except StopIteration:
+-                    # allow the emission of partially collected items
+-                    # the repl loop will be broken below
+-                    break
++            for line in lines:
+ 
+                 # Identify a shell prompt in case of psql commandline example
+                 if line.startswith('$') and not curcode:
+@@ -347,7 +341,10 @@
+             # Emit the output lines
+             out_token = Generic.Output
+             while 1:
+-                line = next(lines)
++                try:
++                    line = next(lines)
++                except StopIteration:
++                    return
+                 mprompt = re_prompt.match(line)
+                 if mprompt is not None:
+                     # push the line back to have it processed by the prompt
