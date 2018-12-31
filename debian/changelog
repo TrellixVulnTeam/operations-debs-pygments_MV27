@@ -3,6 +3,8 @@ pygments (2.3.1+dfsg-1) unstable; urgency=medium
   * New upstream release.
     - sphinx_1.7.patch and python_3.7.patch removed - fixed upstream
   * /usr/bin/pygmentize moved to python3-pygments binary package. Closes: 857273
+  * Add patch to add -g parameter to pygmentize man page. Closes: 807495
+    (thanks to Stéphane Blondon for the patch)
   * Standards-Version bumped to 4.3.0 (no changes needed)
 
  -- Piotr Ożarowski <piotr@debian.org>  Mon, 31 Dec 2018 12:10:22 +0100
