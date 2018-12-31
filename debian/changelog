@@ -1,3 +1,10 @@
+pygments (2.3.1+dfsg-1) unstable; urgency=medium
+
+  * New upstream release.
+    - sphinx_1.7.patch and python_3.7.patch removed - fixed upstream
+
+ -- Piotr Ożarowski <piotr@debian.org>  Mon, 31 Dec 2018 12:10:22 +0100
+
 pygments (2.2.0+dfsg-2) unstable; urgency=medium
 
   * Team upload.
