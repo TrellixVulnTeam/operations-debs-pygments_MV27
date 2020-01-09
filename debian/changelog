@@ -1,7 +1,11 @@
 pygments (2.3.1+dfsg-2) UNRELEASED; urgency=medium
 
+  [ Ondřej Nový ]
   * Use debhelper-compat instead of debian/compat.
   * Bump Standards-Version to 4.4.1.
+
+  [ Debian Janitor ]
+  * Set upstream metadata fields: Name.
 
  -- Ondřej Nový <onovy@debian.org>  Sat, 20 Jul 2019 00:20:29 +0200
 
