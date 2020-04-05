@@ -1,13 +1,24 @@
-pygments (2.3.1+dfsg-2) UNRELEASED; urgency=medium
+pygments (2.3.1+dfsg-2) unstable; urgency=medium
+
+  * Team upload.
 
   [ Ondřej Nový ]
   * Use debhelper-compat instead of debian/compat.
-  * Bump Standards-Version to 4.4.1.
 
   [ Debian Janitor ]
   * Set upstream metadata fields: Name.
 
- -- Ondřej Nový <onovy@debian.org>  Sat, 20 Jul 2019 00:20:29 +0200
+  [ Mattia Rizzolo ]
+  * Move pygmentize.1 manpage to the python3-pygmentize, together with the
+    /usr/bin/pygmentize binary.  Closes: #919653
+  * Hard dependency on python3-pkg-resources to be able to use /usr/bin/pygments
+    Closes: #944908
+  * Recommend the py3 package from the docs package, isntead of the py2 one.
+  * Bump Standards-Version to 4.5.0:
+    + Set Rules-Requires-Root:no.
+  * autopkgtest: use py3versions -s instead of py3versions -i.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Sun, 05 Apr 2020 15:53:18 +0200
 
 pygments (2.3.1+dfsg-1) unstable; urgency=medium
 
