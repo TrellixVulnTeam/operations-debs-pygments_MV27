@@ -57,7 +57,7 @@ Section: doc
 Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}
-Recommends: python-pygments
+Recommends: python3-pygments
 Conflicts: python-pygments (<= 2.0~)
 Description: documentation for the Pygments
  Pygments is syntax highlighting package.
