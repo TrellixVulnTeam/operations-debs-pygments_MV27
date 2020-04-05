@@ -6,7 +6,7 @@ Uploaders: Debian Python Modules Team <python-modules-team@lists.alioth.debian.o
 Build-Depends: debhelper-compat (= 9)
 Build-Depends-Indep: dh-python, python-all (>= 2.6.6-3), python3-all, python3-setuptools,
  python-setuptools (>= 0.6b3), python-docutils, python-jinja2, python3-sphinx
-Standards-Version: 4.4.1
+Standards-Version: 4.5.0
 Homepage: http://pygments.org/
 Vcs-Git: https://salsa.debian.org/python-team/modules/pygments.git
 Vcs-Browser: https://salsa.debian.org/python-team/modules/pygments
