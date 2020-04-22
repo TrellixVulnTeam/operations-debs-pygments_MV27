@@ -16,7 +16,6 @@ Package: python-pygments
 Architecture: all
 Multi-Arch: foreign
 Depends: ${python:Depends}, ${misc:Depends}, ${sphinxdoc:Depends}
-Recommends: python-chardet
 Suggests: python-pygments-doc, ttf-bitstream-vera
 # /usr/bin/pygmentize moved to python3-pygments in 2.3.1+dfsg-1
 Breaks: python3-pygments (<< 2.3.1+dfsg-1~)

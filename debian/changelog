@@ -1,3 +1,11 @@
+pygments (2.3.1+dfsg-3) unstable; urgency=medium
+
+  * Team upload.
+  * Drop Recommend: python-chardet to allow the drop of python-chardet from
+    the archive.
+
+ -- Pierre-Elliott Bécue <peb@debian.org>  Wed, 22 Apr 2020 16:32:33 +0200
+
 pygments (2.3.1+dfsg-2) unstable; urgency=medium
 
   * Team upload.
