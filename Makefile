@@ -4,7 +4,7 @@
 #
 # Combines scripts for common tasks.
 #
-# :copyright: Copyright 2006-2017 by the Pygments team, see AUTHORS.
+# :copyright: Copyright 2006-2019 by the Pygments team, see AUTHORS.
 # :license: BSD, see LICENSE for details.
 #
 
@@ -24,7 +24,7 @@ check:
 		   -i docs/build -i pygments/formatters/_mapping.py -i pygments/unistring.py
 
 clean: clean-pyc
-	-rm -rf build
+	-rm -rf build tests/examplefiles/output
 	-rm -f codetags.html
 
 clean-pyc:
@@ -49,14 +49,16 @@ pylint:
 reindent:
 	@$(PYTHON) scripts/reindent.py -r -B .
 
+TEST = tests
+
 test:
-	@$(PYTHON) tests/run.py -d $(TEST)
+	@$(PYTHON) `which py.test` $(TEST)
 
 test-coverage:
-	@$(PYTHON) tests/run.py -d --with-coverage --cover-package=pygments --cover-erase $(TEST)
+	@$(PYTHON) `which py.test` --cov --cov-report=html --cov-report=term $(TEST)
 
 test-examplefiles:
-	nosetests tests/test_examplefiles.py
+	@$(PYTHON) `which py.test` tests.test_examplefiles
 
 tox-test:
 	@tox -- $(TEST)

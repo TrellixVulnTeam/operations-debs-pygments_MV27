@@ -5,7 +5,7 @@
 
     Lexers for PHP and related languages.
 
-    :copyright: Copyright 2006-2017 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2019 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -15,7 +15,7 @@ from pygments.lexer import RegexLexer, include, bygroups, default, using, \
     this, words
 from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
     Number, Punctuation, Other
-from pygments.util import get_bool_opt, get_list_opt, iteritems
+from pygments.util import get_bool_opt, get_list_opt, shebang_matches
 
 __all__ = ['ZephirLexer', 'PhpLexer']
 
@@ -49,13 +49,14 @@ class ZephirLexer(RegexLexer):
             include('commentsandwhitespace'),
             (r'/(\\.|[^[/\\\n]|\[(\\.|[^\]\\\n])*])+/'
              r'([gim]+\b|\B)', String.Regex, '#pop'),
+            (r'/', Operator, '#pop'),
             default('#pop')
         ],
         'badregex': [
             (r'\n', Text, '#pop')
         ],
         'root': [
-            (r'^(?=\s|/|<!--)', Text, 'slashstartsregex'),
+            (r'^(?=\s|/)', Text, 'slashstartsregex'),
             include('commentsandwhitespace'),
             (r'\+\+|--|~|&&|\?|:|\|\||\\(?=\n)|'
              r'(<<|>>>?|==?|!=?|->|[-<>+*%&|^/])=?', Operator, 'slashstartsregex'),
@@ -243,7 +244,7 @@ class PhpLexer(RegexLexer):
         self._functions = set()
         if self.funcnamehighlighting:
             from pygments.lexers._php_builtins import MODULES
-            for key, value in iteritems(MODULES):
+            for key, value in MODULES.items():
                 if key not in self.disabledmodules:
                     self._functions.update(value)
         RegexLexer.__init__(self, **options)
@@ -261,6 +262,8 @@ class PhpLexer(RegexLexer):
             yield index, token, value
 
     def analyse_text(text):
+        if shebang_matches(text, r'php'):
+            return True
         rv = 0.0
         if re.search(r'<\?(?!xml)', text):
             rv += 0.3

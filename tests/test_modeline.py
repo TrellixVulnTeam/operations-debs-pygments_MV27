@@ -3,19 +3,14 @@
     Tests for the vim modeline feature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    :copyright: Copyright 2006-2017 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2019 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
-
-from __future__ import print_function
 
 from pygments import modeline
 
 
-def test_lexer_classes():
-    def verify(buf):
-        assert modeline.get_filetype_from_buffer(buf) == 'python'
-
+def test_modelines():
     for buf in [
             'vi: ft=python' + '\n' * 8,
             'vi: ft=python' + '\n' * 8,
@@ -23,4 +18,4 @@ def test_lexer_classes():
             '\n' * 8 + 'ex: filetype=python',
             '\n' * 8 + 'vim: some,other,syn=python\n\n\n\n'
     ]:
-        yield verify, buf
+        assert modeline.get_filetype_from_buffer(buf) == 'python'
