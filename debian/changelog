@@ -4,8 +4,10 @@ pygments (2.6.1-1) UNRELEASED; urgency=medium
   * wrap-and-sort.
   * d/salsa-ci.yml: enable salsa-ci.
   * d/gbp.conf: set debian/master as default branch.
+  * d/patches: update change_docs_theme patch.
+    - Remove not applied Adapt-conf.py-for-sphinx-2.0 patch.
 
- -- Emmanuel Arias <eamanu@yaerobi.com>  Mon, 29 Jun 2020 01:02:04 -0300
+ -- Emmanuel Arias <eamanu@yaerobi.com>  Mon, 29 Jun 2020 11:12:13 -0300
 
 pygments (2.3.1+dfsg-3) unstable; urgency=medium
 
