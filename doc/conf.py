@@ -35,7 +35,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Pygments'
-copyright = u'2015, Georg Brandl'
+copyright = u'2006-2019, Georg Brandl and Pygments contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -97,7 +97,7 @@ html_theme_path = ['_themes']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+html_title = 'Pygments'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -125,12 +125,14 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {'index': 'indexsidebar.html',
-                 'docs/*': 'docssidebar.html'}
+html_sidebars = {'index': ['indexsidebar.html', 'searchbox.html']}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
-#html_additional_pages = {}
+if os.environ.get('WEBSITE_BUILD'):
+    html_additional_pages = {
+        'demo': 'demo.html',
+    }
 
 # If false, no module index is generated.
 #html_domain_indices = True
@@ -159,7 +161,7 @@ html_sidebars = {'index': 'indexsidebar.html',
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Pygmentsdoc'
+htmlhelp_basename = 'Pygments'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -178,8 +180,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Pygments.tex', u'Pygments Documentation',
-   u'Georg Brandl', 'manual'),
+  ('docs/index', 'Pygments.tex', u'Pygments Documentation',
+   u'Pygments authors', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -208,34 +210,21 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'pygments', u'Pygments Documentation',
-     [u'Georg Brandl'], 1)
+    ('docs/index', 'pygments', u'Pygments Documentation',
+     [u'Pygments authors'], 1)
 ]
 
 # If true, show URL addresses after external links.
 #man_show_urls = False
 
 
-# -- Options for Texinfo output ------------------------------------------------
-
-# Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-  ('index', 'Pygments', u'Pygments Documentation',
-   u'Georg Brandl', 'Pygments', 'One line description of project.',
-   'Miscellaneous'),
-]
-
-# Documents to append as an appendix to all manuals.
-#texinfo_appendices = []
-
-# If false, no module index is generated.
-#texinfo_domain_indices = True
-
-# How to display URL addresses: 'footnote', 'no', or 'inline'.
-#texinfo_show_urls = 'footnote'
-
-
 # Example configuration for intersphinx: refer to the Python standard library.
 #intersphinx_mapping = {'http://docs.python.org/': None}
+
+
+def pg_context(app, pagename, templatename, ctx, event_arg):
+    ctx['demo_active'] = bool(os.environ.get('WEBSITE_BUILD'))
+
+
+def setup(app):
+    app.connect('html-page-context', pg_context)

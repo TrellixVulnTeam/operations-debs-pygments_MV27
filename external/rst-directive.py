@@ -27,11 +27,11 @@
 
     Look at the `directive documentation`_ to get all the gory details.
 
-    .. _Docutils: http://docutils.sf.net/
+    .. _Docutils: https://docutils.sourceforge.io/
     .. _directive documentation:
-       http://docutils.sourceforge.net/docs/howto/rst-directives.html
+       https://docutils.sourceforge.io/docs/howto/rst-directives.html
 
-    :copyright: Copyright 2006-2017 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2019 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -64,7 +64,7 @@ class Pygments(Directive):
     required_arguments = 1
     optional_arguments = 0
     final_argument_whitespace = True
-    option_spec = dict([(key, directives.flag) for key in VARIANTS])
+    option_spec = {key: directives.flag for key in VARIANTS}
     has_content = True
 
     def run(self):

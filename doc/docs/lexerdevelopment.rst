@@ -106,13 +106,13 @@ flag ``-x``:
 
 .. code-block:: console
 
-    $ pygmentize -l your_lexer_file.py -x
+    $ python -m pygments -l your_lexer_file.py -x
 
 To specify a class name other than CustomLexer, append it with a colon:
 
 .. code-block:: console
 
-    $ pygmentize -l your_lexer.py:SomeLexer -x
+    $ python -m pygments -l your_lexer.py:SomeLexer -x
 
 Or, using the Python API:
 
@@ -136,11 +136,11 @@ have to perform the following steps.
 
 First, change to the current directory containing the Pygments source code.  You
 will need to have either an unpacked source tarball, or (preferably) a copy
-cloned from BitBucket.
+cloned from GitHub.
 
 .. code-block:: console
 
-    $ cd .../pygments-main
+    $ cd pygments
 
 Select a matching module under ``pygments/lexers``, or create a new module for
 your lexer class.
@@ -164,16 +164,17 @@ To test the new lexer, store an example file with the proper extension in
 ``tests/examplefiles``.  For example, to test your ``DiffLexer``, add a
 ``tests/examplefiles/example.diff`` containing a sample diff output.
 
-Now you can use pygmentize to render your example to HTML:
+Now you can use ``python -m pygments`` from the current root of the checkout to
+render your example to HTML:
 
 .. code-block:: console
 
-    $ ./pygmentize -O full -f html -o /tmp/example.html tests/examplefiles/example.diff
+    $ python -m pygments -O full -f html -o /tmp/example.html tests/examplefiles/example.diff
 
-Note that this explicitly calls the ``pygmentize`` in the current directory
-by preceding it with ``./``. This ensures your modifications are used.
-Otherwise a possibly already installed, unmodified version without your new
-lexer would have been called from the system search path (``$PATH``).
+Note that this explicitly calls the ``pygments`` module in the current
+directory. This ensures your modifications are used. Otherwise a possibly
+already installed, unmodified version without your new lexer would have been
+called from the system search path (``$PATH``).
 
 To view the result, open ``/tmp/example.html`` in your browser.
 
@@ -196,7 +197,7 @@ defined, it defaults to `re.MULTILINE`.  For more information about regular
 expression flags see the page about `regular expressions`_ in the Python
 documentation.
 
-.. _regular expressions: http://docs.python.org/library/re.html#regular-expression-syntax
+.. _regular expressions: https://docs.python.org/library/re.html#regular-expression-syntax
 
 
 Scanning multiple tokens at once
@@ -611,7 +612,7 @@ possibility to influence the position.
 There are not really any simple examples for lexer callbacks, but you can see
 them in action e.g. in the `SMLLexer` class in `ml.py`_.
 
-.. _ml.py: http://bitbucket.org/birkenfeld/pygments-main/src/tip/pygments/lexers/ml.py
+.. _ml.py: https://github.com/pygments/pygments/blob/master/pygments/lexers/ml.py
 
 
 The ExtendedRegexLexer class
@@ -667,7 +668,7 @@ For example, this is how the hypothetical lexer above would be written with the
 This might sound confusing (and it can really be). But it is needed, and for an
 example look at the Ruby lexer in `ruby.py`_.
 
-.. _ruby.py: https://bitbucket.org/birkenfeld/pygments-main/src/tip/pygments/lexers/ruby.py
+.. _ruby.py: https://github.com/pygments/pygments/blob/master/pygments/lexers/ruby.py
 
 
 Handling Lists of Keywords

@@ -1,10 +1,235 @@
 Pygments changelog
 ==================
 
-Issue numbers refer to the tracker at
-<https://bitbucket.org/birkenfeld/pygments-main/issues>,
+Since 2.5.0, issue numbers refer to the tracker at
+<https://github.com/pygments/pygments/issues>,
 pull request numbers to the requests at
-<https://bitbucket.org/birkenfeld/pygments-main/pull-requests/merged>.
+<https://github.com/pygments/pygments/pulls>.
+
+
+Version 2.6.1
+-------------
+(released March 8, 2020)
+
+- This release fixes a packaging issue. No functional changes.
+
+Version 2.6
+-----------
+(released March 8, 2020)
+
+- Running Pygments on Python 2.x is no longer supported.
+  (The Python 2 lexer still exists.)
+
+- Added lexers:
+
+  * Linux kernel logs (PR#1310)
+  * LLVM MIR (PR#1361)
+  * MiniScript (PR#1397)
+  * Mosel (PR#1287, PR#1326)
+  * Parsing Expression Grammar (PR#1336)
+  * ReasonML (PR#1386)
+  * Ride (PR#1319, PR#1321)
+  * Sieve (PR#1257)
+  * USD (PR#1290)
+  * WebIDL (PR#1309)
+
+- Updated lexers:
+
+  * Apache2 (PR#1378)
+  * Chapel (PR#1357)
+  * CSound (PR#1383)
+  * D (PR#1375, PR#1362)
+  * Idris (PR#1360)
+  * Perl6/Raku lexer (PR#1344)
+  * Python3 (PR#1382, PR#1385)
+  * Rust: Updated lexer to cover more builtins (mostly macros) and miscellaneous
+  new syntax (PR#1320)
+  * SQL: Add temporal support keywords (PR#1402)
+
+- The 256-color/true-color terminal formatters now support the italic attribute
+  in styles (PR#1288)
+- Support HTTP 2/3 header (PR#1308)
+- Support missing reason in HTTP header (PR#1322)
+- Boogie/Silver: support line continuations and triggers, move contract keywords
+  to separate category (PR#1299)
+- GAS: support C-style comments (PR#1291)
+- Fix names in S lexer (PR#1330, PR#1333)
+- Fix numeric literals in Ada (PR#1334)
+- Recognize ``.mjs`` files as Javascript (PR#1392)
+- Recognize ``.eex`` files as Elixir (PR#1387)
+- Fix ``re.MULTILINE`` usage (PR#1388)
+- Recognize ``pipenv`` and ``poetry`` dependency & lock files (PR#1376)
+- Improve font search on Windows (#1247)
+- Remove unused script block (#1401)
+
+Version 2.5.2
+-------------
+(released November 29, 2019)
+
+- Fix incompatibility with some setuptools versions (PR#1316)
+
+- Fix lexing of ReST field lists (PR#1279)
+- Fix lexing of Matlab keywords as field names (PR#1282)
+- Recognize double-quoted strings in Matlab (PR#1278)
+- Avoid slow backtracking in Vim lexer (PR#1312)
+- Fix Scala highlighting of types (PR#1315)
+- Highlight field lists more consistently in ReST (PR#1279)
+- Fix highlighting Matlab keywords in field names (PR#1282)
+- Recognize Matlab double quoted strings (PR#1278)
+- Add some Terraform keywords
+- Update Modelica lexer to 3.4
+- Update Crystal examples
+
+
+Version 2.5.1
+-------------
+(released November 26, 2019)
+
+- This release fixes a packaging issue. No functional changes.
+
+
+Version 2.5.0
+-------------
+(released November 26, 2019)
+
+- Added lexers:
+
+  * Email (PR#1246)
+  * Erlang, Elixir shells (PR#823, #1521)
+  * Notmuch (PR#1264)
+  * `Scdoc <https://git.sr.ht/~sircmpwn/scdoc>`_ (PR#1268)
+  * `Solidity <https://solidity.readthedocs.io/>`_ (#1214)
+  * `Zeek <https://www.zeek.org>`_ (new name for Bro) (PR#1269)
+  * `Zig <https://ziglang.org/>`_ (PR#820)
+
+- Updated lexers:
+
+  * Apache2 Configuration (PR#1251)
+  * Bash sessions (#1253)
+  * CSound (PR#1250)
+  * Dart
+  * Dockerfile
+  * Emacs Lisp
+  * Handlebars (PR#773)
+  * Java (#1101, #987)
+  * Logtalk (PR#1261)
+  * Matlab (PR#1271)
+  * Praat (PR#1277)
+  * Python3 (PR#1255, PR#1400)
+  * Ruby
+  * YAML (#1528)
+  * Velocity
+
+- Added styles:
+
+  * Inkpot (PR#1276)
+
+- The ``PythonLexer`` class is now an alias for the former ``Python3Lexer``.
+  The old ``PythonLexer`` is available as ``Python2Lexer``.  Same change has
+  been done for the ``PythonTracebackLexer``.  The ``python3`` option for
+  the ``PythonConsoleLexer`` is now true by default.
+
+- Bump ``NasmLexer`` priority over ``TasmLexer`` for ``.asm`` files
+  (fixes #1326)
+- Default font in the ``ImageFormatter`` has been updated (#928, PR#1245)
+- Test suite switched to py.test, removed nose dependency (#1490)
+- Reduce ``TeraTerm`` lexer score -- it used to match nearly all languages
+  (#1256)
+- Treat ``Skylark``/``Starlark`` files as Python files (PR#1259)
+- Image formatter: actually respect ``line_number_separator`` option
+
+- Add LICENSE file to wheel builds
+- Agda: fix lambda highlighting
+- Dart: support ``@`` annotations
+- Dockerfile: accept ``FROM ... AS`` syntax
+- Emacs Lisp: add more string functions
+- GAS: accept registers in directive arguments
+- Java: make structural punctuation (braces, parens, colon, comma) ``Punctuation``, not ``Operator`` (#987)
+- Java: support ``var`` contextual keyword (#1101)
+- Matlab: Fix recognition of ``function`` keyword (PR#1271)
+- Python: recognize ``.jy`` filenames (#976)
+- Python: recognize ``f`` string prefix (#1156)
+- Ruby: support squiggly heredocs
+- Shell sessions: recognize Virtualenv prompt (PR#1266)
+- Velocity: support silent reference syntax
+
+
+Version 2.4.2
+-------------
+(released May 28, 2019)
+
+- Fix encoding error when guessing lexer with given ``encoding`` option
+  (#1438)
+
+
+Version 2.4.1
+-------------
+(released May 24, 2019)
+
+- Updated lexers:
+
+  * Coq (#1430)
+  * MSDOS Session (PR#734)
+  * NASM (#1517)
+  * Objective-C (PR#813, #1508)
+  * Prolog (#1511)
+  * TypeScript (#1515)
+
+- Support CSS variables in stylesheets (PR#814, #1356)
+- Fix F# lexer name (PR#709)
+- Fix ``TerminalFormatter`` using bold for bright text (#1480)
+
+
+Version 2.4.0
+-------------
+(released May 8, 2019)
+
+- Added lexers:
+
+  * Augeas (PR#807)
+  * BBC Basic (PR#806)
+  * Boa (PR#756)
+  * Charm++ CI (PR#788)
+  * DASM16 (PR#807)
+  * FloScript (PR#750)
+  * FreeFem++ (PR#785)
+  * Hspec (PR#790)
+  * Pony (PR#627)
+  * SGF (PR#780)
+  * Slash (PR#807)
+  * Slurm (PR#760)
+  * Tera Term Language (PR#749)
+  * TOML (PR#807)
+  * Unicon (PR#731)
+  * VBScript (PR#673)
+
+- Updated lexers:
+
+  * Apache2 (PR#766)
+  * Cypher (PR#746)
+  * LLVM (PR#792)
+  * Makefiles (PR#766)
+  * PHP (#1482)
+  * Rust
+  * SQL (PR#672)
+  * Stan (PR#774)
+  * Stata (PR#800)
+  * Terraform (PR#787)
+  * YAML
+
+- Add solarized style (PR#708)
+- Add support for Markdown reference-style links (PR#753)
+- Add license information to generated HTML/CSS files (#1496)
+- Change ANSI color names (PR#777)
+- Fix catastrophic backtracking in the bash lexer (#1494)
+- Fix documentation failing to build using Sphinx 2.0 (#1501)
+- Fix incorrect links in the Lisp and R lexer documentation (PR#775)
+- Fix rare unicode errors on Python 2.7 (PR#798, #1492)
+- Fix lexers popping from an empty stack (#1506)
+- TypoScript uses ``.typoscript`` now (#1498)
+- Updated Trove classifiers and ``pip`` requirements (PR#799)
+
+
 
 Version 2.3.1
 -------------
@@ -29,6 +254,7 @@ Version 2.3.1
 
 - Fix invalid string escape sequences
 - Fix `FutureWarning` introduced by regex changes in Python 3.7
+
 
 Version 2.3.0
 -------------
@@ -613,7 +839,7 @@ Version 1.4
 
 - Support ``application/javascript`` as a JavaScript mime type (#504).
 
-- Support `Offload <http://offload.codeplay.com>`_ C++ Extensions as
+- Support `Offload <https://offload.codeplay.com/>`_ C++ Extensions as
   keywords in the C++ lexer (#484).
 
 - Escape more characters in LaTeX output (#505).

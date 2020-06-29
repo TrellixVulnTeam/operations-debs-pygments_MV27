@@ -5,7 +5,7 @@
 
     Lexers for .net languages.
 
-    :copyright: Copyright 2006-2017 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2019 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 import re
@@ -14,7 +14,7 @@ from pygments.lexer import RegexLexer, DelegatingLexer, bygroups, include, \
     using, this, default, words
 from pygments.token import Punctuation, \
     Text, Comment, Operator, Keyword, Name, String, Number, Literal, Other
-from pygments.util import get_choice_opt, iteritems
+from pygments.util import get_choice_opt
 from pygments import unistring as uni
 
 from pygments.lexers.html import XmlLexer
@@ -71,7 +71,7 @@ class CSharpLexer(RegexLexer):
     tokens = {}
     token_variants = True
 
-    for levelname, cs_ident in iteritems(levels):
+    for levelname, cs_ident in levels.items():
         tokens[levelname] = {
             'root': [
                 # method names
@@ -184,7 +184,7 @@ class NemerleLexer(RegexLexer):
     tokens = {}
     token_variants = True
 
-    for levelname, cs_ident in iteritems(levels):
+    for levelname, cs_ident in levels.items():
         tokens[levelname] = {
             'root': [
                 # method names
@@ -541,16 +541,13 @@ class VbNetAspxLexer(DelegatingLexer):
 # Very close to functional.OcamlLexer
 class FSharpLexer(RegexLexer):
     """
-    For the F# language (version 3.0).
-
-    AAAAACK Strings
-    http://research.microsoft.com/en-us/um/cambridge/projects/fsharp/manual/spec.html#_Toc335818775
+    For the `F# language <https://fsharp.org/>`_ (version 3.0).
 
     .. versionadded:: 1.5
     """
 
-    name = 'FSharp'
-    aliases = ['fsharp']
+    name = 'F#'
+    aliases = ['fsharp', 'f#']
     filenames = ['*.fs', '*.fsi']
     mimetypes = ['text/x-fsharp']
 

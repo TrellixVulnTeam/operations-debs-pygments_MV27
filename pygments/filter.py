@@ -5,7 +5,7 @@
 
     Module that implements the default filter.
 
-    :copyright: Copyright 2006-2017 by the Pygments team, see AUTHORS.
+    :copyright: Copyright 2006-2019 by the Pygments team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
 
@@ -40,7 +40,7 @@ def simplefilter(f):
     })
 
 
-class Filter(object):
+class Filter:
     """
     Default filter. Subclass this class or use the `simplefilter`
     decorator to create own filters.
