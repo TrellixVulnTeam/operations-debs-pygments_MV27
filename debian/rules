@@ -2,7 +2,7 @@
 
 #export DH_VERBOSE=1
 
-PYVERS ?= $(shell pyversions -vr) $(shell py3versions -vr)
+PYVERS ?= $(shell py3versions -vr)
 pkgdir = $(CURDIR)/debian/python$(if $(patsubst 3.%,,$(1)),,3)-pygments
 
 clean:
@@ -26,7 +26,7 @@ install: build install-stamp $(PYVERS:%=install-python%-stamp)
 
 install-stamp:
 	dh_installdirs
-	install -m 644 external/pygments.bashcomp debian/python-pygments/usr/share/bash-completion/completions/pygmentize
+	install -m 644 external/pygments.bashcomp debian/python3-pygments/usr/share/bash-completion/completions/pygmentize
 	touch $@
 
 install-python%-stamp:
@@ -43,9 +43,7 @@ binary-indep: build install
 	dh_link -i
 	dh_installman -i
 	dh_install -i -p python3-pygments pygmentize /usr/bin/
-	rm -rf debian/python-pygments/usr/bin/
 	dh_sphinxdoc -i -p python-pygments-doc
-	dh_python2 -i
 	dh_python3 -i --shebang=/usr/bin/python3
 	dh_compress -i -X.py -X.inv
 	dh_fixperms -i

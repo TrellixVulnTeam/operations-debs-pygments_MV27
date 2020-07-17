@@ -9,6 +9,12 @@ pygments (2.6.1+dfsg-1) UNRELEASED; urgency=medium
 
  -- Emmanuel Arias <eamanu@yaerobi.com>  Mon, 29 Jun 2020 11:12:13 -0300
 
+pygments (2.3.1+dfsg-4) unstable; urgency=medium
+
+  * Drop python2 support + run wrap-and-sort; Closes: #937446
+
+ -- Sandro Tosi <morph@debian.org>  Fri, 17 Jul 2020 15:18:56 -0400
+
 pygments (2.3.1+dfsg-3) unstable; urgency=medium
 
   * Team upload.
