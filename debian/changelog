@@ -1,3 +1,9 @@
+pygments (2.3.1+dfsg-4) UNRELEASED; urgency=medium
+
+  * Drop python2 support + run wrap-and-sort; Closes: #937446
+
+ -- Sandro Tosi <morph@debian.org>  Fri, 17 Jul 2020 15:05:51 -0400
+
 pygments (2.3.1+dfsg-3) unstable; urgency=medium
 
   * Team upload.
