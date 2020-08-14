@@ -58,13 +58,4 @@ binary-arch:
 
 binary: binary-indep binary-arch
 
-get-orig-source:
-	VER=$(shell dpkg-parsechangelog | sed -rne 's,^Version: ([^+]+).*,\1,p');\
-	uscan --force-download --rename --download-version=$$VER --destdir=.;\
-	tar -zx --exclude=doc/_build --exclude=tests/examplefiles --exclude=test/test_examplefiles.py -f pygments_$$VER.orig.tar.gz;\
-	find . -name '*.pyc' -delete;\
-	tar -zcf ./pygments_$$VER+dfsg.orig.tar.gz Pygments-*;\
-	rm -f ./pygments_$$VER.orig.tar.gz;\
-	rm -rf Pygments-*
-
 .PHONY: build clean binary-indep binary-arch binary install
