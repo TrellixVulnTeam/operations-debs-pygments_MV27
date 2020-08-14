@@ -8,6 +8,7 @@ Build-Depends-Indep: dh-python,
                      python3-all,
                      python3-docutils,
                      python3-jinja2,
+                     python3-pytest <!nocheck>,
                      python3-setuptools,
                      python3-sphinx,
 Standards-Version: 4.5.0
