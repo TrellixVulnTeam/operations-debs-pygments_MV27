@@ -2,6 +2,13 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: pygments
 Upstream-Contact: Georg Brandl <georg@python.org>
 Source: https://pypi.org/project/Pygments/
+Files-Excluded:
+ tests/examplefiles tests/test_examplefiles.py
+ doc/_build
+ Pygments.egg-info
+Comment: The examplefiles contain numerous code fragments from various sources
+ for which determining licensing is difficult, so they have been removed.
+ Furthermore, the pre-built documentation and egg info has been removed.
 
 Files: *
 Copyright: 2006-2020 Pygments team, see AUTHORS
