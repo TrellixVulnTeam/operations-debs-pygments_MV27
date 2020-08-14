@@ -42,7 +42,6 @@ binary-indep: build install
 	dh_installdocs -i
 	dh_link -i
 	dh_installman -i
-	dh_install -i -p python3-pygments pygmentize /usr/bin/
 	dh_sphinxdoc -i -p python-pygments-doc
 	dh_python3 -i --shebang=/usr/bin/python3
 	dh_compress -i -X.py -X.inv
