@@ -1,5 +1,6 @@
 pygments (2.6.1+dfsg-1) UNRELEASED; urgency=medium
 
+  [ Emmanuel Arias ]
   * New upstream version 2.6.1 (Closes: #962505)
   * wrap-and-sort.
   * d/salsa-ci.yml: enable salsa-ci.
@@ -7,7 +8,17 @@ pygments (2.6.1+dfsg-1) UNRELEASED; urgency=medium
   * d/patches: update change_docs_theme patch.
     - Remove not applied Adapt-conf.py-for-sphinx-2.0 patch.
 
- -- Emmanuel Arias <eamanu@yaerobi.com>  Mon, 29 Jun 2020 11:12:13 -0300
+  [ Christian Kastner ]
+  * Convert d/copyright to Machine-Readable Copyright Format 1.0
+  * Add Files-Excluded+Comment to d/copyright
+  * Add repacksuffix=+dfsg to d/watch
+  * Drop obsolete get-orig-source target (uscan removes files now)
+  * Update d/watch to version 4
+  * Drop TODO from python-pygments-doc.docs
+  * d/gbp.conf: Rename upstream -> upstream/latest
+  * Add upstream metadata
+
+ -- Christian Kastner <ckk@debian.org>  Fri, 14 Aug 2020 14:46:34 +0200
 
 pygments (2.3.1+dfsg-4) unstable; urgency=medium
 
