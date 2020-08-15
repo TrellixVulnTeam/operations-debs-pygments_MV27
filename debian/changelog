@@ -13,6 +13,9 @@ pygments (2.6.1+dfsg-1) UNRELEASED; urgency=medium
   * Add Files-Excluded+Comment to d/copyright
   * Add repacksuffix=+dfsg to d/watch
   * Drop obsolete get-orig-source target (uscan removes files now)
+  * Add python3-pytest to Build-Depends
+  * Replace nose with pytest in autopkgtest
+  * Enable running tests at build time
   * Update d/watch to version 4
   * Drop TODO from python-pygments-doc.docs
   * d/gbp.conf: Rename upstream -> upstream/latest
