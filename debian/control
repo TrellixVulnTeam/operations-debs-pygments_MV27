@@ -14,8 +14,8 @@ Build-Depends-Indep: dh-python,
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Homepage: http://pygments.org/
-Vcs-Git: https://salsa.debian.org/python-team/modules/pygments.git
-Vcs-Browser: https://salsa.debian.org/python-team/modules/pygments
+Vcs-Git: https://salsa.debian.org/python-team/packages/pygments.git
+Vcs-Browser: https://salsa.debian.org/python-team/packages/pygments
 
 Package: python3-pygments
 Architecture: all
