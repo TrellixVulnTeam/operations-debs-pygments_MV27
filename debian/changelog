@@ -1,4 +1,4 @@
-pygments (2.7.1+dfsg-1) UNRELEASED; urgency=medium
+pygments (2.7.1+dfsg-1) unstable; urgency=medium
 
   [ Emmanuel Arias ]
   * New upstream version 2.6.1 (Closes: #962505)
@@ -31,7 +31,7 @@ pygments (2.7.1+dfsg-1) UNRELEASED; urgency=medium
   * debian/rules
     - if you never run dh_install, .install files are not processed
 
- -- Sandro Tosi <morph@debian.org>  Thu, 08 Oct 2020 18:53:43 -0400
+ -- Sandro Tosi <morph@debian.org>  Thu, 08 Oct 2020 18:54:38 -0400
 
 pygments (2.3.1+dfsg-4) unstable; urgency=medium
 
