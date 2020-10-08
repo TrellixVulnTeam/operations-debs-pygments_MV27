@@ -28,8 +28,10 @@ pygments (2.7.1+dfsg-1) UNRELEASED; urgency=medium
   [ Sandro Tosi ]
   * New upstream release; Closes: #962505
   * Skip test that's missing some example file (gh:issues/1567)
+  * debian/rules
+    - if you never run dh_install, .install files are not processed
 
- -- Sandro Tosi <morph@debian.org>  Thu, 08 Oct 2020 18:35:57 -0400
+ -- Sandro Tosi <morph@debian.org>  Thu, 08 Oct 2020 18:53:43 -0400
 
 pygments (2.3.1+dfsg-4) unstable; urgency=medium
 
