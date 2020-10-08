@@ -27,8 +27,9 @@ pygments (2.7.1+dfsg-1) UNRELEASED; urgency=medium
 
   [ Sandro Tosi ]
   * New upstream release; Closes: #962505
+  * Skip test that's missing some example file (gh:issues/1567)
 
- -- Sandro Tosi <morph@debian.org>  Thu, 08 Oct 2020 18:19:41 -0400
+ -- Sandro Tosi <morph@debian.org>  Thu, 08 Oct 2020 18:35:57 -0400
 
 pygments (2.3.1+dfsg-4) unstable; urgency=medium
 
