@@ -1,4 +1,4 @@
-pygments (2.6.1+dfsg-1) UNRELEASED; urgency=medium
+pygments (2.7.1+dfsg-1) UNRELEASED; urgency=medium
 
   [ Emmanuel Arias ]
   * New upstream version 2.6.1 (Closes: #962505)
@@ -25,7 +25,10 @@ pygments (2.6.1+dfsg-1) UNRELEASED; urgency=medium
   * d/control: Update Vcs-* fields with new Debian Python Team Salsa
     layout.
 
- -- Christian Kastner <ckk@debian.org>  Fri, 14 Aug 2020 14:46:34 +0200
+  [ Sandro Tosi ]
+  * New upstream release; Closes: #962505
+
+ -- Sandro Tosi <morph@debian.org>  Thu, 08 Oct 2020 18:19:41 -0400
 
 pygments (2.3.1+dfsg-4) unstable; urgency=medium
 
