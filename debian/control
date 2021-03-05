@@ -3,7 +3,7 @@ Section: python
 Priority: optional
 Maintainer: Piotr Ożarowski <piotr@debian.org>
 Uploaders: Debian Python Team <team+python@tracker.debian.org>
-Build-Depends: debhelper-compat (= 13)
+Build-Depends: debhelper-compat (= 12)
 Build-Depends-Indep: dh-python,
                      python3-all,
                      python3-docutils,
