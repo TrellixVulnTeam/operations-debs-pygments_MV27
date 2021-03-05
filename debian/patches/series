@@ -1,2 +1,3 @@
 0003-docs-moved-to-python-pygments-doc-binary-package.patch
 0003-Update-change-docs-theme-patch.patch
+0003-Drop-tests-test_guess.py-requires-non-dfsg-examplefi.patch

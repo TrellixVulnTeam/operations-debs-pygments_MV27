@@ -7,10 +7,10 @@ Subject: Update change docs theme patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/doc/conf.py b/doc/conf.py
-index 3ab5c2e..98ad14d 100644
+index 3676065..b6b9611 100644
 --- a/doc/conf.py
 +++ b/doc/conf.py
-@@ -85,7 +85,7 @@ exclude_patterns = ['_build']
+@@ -84,7 +84,7 @@ exclude_patterns = ['_build']
  
  # The theme to use for HTML and HTML Help pages.  See the documentation for
  # a list of builtin themes.
