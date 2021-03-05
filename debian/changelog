@@ -1,4 +1,4 @@
-pygments (2.8.0+dfsg-1) UNRELEASED; urgency=medium
+pygments (2.8.0+dfsg-1) buster-wikimedia; urgency=medium
 
   [ Sandro Tosi ]
   * Use the new Debian Python Team contact name and address
@@ -9,8 +9,11 @@ pygments (2.8.0+dfsg-1) UNRELEASED; urgency=medium
   [ Kunal Mehta ]
   * New upstream version 2.8.0+dfsg
   * Update d/gbp.conf for new branch
+  * Drop patch fixed upstream
+  * Downgrade to debhelper-compat 12 for buster
+  * Drop tests/test_guess.py, requires non-dfsg examplefiles
 
- -- Kunal Mehta <legoktm@debian.org>  Fri, 05 Mar 2021 14:35:03 -0800
+ -- Kunal Mehta <legoktm@debian.org>  Fri, 05 Mar 2021 14:48:05 -0800
 
 pygments (2.7.1+dfsg-1) unstable; urgency=medium
 
