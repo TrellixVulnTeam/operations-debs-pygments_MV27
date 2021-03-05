@@ -78,6 +78,7 @@ Other contributors, listed alphabetically, are:
 * Michał Górny -- vim modeline support
 * Alex Gosse -- TrafficScript lexer
 * Patrick Gotthardt -- PHP namespaces support
+* Hubert Gruniaux -- C and C++ lexer improvements
 * Olivier Guibe -- Asymptote lexer
 * Phil Hagelberg -- Fennel lexer
 * Florian Hahn -- Boogie lexer
@@ -90,6 +91,7 @@ Other contributors, listed alphabetically, are:
 * Justin Hendrick -- ParaSail lexer
 * Jordi Gutiérrez Hermoso -- Octave lexer
 * David Hess, Fish Software, Inc. -- Objective-J lexer
+* Ken Hilton -- Typographic Number Theory and Arrow lexers
 * Varun Hiremath -- Debian control lexer
 * Rob Hoelz -- Perl 6 lexer
 * Doug Hogan -- Mscgen lexer
@@ -233,5 +235,9 @@ Other contributors, listed alphabetically, are:
 * Rob Zimmerman -- Kal lexer
 * Vincent Zurczak -- Roboconf lexer
 * Hubert Gruniaux -- C and C++ lexer improvements
+* Thomas Symalla -- AMDGPU Lexer
+* 15b3 -- Image Formatter improvements
+* Fabian Neumann -- CDDL lexer
+* Thomas Duboucher -- CDDL lexer
 
 Many thanks for all contributions!
