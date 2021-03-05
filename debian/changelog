@@ -1,8 +1,16 @@
-pygments (2.7.1+dfsg-2) UNRELEASED; urgency=medium
+pygments (2.8.0+dfsg-1) UNRELEASED; urgency=medium
 
+  [ Sandro Tosi ]
   * Use the new Debian Python Team contact name and address
 
- -- Sandro Tosi <morph@debian.org>  Mon, 04 Jan 2021 17:02:33 -0500
+  [ Christian Aistleitner ]
+  * Add .gitreview
+
+  [ Kunal Mehta ]
+  * New upstream version 2.8.0+dfsg
+  * Update d/gbp.conf for new branch
+
+ -- Kunal Mehta <legoktm@debian.org>  Fri, 05 Mar 2021 14:35:03 -0800
 
 pygments (2.7.1+dfsg-1) unstable; urgency=medium
 
